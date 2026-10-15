@@ -59,7 +59,7 @@ src/demo/Listings.tsx       /demo/listings — the split-test showpiece.
 src/demo/NewRole.tsx        /demo/roles/new — 4-step wizard to post variants.
 Dockerfile, Caddyfile, railway.json, wrangler.toml, vercel.json, netlify.toml
                             Deploy configs. It builds to a static site in dist/.
-docs/WORKSTREAMS.md         What's open and who's on it. Read before starting.
+docs/WORKSTREAMS.md         Who is building what, and the claim-first protocol. Read before starting.
 ```
 
 ## Commands
@@ -73,7 +73,8 @@ npm run build      # must succeed before you push
 
 ## How we work during the hackathon
 
-- Pick a workstream in `docs/WORKSTREAMS.md`, put your name on it, and stay inside the
+- Claim a workstream in `docs/WORKSTREAMS.md` with a commit to `main` BEFORE you build,
+  pre-wiring its route and nav with a stub in that commit. Then stay inside the
   files it lists. Parallel work only stays safe if two people never edit the same file.
 - Shared files (`styles.css`, `ui.tsx`, `mock.ts`, `main.tsx`, `Shell.tsx`) are
   append-only during the hackathon: add a token, a component, a field or a route; don't
