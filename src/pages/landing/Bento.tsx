@@ -45,7 +45,7 @@ const cap = (s: string) => s[0].toUpperCase() + s.slice(1);
 function InboxMock() {
   const recent = [...CANDIDATES].sort((a, b) => a.appliedDaysAgo - b.appliedDaysAgo).slice(0, 5);
   return (
-    <div className="mx-auto max-w-[520px] space-y-1.5">
+    <div className="mx-auto w-full max-w-[560px] space-y-1.5">
       {recent.map((c, i) => {
         const b = boardById(listingById(c.listingId).board);
         return (
@@ -93,8 +93,10 @@ function Mini({ id }: { id: string }) {
   return (
     <div className="flex h-8 items-center gap-1.5 rounded-[7px] bg-card px-1.5 shadow-card">
       <Avatar initials={c.initials} hue={c.hue} size={16} />
-      <span className="min-w-0 flex-1 truncate text-[10.5px] font-medium">{c.name.split(" ")[0]}</span>
-      <TierBadge tier={c.tier} className="h-4 min-w-4 text-[9.5px]" />
+      <span className="min-w-0 flex-1 truncate text-[11px] font-medium">{c.name.split(" ")[0]}</span>
+      <span className="font-mono text-[10px] font-medium" style={{ color: TIER_COLOR[c.tier] }}>
+        {c.tier}
+      </span>
     </div>
   );
 }
@@ -142,7 +144,7 @@ function RoiMock() {
   }).sort((x, y) => y.per100 - x.per100);
   const max = rows[0].per100;
   return (
-    <div className="mx-auto max-w-[540px]">
+    <div className="mx-auto w-full max-w-[560px]">
       <div className="mb-2.5 flex justify-between text-[11px] text-faint">
         <span>Board · spend</span>
         <span>A-tier candidates per $100</span>
@@ -219,12 +221,12 @@ function AiMock() {
     ["Asks $25 / hr, inside the band", "From the pay question"],
   ];
   return (
-    <div className="mx-auto max-w-[540px] rounded-card bg-card p-3.5 shadow-card">
+    <div className="mx-auto w-full max-w-[560px] rounded-card bg-card p-3.5 shadow-card">
       <div className="flex items-center gap-2">
         <Avatar initials={c.initials} hue={c.hue} size={22} />
         <span className="text-[12.5px] font-medium">{c.name}</span>
         <span className="ml-auto inline-flex items-center gap-1 rounded-chip bg-primary-tint px-1.5 py-0.5 text-[10.5px] font-medium text-primary">
-          <Sparkles className="size-3" /> Summary, drawn only from what he sent
+          <Sparkles className="size-3" /> Drawn only from the application
         </span>
       </div>
       <ul className="mt-3 space-y-1.5">
