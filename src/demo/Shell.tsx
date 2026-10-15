@@ -1,7 +1,7 @@
 import { Suspense, useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import {
-  BarChart3, CalendarDays, Columns3, Inbox as InboxIcon, FlaskConical, LayoutDashboard, Menu, Plus, Search, Users, X,
+  BarChart3, CalendarDays, LineChart, Settings as SettingsIcon, Columns3, Inbox as InboxIcon, FlaskConical, LayoutDashboard, Menu, Plus, Search, Users, X,
 } from "lucide-react";
 import { Wordmark } from "@/components/mark";
 import { ButtonLink, cx, GithubIcon, Kbd } from "@/components/ui";
@@ -16,6 +16,8 @@ const NAV = [
   { to: "/demo/candidates", label: "Candidates", icon: Users, count: CANDIDATES.length },
   { to: "/demo/listings", label: "Listings & split tests", icon: FlaskConical, count: LISTINGS.length },
   { to: "/demo/interviews", label: "Interviews", icon: CalendarDays },
+  { to: "/demo/reports", label: "Reports", icon: LineChart },
+  { to: "/demo/settings", label: "Settings", icon: SettingsIcon },
 ];
 
 export const GITHUB_URL = "https://github.com/vsafawi/recruited";
