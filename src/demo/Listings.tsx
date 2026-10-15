@@ -463,7 +463,7 @@ function AllListings({ statuses }: { statuses: Record<string, Status> }) {
               <th className="py-2.5 pr-3 pl-4 font-medium">Listing</th>
               <th className="px-3 font-medium">Status</th>
               {COLS.map((c) => (
-                <th key={c.key} className="px-3 text-right font-medium">
+                <th key={c.key} className="px-3 text-right font-medium whitespace-nowrap">
                   <button
                     className={cx("inline-flex items-center gap-1 hover:text-foreground", sort.key === c.key && "text-foreground")}
                     onClick={() => setSort((s) => ({ key: c.key, dir: s.key === c.key ? (s.dir === 1 ? -1 : 1) : c.better === "high" ? -1 : 1 }))}
@@ -733,18 +733,17 @@ function Scatter() {
 
         <AnimatePresence>
           {h && (
-            <motion.div
+            <div
               key={h.l.id}
+              className="pointer-events-none absolute z-10 w-60"
+              style={{ left: Math.min(Math.max(h.cx - 120, 0), width - 240), top: h.cy - h.r - 10, transform: "translateY(-100%)" }}
+            >
+            <motion.div
               initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, transition: { duration: 0.08 } }}
               transition={{ duration: 0.14 }}
-              className="pointer-events-none absolute z-10 w-60 rounded-card bg-card p-3 text-[12px] shadow-overlay"
-              style={{
-                left: Math.min(Math.max(h.cx - 120, 0), width - 240),
-                top: h.cy - h.r - 10,
-                transform: "translateY(-100%)",
-              }}
+              className="rounded-card bg-card p-3 text-[12px] shadow-overlay"
             >
               <div className="flex items-center gap-1.5 text-[11.5px] text-muted">
                 <BoardDot id={h.l.board} /> {boardById(h.l.board).name} · Variant {h.l.variant}
@@ -757,6 +756,7 @@ function Scatter() {
                 <span className="text-muted">A-tier per $</span><span className="text-right font-medium text-primary">{aTierPerDollar(h.l).toFixed(2)}</span>
               </div>
             </motion.div>
+            </div>
           )}
         </AnimatePresence>
       </div>

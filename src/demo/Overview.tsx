@@ -110,7 +110,7 @@ export default function Overview() {
     <div className="pb-16">
       <PageHeader
         title="Good morning"
-        subtitle={`Wednesday, 15 October · ${ROLES.length} roles open · ${activeCandidates.length} candidates in play`}
+        subtitle={`Thursday, 15 October · ${ROLES.length} roles open · ${activeCandidates.length} candidates in play`}
         actions={
           <>
             <ButtonLink to="/demo/pipeline" variant="secondary">Open pipeline</ButtonLink>
