@@ -432,13 +432,13 @@ function Experiment({
 
 type SortKey = "views" | "applies" | "rate" | "qualified" | "aShare" | "cpq" | "apd" | "spend";
 
-const COLS: { key: SortKey; label: string; get: (l: Listing) => number; fmt: (n: number) => string; better: "high" | "low" }[] = [
+const COLS: { key: SortKey; label: string; get: (l: Listing) => number; fmt: (n: number) => string; better: "high" | "low" | "none" }[] = [
   { key: "views", label: "Views", get: (l) => l.views, fmt: int, better: "high" },
   { key: "applies", label: "Applies", get: (l) => l.applies, fmt: int, better: "high" },
   { key: "rate", label: "Apply rate", get: applyRate, fmt: (n) => pct(n), better: "high" },
   { key: "qualified", label: "Qualified", get: (l) => l.qualified, fmt: int, better: "high" },
   { key: "aShare", label: "A-tier", get: (l) => l.tierMix.A, fmt: (n) => `${n}%`, better: "high" },
-  { key: "spend", label: "Spend", get: (l) => l.spend, fmt: (n) => money(n), better: "low" },
+  { key: "spend", label: "Spend", get: (l) => l.spend, fmt: (n) => money(n), better: "none" },
   { key: "cpq", label: "Cost / qual.", get: costPerQualified, fmt: (n) => money(n, 2), better: "low" },
   { key: "apd", label: "A-tier per $", get: aTierPerDollar, fmt: (n) => n.toFixed(2), better: "high" },
 ];
@@ -463,7 +463,7 @@ function AllListings({ statuses }: { statuses: Record<string, Status> }) {
               <th className="py-2.5 pr-3 pl-4 font-medium">Listing</th>
               <th className="px-3 font-medium">Status</th>
               {COLS.map((c) => (
-                <th key={c.key} className="px-3 text-right font-medium">
+                <th key={c.key} className="px-3 text-right font-medium whitespace-nowrap">
                   <button
                     className={cx("inline-flex items-center gap-1 hover:text-foreground", sort.key === c.key && "text-foreground")}
                     onClick={() => setSort((s) => ({ key: c.key, dir: s.key === c.key ? (s.dir === 1 ? -1 : 1) : c.better === "high" ? -1 : 1 }))}
@@ -496,7 +496,7 @@ function AllListings({ statuses }: { statuses: Record<string, Status> }) {
                   {COLS.map((c) => {
                     const v = c.get(l);
                     return (
-                      <td key={c.key} className={cx("tnum px-3 text-right", v === best[c.key] ? "font-semibold text-primary" : "text-foreground")}>
+                      <td key={c.key} className={cx("tnum px-3 text-right", c.better !== "none" && v === best[c.key] ? "font-semibold text-primary" : "text-foreground")}>
                         {c.fmt(v)}
                       </td>
                     );
@@ -547,7 +547,7 @@ type BoardRow = ReturnType<typeof boardStats>[number];
 
 const BCOLS: { key: keyof BoardRow; label: string; fmt: (n: number) => string; better?: "high" | "low" }[] = [
   { key: "listings", label: "Listings", fmt: int },
-  { key: "spend", label: "Spend", fmt: (n) => money(n), better: "low" },
+  { key: "spend", label: "Spend", fmt: (n) => money(n) },
   { key: "applies", label: "Applies", fmt: int, better: "high" },
   { key: "rate", label: "Apply rate", fmt: (n) => pct(n), better: "high" },
   { key: "qualified", label: "Qualified", fmt: int, better: "high" },
@@ -616,6 +616,26 @@ function BoardMatrix() {
         </table>
       </div>
     </Card>
+  );
+}
+
+/** A plain-language reading of the matrix, built from the same numbers. */
+function BoardReadout() {
+  const rows = boardStats();
+  const byCpa = [...rows].sort((a, b) => a.cpa - b.cpa);
+  const cheap = byCpa.slice(0, 2);
+  const volume = [...rows].sort((a, b) => b.applies - a.applies)[0];
+  const share = [...rows].sort((a, b) => b.aShare - a.aShare)[0];
+  return (
+    <div className="flex items-start gap-2.5 rounded-card bg-primary-tint/60 px-4 py-3 text-[12.5px] text-foreground">
+      <Sparkles className="mt-0.5 size-4 shrink-0 text-primary" />
+      <p>
+        {cheap[0].board.name} and {cheap[1].board.name} buy A-tier applicants for {money(cheap[0].cpa, 2)} and{" "}
+        {money(cheap[1].cpa, 2)} each. {volume.board.name} brings the most applies, {int(volume.applies)}, but only{" "}
+        {pct(volume.aShare, 0)} are A-tier, so each one costs {money(volume.cpa, 2)}. {share.board.name} has the highest A-tier
+        share at {pct(share.aShare, 0)}, at {money(share.cpq, 2)} per qualified candidate. Worked out from the table above.
+      </p>
+    </div>
   );
 }
 
@@ -713,18 +733,17 @@ function Scatter() {
 
         <AnimatePresence>
           {h && (
-            <motion.div
+            <div
               key={h.l.id}
+              className="pointer-events-none absolute z-10 w-60"
+              style={{ left: Math.min(Math.max(h.cx - 120, 0), width - 240), top: h.cy - h.r - 10, transform: "translateY(-100%)" }}
+            >
+            <motion.div
               initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, transition: { duration: 0.08 } }}
               transition={{ duration: 0.14 }}
-              className="pointer-events-none absolute z-10 w-60 rounded-card bg-card p-3 text-[12px] shadow-overlay"
-              style={{
-                left: Math.min(Math.max(h.cx - 120, 0), width - 240),
-                top: h.cy - h.r - 10,
-                transform: "translateY(-100%)",
-              }}
+              className="rounded-card bg-card p-3 text-[12px] shadow-overlay"
             >
               <div className="flex items-center gap-1.5 text-[11.5px] text-muted">
                 <BoardDot id={h.l.board} /> {boardById(h.l.board).name} · Variant {h.l.variant}
@@ -737,6 +756,7 @@ function Scatter() {
                 <span className="text-muted">A-tier per $</span><span className="text-right font-medium text-primary">{aTierPerDollar(h.l).toFixed(2)}</span>
               </div>
             </motion.div>
+            </div>
           )}
         </AnimatePresence>
       </div>
@@ -836,14 +856,7 @@ export default function Listings() {
           <div className="mt-4 flex flex-col gap-4">
             <BoardMatrix />
             <Scatter />
-            <div className="flex items-start gap-2.5 rounded-card bg-primary-tint/60 px-4 py-3 text-[12.5px] text-foreground">
-              <Sparkles className="mt-0.5 size-4 shrink-0 text-primary" />
-              <p>
-                Indeed brings the most applies and the fewest A-tier ones. Music Business Worldwide costs the most per qualified
-                candidate but a third of what it sends are A-tier. If you only need one more hire, the industry board is the shorter
-                path; if you need volume, keep Indeed with the salary in the headline.
-              </p>
-            </div>
+            <BoardReadout />
           </div>
         </div>
       </div>
