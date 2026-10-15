@@ -1,64 +1,64 @@
 WEBVTT
 
-00:03.200 --> 00:06.031
-Small teams post the same job on four boards,
+00:03.200 --> 00:06.272
+Small teams post the same job on four job sites,
 
-00:06.051 --> 00:08.482
+00:06.292 --> 00:08.760
 and get a pile of applications back.
 
-00:09.000 --> 00:11.994
-But they never find out which listing brought the person they hired.
+00:09.000 --> 00:12.261
+But they never find out which job post brought the person they hired.
 
-00:13.500 --> 00:17.726
+00:13.500 --> 00:17.888
 recruited.tools is an open-source applicant tracker that answers that.
 
-00:17.746 --> 00:20.699
+00:17.908 --> 00:20.973
 The demo runs on sample data from a music agency.
 
-00:20.719 --> 00:23.356
-Three roles, seven listings, four boards.
+00:20.993 --> 00:23.880
+Three jobs, seven job posts, four job sites.
 
-00:23.900 --> 00:26.438
+00:23.900 --> 00:26.327
 The home screen doesn't lead with applications.
 
-00:26.458 --> 00:29.002
+00:26.347 --> 00:28.787
 It leads with what an A-tier candidate cost.
 
-00:30.600 --> 00:34.647
-Same board, same spend. Variant A got twice the applications.
+00:30.600 --> 00:34.578
+Same job site, same spend. Variant A got twice the applications.
 
-00:34.667 --> 00:38.248
+00:34.598 --> 00:37.952
 Variant B paid more, and named the tools in the title.
 
-00:38.268 --> 00:41.752
+00:37.972 --> 00:41.245
 It brought 3.7× more A-tier candidates per dollar.
 
-00:43.600 --> 00:45.699
+00:43.600 --> 00:45.767
 Every variant gets its own apply page,
 
-00:45.719 --> 00:48.824
-so each application knows which listing it came from.
+00:45.787 --> 00:49.044
+so each application knows which job post it came from.
 
-00:49.900 --> 00:52.895
-Every applicant, from every board, lands on one pipeline,
+00:49.900 --> 00:53.001
+Every applicant, from every job site, lands on one pipeline,
 
-00:52.915 --> 00:55.286
+00:53.021 --> 00:55.356
 tagged with the variant that brought them.
 
-00:57.300 --> 01:00.272
+00:57.300 --> 01:00.322
 Interviewers score on their own, and the summary is drawn only
 
-01:00.292 --> 01:03.000
+01:00.342 --> 01:03.092
 from what the candidate sent and what the team wrote.
 
-01:04.300 --> 01:07.775
-Posting a role means writing two variants and picking the boards.
+01:04.300 --> 01:07.861
+Posting a job means writing two variants and picking the job sites.
 
-01:07.795 --> 01:09.774
+01:07.881 --> 01:09.849
 The test starts when it goes live.
 
-01:11.800 --> 01:14.532
+01:11.800 --> 01:14.502
 It's open source, and it deploys in five minutes.
 
-01:14.552 --> 01:17.622
-Hire from the listing that brings A-tier candidates.
+01:14.522 --> 01:17.616
+Hire from the job post that brings A-tier candidates.
