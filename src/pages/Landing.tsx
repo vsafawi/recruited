@@ -2,14 +2,16 @@ import { useRef } from "react";
 import "./landing/landing.css";
 import { Bento } from "./landing/Bento";
 import { Hero } from "./landing/Hero";
+import { Integrations } from "./landing/Integrations";
 import { ResumeDesk } from "./landing/ResumeDesk";
-import { BoardStrip, CaseStudy, Deploy, FinalCta, Footer, HowItWorks, Nav } from "./landing/Sections";
+import { CaseStudy, Deploy, FinalCta, Footer, HowItWorks, Nav } from "./landing/Sections";
 import { SplitTest } from "./landing/SplitTest";
 import { useRevealAll } from "./landing/hooks";
 
 /**
  * recruited.tools landing page. Ships in the first bundle, so it stays light:
- * no motion library, no images. The 3D is CSS transforms driven by one rAF
+ * no motion library, no images beyond the small
+ * bundled logos in public/logos. The 3D is CSS transforms driven by one rAF
  * loop in the hero; everything else is one IntersectionObserver adding
  * `.is-in`. All the numbers come from src/data/mock.ts.
  */
@@ -21,7 +23,7 @@ export default function Landing() {
       <Nav />
       <main>
         <Hero />
-        <BoardStrip />
+        <Integrations />
         <ResumeDesk />
         <SplitTest />
         <Bento />

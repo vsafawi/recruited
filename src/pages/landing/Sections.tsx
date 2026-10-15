@@ -66,45 +66,6 @@ export function Nav() {
   );
 }
 
-/* --- Board strip --------------------------------------------------------- */
-
-const MORE_BOARDS = ["LinkedIn", "Wellfound", "Craigslist", "Upwork", "Your careers page"];
-
-export function BoardStrip() {
-  const live = BOARDS.map((b) => b.name);
-  return (
-    <section className="px-4 pt-10 pb-6 sm:pt-16">
-      <div className="reveal mx-auto max-w-[1000px] text-center">
-        <div className="text-[12.5px] font-medium text-faint">Works with the job sites you already use</div>
-        <div className="mt-5 flex flex-wrap justify-center gap-2">
-          {live.map((n, i) => {
-            const b = BOARDS[i];
-            return (
-              <span
-                key={n}
-                className="fade-in inline-flex h-9 items-center gap-2 rounded-full bg-card px-3.5 text-[13.5px] font-medium tracking-[-0.01em] shadow-card"
-                style={{ ["--d" as string]: `${i * 70}ms` }}
-              >
-                <span className="size-2 rounded-full" style={{ background: b.color }} />
-                {n}
-              </span>
-            );
-          })}
-          {MORE_BOARDS.map((n, i) => (
-            <span
-              key={n}
-              className="fade-in inline-flex h-9 items-center rounded-full px-3.5 text-[13.5px] text-muted shadow-[inset_0_0_0_1px_var(--rim)]"
-              style={{ ["--d" as string]: `${(live.length + i) * 70}ms` }}
-            >
-              {n}
-            </span>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /* --- How it works -------------------------------------------------------- */
 
 const STEP_TONES = ["sky", "lavender", "mint"] as const;

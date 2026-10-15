@@ -7,10 +7,11 @@ import {
 import { Avatar, Button, ButtonLink, Card, cx, Index, Kbd, SectionLabel, Segmented, StatusMark, Tag } from "@/components/ui";
 import InterviewLoop, { hasWrittenScorecards } from "./InterviewLoop";
 import {
-  ACTIVITY, boardById, CANDIDATES, listingById, roleById, STAGES, TIER_COLOR, TIER_LABEL,
+  ACTIVITY, boardById, CANDIDATES, listingById, pastJobsOf, roleById, STAGES, TIER_COLOR, TIER_LABEL,
   type Candidate, type StageId,
 } from "@/data/mock";
 import { updatePerson, usePerson } from "@/data/store";
+import { BoardLogo, Logo } from "@/components/logo";
 
 const FLOW: StageId[] = ["new", "screen", "assess", "interview", "offer", "hired"];
 const stageLabel = (s: StageId) => STAGES.find((x) => x.id === s)!.label;
@@ -115,6 +116,7 @@ function Detail({ c }: { c: Candidate }) {
   const navigate = useNavigate();
   const l = listingById(c.listingId);
   const b = boardById(l.board);
+  const jobs = pastJobsOf(c.id);
   const r = roleById(c.roleId);
 
   const stage = c.stage;
@@ -244,7 +246,7 @@ function Detail({ c }: { c: Candidate }) {
             <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
               <Tag color={stageMeta.color}><span className="size-1.5 rounded-full" style={{ background: stageMeta.color }} />{stageMeta.label}</Tag>
               <Tag color={TIER_COLOR[c.tier]}>Tier {c.tier}</Tag>
-              <Tag color={b.color}>{b.name}</Tag>
+              <Tag color={b.color}><BoardLogo id={l.board} size={13} />{b.name}</Tag>
               <Tag color="var(--muted)"><span className="font-mono text-[11px]">{b.short} · {l.variant}</span></Tag>
             </div>
             <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-[12.5px] text-muted">
@@ -447,7 +449,7 @@ function Detail({ c }: { c: Candidate }) {
               {l.status === "paused" && <Tag color="var(--muted)">Paused</Tag>}
             </div>
             <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
-              <Tag color={b.color}>{b.name}</Tag>
+              <Tag color={b.color}><BoardLogo id={l.board} size={13} />{b.name}</Tag>
               <Tag color="var(--muted)"><span className="font-mono text-[11px]">{b.short} · {l.variant}</span></Tag>
             </div>
             <p className="mt-2.5 text-[13px] leading-snug">“{l.headline}”</p>
@@ -464,7 +466,26 @@ function Detail({ c }: { c: Candidate }) {
           </Card>
 
           <Card className="p-4">
-            <SideTitle n={3}>Skills</SideTitle>
+            <SideTitle n={3}>Experience</SideTitle>
+            {jobs.length ? (
+              <ul className="mt-2.5 space-y-2.5">
+                {jobs.map((j) => (
+                  <li key={j.company.domain + j.years} className="flex items-center gap-2.5">
+                    <Logo name={j.company.name} domain={j.company.domain} size={28} />
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate text-[13px] font-medium">{j.title}</div>
+                      <div className="truncate text-[12px] text-muted">{j.company.name} · <span className="tnum">{j.years}</span></div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mt-2.5 text-[13px] text-muted">No past employers listed.</p>
+            )}
+          </Card>
+
+          <Card className="p-4">
+            <SideTitle n={4}>Skills</SideTitle>
             <div className="mt-2.5 flex flex-wrap gap-1.5">
               {c.skills.map((s) => (
                 <span key={s} className="rounded-[6px] bg-inset px-1.5 py-0.5 text-[12px] text-muted shadow-[inset_0_0_0_1px_var(--rim)]">{s}</span>
@@ -473,7 +494,7 @@ function Detail({ c }: { c: Candidate }) {
           </Card>
 
           <Card className="p-4">
-            <SideTitle n={4}>Documents</SideTitle>
+            <SideTitle n={5}>Documents</SideTitle>
             <div className="mt-2 flex flex-col">
               {["Application answers", c.roleId === "va-ops" || c.stage === "assess" ? "Trial task brief" : "Resume"].map((d) => (
                 <div key={d} className="flex items-center gap-2 border-b border-rim py-1.5 text-[12.5px] text-muted last:border-b-0">

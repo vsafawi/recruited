@@ -455,3 +455,116 @@ export const AI_SUMMARIES: Record<string, SummaryLine[]> = {
     { kind: "question", text: "No evidence yet of label-side editorial pitching through Spotify for Artists.", source: "Rhea, round 2" },
   ],
 };
+
+/* --- Logos, integrations and past employers ------------------------------ */
+
+/**
+ * Domains for logos. Each one has a bundled icon at public/logos/<domain>.png,
+ * fetched once from Twenty's favicon service (twenty-icons.com/<domain>, from
+ * github.com/twentyhq/favicon) so the demo never waits on a third party.
+ * A missing domain or file falls back to initials.
+ */
+export const BOARD_DOMAIN: Record<BoardId, string | undefined> = {
+  onlinejobs: "onlinejobs.ph",
+  indeed: "indeed.com",
+  mbw: "musicbusinessworldwide.com",
+  roster: undefined,
+};
+
+export interface Integration {
+  name: string;
+  domain?: string;
+  /** Flip to "soon" to show a Coming soon badge, or to "live" when it ships. */
+  status: "live" | "soon";
+}
+
+export const INTEGRATIONS: Integration[] = [
+  ...BOARDS.map((b): Integration => ({ name: b.name, domain: BOARD_DOMAIN[b.id], status: "live" })),
+  { name: "LinkedIn", domain: "linkedin.com", status: "soon" },
+  { name: "Wellfound", domain: "wellfound.com", status: "soon" },
+  { name: "Upwork", domain: "upwork.com", status: "soon" },
+  { name: "ZipRecruiter", domain: "ziprecruiter.com", status: "soon" },
+  { name: "Craigslist", domain: "craigslist.org", status: "soon" },
+  { name: "Google Calendar", domain: "calendar.google.com", status: "soon" },
+  { name: "Google Meet", domain: "meet.google.com", status: "soon" },
+  { name: "Zoom", domain: "zoom.us", status: "soon" },
+  { name: "Calendly", domain: "calendly.com", status: "soon" },
+  { name: "Gmail", domain: "gmail.com", status: "soon" },
+  { name: "Outlook", domain: "outlook.com", status: "soon" },
+  { name: "Slack", domain: "slack.com", status: "soon" },
+  { name: "Notion", domain: "notion.so", status: "soon" },
+  { name: "Zapier", domain: "zapier.com", status: "soon" },
+  { name: "DocuSign", domain: "docusign.com", status: "soon" },
+];
+
+export interface Company {
+  name: string;
+  domain: string;
+}
+
+export const COMPANIES = {
+  amuse: { name: "Amuse", domain: "amuse.io" },
+  concentrix: { name: "Concentrix", domain: "concentrix.com" },
+  shopify: { name: "Shopify", domain: "shopify.com" },
+  accenture: { name: "Accenture", domain: "accenture.com" },
+  iheart: { name: "iHeartMedia", domain: "iheartmedia.com" },
+  teleperformance: { name: "Teleperformance", domain: "teleperformance.com" },
+  sony: { name: "Sony Music", domain: "sonymusic.com" },
+  distrokid: { name: "DistroKid", domain: "distrokid.com" },
+  symphonic: { name: "Symphonic", domain: "symphonic.com" },
+  tunecore: { name: "TuneCore", domain: "tunecore.com" },
+  wmg: { name: "Warner Music Group", domain: "wmg.com" },
+  doordash: { name: "DoorDash", domain: "doordash.com" },
+  target: { name: "Target", domain: "target.com" },
+  atlantic: { name: "Atlantic Records", domain: "atlantic-records.com" },
+  eventbrite: { name: "Eventbrite", domain: "eventbrite.com" },
+  livenation: { name: "Live Nation", domain: "livenation.com" },
+  hubspot: { name: "HubSpot", domain: "hubspot.com" },
+  sweetgreen: { name: "Sweetgreen", domain: "sweetgreen.com" },
+  umg: { name: "Universal Music Group", domain: "umusic.com" },
+  groover: { name: "Groover", domain: "groover.co" },
+  bandcamp: { name: "Bandcamp", domain: "bandcamp.com" },
+  cdbaby: { name: "CD Baby", domain: "cdbaby.com" },
+  spotify: { name: "Spotify", domain: "spotify.com" },
+  downtown: { name: "Downtown Music", domain: "downtownmusic.com" },
+  upwork: { name: "Upwork", domain: "upwork.com" },
+  amazon: { name: "Amazon", domain: "amazon.com" },
+} satisfies Record<string, Company>;
+
+export interface PastJob {
+  company: Company;
+  title: string;
+  years: string;
+}
+
+const job = (k: keyof typeof COMPANIES, title: string, years: string): PastJob => ({ company: COMPANIES[k], title, years });
+
+/** Where each candidate worked before, most recent first, as listed on what they sent. */
+export const PAST_JOBS: Record<string, PastJob[]> = {
+  c1: [job("amuse", "Operations VA", "2023–now"), job("upwork", "Freelance VA", "2021–2023")],
+  c2: [job("concentrix", "Fan support lead", "2022–now")],
+  c3: [job("shopify", "Store support contractor", "2023–now")],
+  c4: [job("accenture", "Data entry associate", "2025–now")],
+  c5: [job("iheart", "Podcast production assistant", "2023–now")],
+  c6: [job("teleperformance", "Customer support", "2022–now")],
+  c7: [job("sony", "Label coordinator", "2022–2025"), job("distrokid", "Royalty ops", "2020–2022")],
+  c8: [job("symphonic", "Release campaign manager", "2022–now"), job("tunecore", "Artist marketing", "2019–2022")],
+  c9: [job("wmg", "Marketing manager", "2021–now")],
+  c10: [job("doordash", "Growth marketer", "2022–now")],
+  c11: [job("target", "Marketing associate", "2023–now")],
+  c12: [job("atlantic", "Artist manager's assistant", "2023–now")],
+  c13: [job("eventbrite", "Digital marketer", "2024–now"), job("livenation", "Event promoter", "2020–2024")],
+  c14: [job("hubspot", "Content marketer", "2022–now")],
+  c15: [job("sweetgreen", "Social media coordinator", "2024–now")],
+  c16: [job("umg", "PR assistant", "2023–now")],
+  c17: [job("groover", "Curator", "2022–now")],
+  c18: [job("bandcamp", "Campus ambassador", "2024–now")],
+  c19: [],
+  c20: [job("cdbaby", "DSP pitching", "2024–now"), job("spotify", "Editorial intern", "2023")],
+  c21: [job("bandcamp", "Contributing writer", "2020–now")],
+  c22: [job("downtown", "Sync licensing intern", "2025–now")],
+  c23: [job("upwork", "Freelance transcriber", "2022–now")],
+  c24: [job("amazon", "Marketing intern", "2025")],
+};
+
+export const pastJobsOf = (candidateId: string) => PAST_JOBS[candidateId] ?? [];
