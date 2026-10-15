@@ -15,6 +15,7 @@ const Candidates = lazy(() => import("./demo/Candidates"));
 const CandidateDetail = lazy(() => import("./demo/CandidateDetail"));
 const Listings = lazy(() => import("./demo/Listings"));
 const NewRole = lazy(() => import("./demo/NewRole"));
+const Integrations = lazy(() => import("./demo/Integrations"));
 const Careers = lazy(() => import("./pages/Careers"));
 const Apply = lazy(() => import("./pages/Apply"));
 
@@ -31,6 +32,8 @@ createRoot(document.getElementById("root")!).render(
             <Route path="candidates/:id" element={<CandidateDetail />} />
             <Route path="listings" element={<Navigate to="/demo" replace />} />
             <Route path="roles/new" element={<NewRole />} />
+            <Route path="integrations" element={<Integrations />} />
+            <Route path="settings" element={<Navigate to="/demo/integrations" replace />} />
             <Route path="*" element={<Navigate to="/demo" replace />} />
           </Route>
           <Route path="/jobs" element={<Careers />} />

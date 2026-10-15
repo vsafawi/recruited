@@ -47,6 +47,7 @@ how we avoid two threads building the same thing or editing the same file.
 | 11 | Team and settings — interviewers, rubric templates, board connections | `src/demo/Settings.tsx`, `src/demo/settings/*` | lead thread | done |
 | 15 | UI refresh v2 (beautifului.dev style): tokens, primitives, shell, then every screen | appended blocks in `styles.css` and `ui.tsx`, `Shell.tsx`, then page files one agent each | hackathon-plan thread | claimed — restyles only, no behaviour or data changes |
 | 16 | Logos — a "Works with today / Coming soon" row on the landing page, logos on board tags, past companies on candidates | `public/logos/`, `src/components/logo.tsx`, `src/pages/landing/Integrations.tsx`, appended block in `mock.ts` (`INTEGRATIONS`, `PAST_JOBS`), small edits in the candidate screens | logos thread | done |
+| 17 | Integrations page — one rail link, AI connectors (Claude MCP, OpenAI, custom MCP) with an Add integration dialog, Coming soon meeting-note tools | `src/demo/Integrations.tsx`, the `INTEGRATIONS` block in `mock.ts`, one route in `main.tsx`, one rail entry in `Shell.tsx` | logos thread | done |
 
 Already wired and stubbed until their stream lands: `/demo/inbox`, `/demo/interviews`,
 `/jobs`, `/jobs/:listingId`, and the rail's search box, which calls `openPalette()`

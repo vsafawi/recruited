@@ -471,30 +471,48 @@ export const BOARD_DOMAIN: Record<BoardId, string | undefined> = {
   roster: undefined,
 };
 
+export type IntegrationGroup = "Job boards" | "AI and MCP" | "Calendar and video" | "Meeting notes" | "Email and chat" | "Workflow";
+
 export interface Integration {
+  id: string;
   name: string;
   domain?: string;
+  group: IntegrationGroup;
+  /** One line on what it does for you here. */
+  blurb: string;
   /** Flip to "soon" to show a Coming soon badge, or to "live" when it ships. */
   status: "live" | "soon";
 }
 
+const soon = (id: string, name: string, domain: string, group: IntegrationGroup, blurb: string): Integration =>
+  ({ id, name, domain, group, blurb, status: "soon" });
+
+/** Every platform recruited connects to. The landing row and /demo/integrations both read this list. */
 export const INTEGRATIONS: Integration[] = [
-  ...BOARDS.map((b): Integration => ({ name: b.name, domain: BOARD_DOMAIN[b.id], status: "live" })),
-  { name: "LinkedIn", domain: "linkedin.com", status: "soon" },
-  { name: "Wellfound", domain: "wellfound.com", status: "soon" },
-  { name: "Upwork", domain: "upwork.com", status: "soon" },
-  { name: "ZipRecruiter", domain: "ziprecruiter.com", status: "soon" },
-  { name: "Craigslist", domain: "craigslist.org", status: "soon" },
-  { name: "Google Calendar", domain: "calendar.google.com", status: "soon" },
-  { name: "Google Meet", domain: "meet.google.com", status: "soon" },
-  { name: "Zoom", domain: "zoom.us", status: "soon" },
-  { name: "Calendly", domain: "calendly.com", status: "soon" },
-  { name: "Gmail", domain: "gmail.com", status: "soon" },
-  { name: "Outlook", domain: "outlook.com", status: "soon" },
-  { name: "Slack", domain: "slack.com", status: "soon" },
-  { name: "Notion", domain: "notion.so", status: "soon" },
-  { name: "Zapier", domain: "zapier.com", status: "soon" },
-  { name: "DocuSign", domain: "docusign.com", status: "soon" },
+  ...BOARDS.map((b): Integration => ({ id: b.id, name: b.name, domain: BOARD_DOMAIN[b.id], group: "Job boards", blurb: b.audience, status: "live" })),
+  soon("linkedin", "LinkedIn", "linkedin.com", "Job boards", "Professional network, paid promotion"),
+  soon("wellfound", "Wellfound", "wellfound.com", "Job boards", "Startup roles and candidates"),
+  soon("upwork", "Upwork", "upwork.com", "Job boards", "Freelance and contract work"),
+  soon("ziprecruiter", "ZipRecruiter", "ziprecruiter.com", "Job boards", "Broad US reach"),
+  soon("craigslist", "Craigslist", "craigslist.org", "Job boards", "Local, by city"),
+  { id: "claude", name: "Claude", domain: "claude.ai", group: "AI and MCP", status: "live", blurb: "Connect recruited as an MCP server so Claude can read your pipeline and draft listings" },
+  { id: "openai", name: "OpenAI", domain: "openai.com", group: "AI and MCP", status: "live", blurb: "Use your own API key for screening summaries and listing drafts" },
+  { id: "custom-mcp", name: "Custom MCP server", domain: "modelcontextprotocol.io", group: "AI and MCP", status: "live", blurb: "Point recruited at any MCP server by URL" },
+  soon("wispr", "Wispr Flow", "wisprflow.ai", "Meeting notes", "Dictate interview notes straight onto a scorecard"),
+  soon("granola", "Granola", "granola.ai", "Meeting notes", "Interview notes attached to the candidate"),
+  soon("fireflies", "Fireflies", "fireflies.ai", "Meeting notes", "Recorded interviews, transcribed"),
+  soon("otter", "Otter", "otter.ai", "Meeting notes", "Live transcripts of every round"),
+  soon("fathom", "Fathom", "fathom.video", "Meeting notes", "Call recordings with highlights"),
+  soon("gcal", "Google Calendar", "calendar.google.com", "Calendar and video", "Book interviews against everyone's calendar"),
+  soon("meet", "Google Meet", "meet.google.com", "Calendar and video", "A video link on every interview"),
+  soon("zoom", "Zoom", "zoom.us", "Calendar and video", "A video link on every interview"),
+  soon("calendly", "Calendly", "calendly.com", "Calendar and video", "Let candidates pick their own slot"),
+  soon("gmail", "Gmail", "gmail.com", "Email and chat", "Send and track candidate email"),
+  soon("outlook", "Outlook", "outlook.com", "Email and chat", "Send and track candidate email"),
+  soon("slack", "Slack", "slack.com", "Email and chat", "New A-tier applicants posted to a channel"),
+  soon("notion", "Notion", "notion.so", "Workflow", "Sync roles and scorecards"),
+  soon("zapier", "Zapier", "zapier.com", "Workflow", "Trigger anything on a stage change"),
+  soon("docusign", "DocuSign", "docusign.com", "Workflow", "Send offers for signature"),
 ];
 
 export interface Company {
