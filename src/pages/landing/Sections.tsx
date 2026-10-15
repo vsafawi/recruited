@@ -82,14 +82,6 @@ export function Scenario() {
             </div>
           ))}
         </dl>
-        <div className="mt-5 flex flex-wrap gap-1.5">
-          {BOARDS.map((b) => (
-            <Tag key={b.id} color={b.color}>
-              <span className="size-1.5 rounded-full" style={{ background: b.color }} />
-              {b.name}
-            </Tag>
-          ))}
-        </div>
       </div>
     </section>
   );

@@ -2,13 +2,15 @@ import { useRef } from "react";
 import "./landing/landing.css";
 import { Intro } from "./landing/Hero";
 import { ApplyPage, Closing, Deploy, Footer, InterviewLoop, Pipeline, Scenario, SplitTests } from "./landing/Sections";
+import { Integrations } from "./landing/Integrations";
 import { useRevealAll } from "./landing/hooks";
 
 /**
  * recruited.tools landing page, laid out as a catalogue: a centred column with
  * dashed side rules over a hatched ground, the pitch in a sticky sidebar, and
  * one numbered entry per part of the product, each with a small live mock.
- * Ships in the first bundle, so it stays light: no motion library, no images,
+ * Ships in the first bundle, so it stays light: no motion library, no images
+ * beyond the small bundled logos in public/logos,
  * nothing imported from the demo screens. All the numbers come from
  * src/data/mock.ts.
  */
@@ -23,6 +25,7 @@ export default function Landing() {
         </aside>
         <main className="min-w-0">
           <Scenario />
+          <Integrations />
           <SplitTests />
           <Pipeline />
           <InterviewLoop />

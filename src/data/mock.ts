@@ -471,33 +471,30 @@ export const BOARD_DOMAIN: Record<BoardId, string | undefined> = {
   roster: undefined,
 };
 
-export type IntegrationKind = "Job board" | "Calendar and video" | "Email and chat" | "Workflow";
-
 export interface Integration {
   name: string;
   domain?: string;
-  kind: IntegrationKind;
   /** Flip to "soon" to show a Coming soon badge, or to "live" when it ships. */
   status: "live" | "soon";
 }
 
 export const INTEGRATIONS: Integration[] = [
-  ...BOARDS.map((b): Integration => ({ name: b.name, domain: BOARD_DOMAIN[b.id], kind: "Job board", status: "live" })),
-  { name: "LinkedIn", domain: "linkedin.com", kind: "Job board", status: "soon" },
-  { name: "Wellfound", domain: "wellfound.com", kind: "Job board", status: "soon" },
-  { name: "Upwork", domain: "upwork.com", kind: "Job board", status: "soon" },
-  { name: "ZipRecruiter", domain: "ziprecruiter.com", kind: "Job board", status: "soon" },
-  { name: "Craigslist", domain: "craigslist.org", kind: "Job board", status: "soon" },
-  { name: "Google Calendar", domain: "calendar.google.com", kind: "Calendar and video", status: "soon" },
-  { name: "Google Meet", domain: "meet.google.com", kind: "Calendar and video", status: "soon" },
-  { name: "Zoom", domain: "zoom.us", kind: "Calendar and video", status: "soon" },
-  { name: "Calendly", domain: "calendly.com", kind: "Calendar and video", status: "soon" },
-  { name: "Gmail", domain: "gmail.com", kind: "Email and chat", status: "soon" },
-  { name: "Outlook", domain: "outlook.com", kind: "Email and chat", status: "soon" },
-  { name: "Slack", domain: "slack.com", kind: "Email and chat", status: "soon" },
-  { name: "Notion", domain: "notion.so", kind: "Workflow", status: "soon" },
-  { name: "Zapier", domain: "zapier.com", kind: "Workflow", status: "soon" },
-  { name: "DocuSign", domain: "docusign.com", kind: "Workflow", status: "soon" },
+  ...BOARDS.map((b): Integration => ({ name: b.name, domain: BOARD_DOMAIN[b.id], status: "live" })),
+  { name: "LinkedIn", domain: "linkedin.com", status: "soon" },
+  { name: "Wellfound", domain: "wellfound.com", status: "soon" },
+  { name: "Upwork", domain: "upwork.com", status: "soon" },
+  { name: "ZipRecruiter", domain: "ziprecruiter.com", status: "soon" },
+  { name: "Craigslist", domain: "craigslist.org", status: "soon" },
+  { name: "Google Calendar", domain: "calendar.google.com", status: "soon" },
+  { name: "Google Meet", domain: "meet.google.com", status: "soon" },
+  { name: "Zoom", domain: "zoom.us", status: "soon" },
+  { name: "Calendly", domain: "calendly.com", status: "soon" },
+  { name: "Gmail", domain: "gmail.com", status: "soon" },
+  { name: "Outlook", domain: "outlook.com", status: "soon" },
+  { name: "Slack", domain: "slack.com", status: "soon" },
+  { name: "Notion", domain: "notion.so", status: "soon" },
+  { name: "Zapier", domain: "zapier.com", status: "soon" },
+  { name: "DocuSign", domain: "docusign.com", status: "soon" },
 ];
 
 export interface Company {

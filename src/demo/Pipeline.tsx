@@ -10,6 +10,7 @@ import {
 } from "@/data/mock";
 import { usePeople } from "@/data/store";
 import { PageHeader } from "./Shell";
+import { BoardLogo } from "@/components/logo";
 
 const FLOW: StageId[] = ["new", "screen", "assess", "interview", "offer", "hired"];
 const TIERS: Tier[] = ["A", "B", "C"];
@@ -164,7 +165,7 @@ export default function Pipeline() {
                     on ? "bg-card text-foreground shadow-[0_0_0_1px_var(--rim-strong)]" : "text-muted shadow-[inset_0_0_0_1px_var(--rim)] hover:text-foreground",
                   )}
                 >
-                  <span className="size-1.5 rounded-full" style={{ background: b.color }} />
+                  <BoardLogo id={b.id} size={14} />
                   {b.name}
                 </button>
               );
@@ -332,6 +333,7 @@ function PipelineCard({
         <span title={`Tier ${c.tier}`}><Tag color={TIER_COLOR[c.tier]} className="font-mono">{c.tier}</Tag></span>
         <span title={`${b.name}, variant ${l.variant}`}>
           <Tag color={b.color}>
+            <BoardLogo id={l.board} size={13} />
             {b.short}
             <span className="font-mono text-[10.5px] opacity-75">{l.variant}</span>
           </Tag>
@@ -469,7 +471,7 @@ function PanelBody({
           <SectionLabel n={1} title="Source">The listing they answered</SectionLabel>
           <div className="mt-2.5 rounded-card bg-card p-3 shadow-[0_0_0_1px_var(--rim)]">
             <div className="flex flex-wrap items-center gap-1.5 text-[12.5px]">
-              <Tag color={b.color}>{b.name}</Tag>
+              <Tag color={b.color}><BoardLogo id={l.board} size={13} />{b.name}</Tag>
               <Tag color="var(--muted)" className="font-mono text-[11px]">Variant {l.variant}</Tag>
               {l.status === "winner" && <Tag color="var(--success)" className="ml-auto">Winner</Tag>}
             </div>

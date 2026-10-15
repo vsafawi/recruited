@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { boardById, BOARD_DOMAIN, type BoardId } from "@/data/mock";
 import { cx } from "./ui";
 
 /**
@@ -36,4 +37,9 @@ export function Logo({ name, domain, size = 20, className }: { name: string; dom
       )}
     </span>
   );
+}
+
+/** A job board's logo, from BOARD_DOMAIN in mock.ts. */
+export function BoardLogo({ id, size = 14, className }: { id: BoardId; size?: number; className?: string }) {
+  return <Logo name={boardById(id).name} domain={BOARD_DOMAIN[id]} size={size} className={className} />;
 }

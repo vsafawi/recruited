@@ -3,13 +3,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { ArrowDown, ArrowUp, Check, ChevronDown, Mail, Minus, Search, Star, X } from "lucide-react";
 import { Avatar, Button, cx, Index, Segmented, StageChip, Tag } from "@/components/ui";
 import {
-  BOARDS, boardById, listingById, roleById, ROLES, STAGES, TIER_COLOR,
+  BOARDS, boardById, COMPANIES, listingById, pastJobsOf, roleById, ROLES, STAGES, TIER_COLOR,
   type BoardId, type Candidate, type StageId, type Tier,
 } from "@/data/mock";
 import { usePeople } from "@/data/store";
 import { PageHeader } from "./Shell";
+import { BoardLogo, Logo } from "@/components/logo";
 
-type SortKey = "name" | "role" | "source" | "stage" | "tier" | "score" | "ask" | "applied";
+type SortKey = "name" | "company" | "role" | "source" | "stage" | "tier" | "score" | "ask" | "applied";
 type Sort = { key: SortKey; dir: "asc" | "desc" };
 
 const STAGE_ORDER = Object.fromEntries(STAGES.map((s, i) => [s.id, i])) as Record<StageId, number>;
@@ -26,6 +27,8 @@ function askValue(ask: string) {
 const sortValue = (c: Candidate, k: SortKey): string | number => {
   switch (k) {
     case "name": return c.name;
+    // Most recent employer, A to Z; people with none listed go to the end.
+    case "company": return pastJobsOf(c.id)[0]?.company.name ?? "\uffff";
     case "role": return roleById(c.roleId).title;
     case "source": { const l = listingById(c.listingId); return boardById(l.board).name + l.variant; }
     case "stage": return STAGE_ORDER[c.stage];
@@ -35,6 +38,27 @@ const sortValue = (c: Candidate, k: SortKey): string | number => {
     case "applied": return c.appliedDaysAgo;
   }
 };
+
+const COMPANY_OPTIONS = Object.values(COMPANIES)
+  .sort((a, b) => a.name.localeCompare(b.name))
+  .map((co) => ({ id: co.domain, label: co.name, icon: <Logo name={co.name} domain={co.domain} size={16} /> }));
+
+/** Logos of where someone worked, most recent first, with the latest one named. */
+function PastCompanies({ id, className }: { id: string; className?: string }) {
+  const jobs = pastJobsOf(id);
+  if (!jobs.length) return <span className={cx("block text-[12px] text-faint", className)}>None listed</span>;
+  return (
+    <span className={cx("flex max-w-[150px] items-center gap-2", className)} title={jobs.map((j) => `${j.title}, ${j.company.name}`).join(" · ")}>
+      <span className="flex shrink-0 -space-x-1.5">
+        {jobs.map((j) => <Logo key={j.company.domain} name={j.company.name} domain={j.company.domain} size={18} className="ring-2 ring-card" />)}
+      </span>
+      <span className="truncate text-[12.5px] text-muted">
+        {jobs[0].company.name}
+        {jobs.length > 1 && <span className="text-faint"> +{jobs.length - 1}</span>}
+      </span>
+    </span>
+  );
+}
 
 function ago(days: number) {
   return days === 0 ? "Today" : `${days}d ago`;
@@ -48,6 +72,7 @@ export default function Candidates() {
   const [tiers, setTiers] = useState<Tier[]>([]);
   const [boards, setBoards] = useState<BoardId[]>([]);
   const [roles, setRoles] = useState<string[]>([]);
+  const [companies, setCompanies] = useState<string[]>([]);
   const [sort, setSort] = useState<Sort>({ key: "score", dir: "desc" });
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [toast, setToast] = useState<string | null>(null);
@@ -81,11 +106,12 @@ export default function Candidates() {
       if (tiers.length && !tiers.includes(c.tier)) return false;
       if (boards.length && !boards.includes(l.board)) return false;
       if (roles.length && !roles.includes(c.roleId)) return false;
+      if (companies.length && !pastJobsOf(c.id).some((j) => companies.includes(j.company.domain))) return false;
       if (!needle) return true;
-      return [c.name, c.headline, c.location, roleById(c.roleId).title, boardById(l.board).name, ...c.skills]
+      return [c.name, c.headline, c.location, roleById(c.roleId).title, boardById(l.board).name, ...c.skills, ...pastJobsOf(c.id).map((j) => j.company.name)]
         .some((s) => s.toLowerCase().includes(needle));
     });
-  }, [people, q, tiers, boards, roles]);
+  }, [people, q, tiers, boards, roles, companies]);
 
   const stageCounts = useMemo(() => {
     const n = Object.fromEntries(STAGES.map((s) => [s.id, 0])) as Record<StageId, number>;
@@ -103,7 +129,7 @@ export default function Candidates() {
     });
   }, [base, stages, sort]);
 
-  const filtered = stages.length + tiers.length + boards.length + roles.length > 0 || q.length > 0;
+  const filtered = stages.length + tiers.length + boards.length + roles.length + companies.length > 0 || q.length > 0;
   const allOn = rows.length > 0 && rows.every((r) => selected.has(r.id));
   const someOn = rows.some((r) => selected.has(r.id));
 
@@ -112,7 +138,7 @@ export default function Candidates() {
   const toggleAll = () => setSelected(allOn ? new Set() : new Set(rows.map((r) => r.id)));
 
   const clickSort = (key: SortKey) =>
-    setSort((s) => (s.key === key ? { key, dir: s.dir === "asc" ? "desc" : "asc" } : { key, dir: key === "name" || key === "role" || key === "source" || key === "tier" ? "asc" : "desc" }));
+    setSort((s) => (s.key === key ? { key, dir: s.dir === "asc" ? "desc" : "asc" } : { key, dir: key === "name" || key === "company" || key === "role" || key === "source" || key === "tier" ? "asc" : "desc" }));
 
   const bulkMove = (stage: StageId) => {
     const n = selected.size;
@@ -121,7 +147,7 @@ export default function Candidates() {
     notify(`${n} ${n === 1 ? "candidate" : "candidates"} moved to ${STAGES.find((s) => s.id === stage)!.label}.`);
   };
 
-  const clearAll = () => { setQ(""); setStages([]); setTiers([]); setBoards([]); setRoles([]); };
+  const clearAll = () => { setQ(""); setStages([]); setTiers([]); setBoards([]); setRoles([]); setCompanies([]); };
 
   return (
     <div className="pb-28">
@@ -159,7 +185,7 @@ export default function Candidates() {
               ref={searchRef}
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="Search name, skill, location"
+              placeholder="Search name, skill, company"
               className="h-full w-full rounded-full bg-transparent pr-8 pl-8 text-[12.5px] shadow-[inset_0_0_0_1px_var(--rim)] outline-none transition-shadow placeholder:text-faint hover:shadow-[inset_0_0_0_1px_var(--rim-strong)] focus:shadow-[inset_0_0_0_1.5px_var(--primary)]"
             />
             {q ? (
@@ -176,7 +202,7 @@ export default function Candidates() {
           />
           <FilterMenu
             label="Board"
-            options={BOARDS.map((b) => ({ id: b.id, label: b.name, dot: b.color }))}
+            options={BOARDS.map((b) => ({ id: b.id, label: b.name, icon: <BoardLogo id={b.id} size={16} /> }))}
             value={boards}
             onChange={(v) => setBoards(v as BoardId[])}
           />
@@ -185,6 +211,12 @@ export default function Candidates() {
             options={ROLES.map((r) => ({ id: r.id, label: r.title }))}
             value={roles}
             onChange={setRoles}
+          />
+          <FilterMenu
+            label="Past company"
+            options={COMPANY_OPTIONS}
+            value={companies}
+            onChange={setCompanies}
           />
           {filtered && (
             <button onClick={clearAll} className="h-7.5 px-1.5 text-[12px] text-muted hover:text-foreground">Clear</button>
@@ -199,7 +231,7 @@ export default function Candidates() {
       <div className="mt-4 hidden px-8 md:block">
         <div className="overflow-hidden rounded-panel bg-card shadow-card">
           <div className="scroll-quiet overflow-x-auto">
-            <table className="w-full min-w-[880px] border-collapse text-[13px]">
+            <table className="w-full min-w-[1040px] border-collapse text-[13px]">
               <thead>
                 <tr className="h-9 border-b border-rim text-left text-[12px] text-faint">
                   <th className="w-11 pr-1 pl-4">
@@ -207,6 +239,7 @@ export default function Candidates() {
                   </th>
                   <th className="w-9 pr-3 font-normal"><span className="sr-only">Row</span></th>
                   <Th k="name" sort={sort} onSort={clickSort}>Candidate</Th>
+                  <Th k="company" sort={sort} onSort={clickSort}>Past companies</Th>
                   <Th k="role" sort={sort} onSort={clickSort}>Role</Th>
                   <Th k="source" sort={sort} onSort={clickSort}>Source</Th>
                   <Th k="stage" sort={sort} onSort={clickSort}>Stage</Th>
@@ -235,7 +268,7 @@ export default function Candidates() {
                       </td>
                       <td className="pr-3"><Index n={i + 1} /></td>
                       <td className="py-1.5 pr-4">
-                        <div className="flex max-w-[260px] items-center gap-2.5">
+                        <div className="flex max-w-[220px] items-center gap-2.5">
                           <Avatar initials={c.initials} hue={c.hue} size={28} />
                           <div className="min-w-0">
                             <div className="flex items-center gap-1.5">
@@ -248,10 +281,12 @@ export default function Candidates() {
                           </div>
                         </div>
                       </td>
-                      <td className="pr-4 text-muted"><div className="max-w-[150px] truncate">{roleById(c.roleId).title}</div></td>
+                      <td className="pr-4"><PastCompanies id={c.id} /></td>
+                      <td className="pr-4 text-muted"><div className="max-w-[130px] truncate">{roleById(c.roleId).title}</div></td>
                       <td className="pr-4 whitespace-nowrap">
                         <span title={`${b.name}, variant ${l.variant}`}>
                           <Tag color={b.color}>
+                            <BoardLogo id={l.board} size={13} />
                             {b.short}
                             <span className="font-mono text-[10.5px] opacity-75">{l.variant}</span>
                           </Tag>
@@ -270,7 +305,7 @@ export default function Candidates() {
                 <tfoot>
                   <tr className="h-10 text-[12px] text-faint">
                     <td />
-                    <td colSpan={9} className="pr-4">
+                    <td colSpan={10} className="pr-4">
                       <span className="tnum font-medium text-muted">{rows.length}</span>{" "}
                       {rows.length === 1 ? "candidate" : "candidates"}
                       {someOn && <span className="tnum"> · {rows.filter((r) => selected.has(r.id)).length} selected</span>}
@@ -301,6 +336,7 @@ export default function Candidates() {
                 <option value="applied:asc">Newest</option>
                 <option value="stage:desc">Furthest along</option>
                 <option value="name:asc">Name</option>
+                <option value="company:asc">Past company</option>
               </select>
             </label>
           </div>
@@ -322,9 +358,11 @@ export default function Candidates() {
                       <span className="tnum ml-auto text-[13px] font-medium">{c.score}</span>
                     </div>
                     <div className="truncate text-[12px] text-muted">{c.headline}</div>
+                    <PastCompanies id={c.id} className="mt-1.5" />
                     <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11.5px] text-faint">
                       <StageChip stage={c.stage} />
                       <Tag color={b.color}>
+                        <BoardLogo id={l.board} size={13} />
                         {b.short}
                         <span className="font-mono text-[10.5px] opacity-75">{l.variant}</span>
                       </Tag>
@@ -438,7 +476,7 @@ function useOutside(ref: React.RefObject<HTMLElement | null>, on: boolean, close
 
 function FilterMenu({
   label, options, value, onChange,
-}: { label: string; options: { id: string; label: string; dot?: string }[]; value: string[]; onChange: (v: string[]) => void }) {
+}: { label: string; options: { id: string; label: string; dot?: string; icon?: ReactNode }[]; value: string[]; onChange: (v: string[]) => void }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const close = useMemo(() => () => setOpen(false), []);
@@ -459,7 +497,7 @@ function FilterMenu({
         <ChevronDown className={cx("size-3 opacity-70 transition-transform duration-150", open && "rotate-180")} />
       </button>
       {open && (
-        <div className="absolute left-0 top-full z-30 mt-1.5 w-56 rounded-card bg-card p-1 shadow-overlay">
+        <div className="absolute left-0 top-full z-30 mt-1.5 max-h-80 w-56 overflow-y-auto rounded-card bg-card p-1 shadow-overlay">
           {options.map((o) => {
             const on = value.includes(o.id);
             return (
@@ -472,6 +510,7 @@ function FilterMenu({
                   {on && <Check className="size-2.5" strokeWidth={3.5} />}
                 </span>
                 {o.dot && <span className="size-1.5 rounded-full" style={{ background: o.dot }} />}
+                {o.icon}
                 <span className="truncate">{o.label}</span>
               </button>
             );
