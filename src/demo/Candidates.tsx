@@ -175,7 +175,7 @@ export default function Candidates() {
             <table className="w-full min-w-[880px] border-collapse text-[13px]">
               <thead>
                 <tr className="h-9 border-b border-rim text-left text-[11.5px] text-muted">
-                  <th className="w-10 pl-4">
+                  <th className="w-11 pr-1 pl-4">
                     <Checkbox checked={allOn} indeterminate={!allOn && someOn} onChange={toggleAll} label="Select all" />
                   </th>
                   <Th k="name" sort={sort} onSort={clickSort}>Candidate</Th>
@@ -202,11 +202,11 @@ export default function Candidates() {
                         on ? "bg-primary-tint/70" : "hover:bg-[var(--wash)]",
                       )}
                     >
-                      <td className="pl-4" onClick={(e) => e.stopPropagation()}>
+                      <td className="pr-1 pl-4" onClick={(e) => e.stopPropagation()}>
                         <Checkbox checked={on} onChange={() => toggle(c.id)} label={`Select ${c.name}`} />
                       </td>
-                      <td className="max-w-[300px] py-1.5 pr-4">
-                        <div className="flex items-center gap-2.5">
+                      <td className="py-1.5 pr-4">
+                        <div className="flex max-w-[260px] items-center gap-2.5">
                           <Avatar initials={c.initials} hue={c.hue} size={28} />
                           <div className="min-w-0">
                             <div className="flex items-center gap-1.5">
@@ -219,11 +219,11 @@ export default function Candidates() {
                           </div>
                         </div>
                       </td>
-                      <td className="max-w-[180px] truncate pr-4 text-muted">{roleById(c.roleId).title}</td>
+                      <td className="pr-4 text-muted"><div className="max-w-[150px] truncate">{roleById(c.roleId).title}</div></td>
                       <td className="pr-4 whitespace-nowrap">
                         <span className="inline-flex items-center gap-1.5">
                           <span className="size-1.5 rounded-full" style={{ background: b.color }} />
-                          <span className="text-muted">{b.name}</span>
+                          <span className="max-w-[120px] truncate text-muted">{b.name}</span>
                           <span className="rounded-[4px] bg-inset px-1 font-mono text-[10.5px] text-muted">{l.variant}</span>
                         </span>
                       </td>

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type DragEvent } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import {
-  ArrowRight, CalendarClock, ChevronDown, ChevronRight, Clock, ExternalLink, Star, X,
+  ArrowRight, CalendarClock, ChevronDown, ChevronRight, Clock, Star, X,
 } from "lucide-react";
 import { Avatar, Button, ButtonLink, cx, Kbd, StageChip, TierBadge } from "@/components/ui";
 import {
@@ -497,18 +497,18 @@ function PanelBody({
       </div>
 
       <div className="mt-auto border-t border-rim px-5 py-4">
-        <div className="flex flex-wrap gap-2">
-          {next && !rejected && (
-            <Button variant="primary" onClick={() => onMove(c.id, next)}>
-              Advance to {STAGES.find((s) => s.id === next)!.label} <ArrowRight className="size-3.5" />
-            </Button>
-          )}
-          {rejected && (
-            <Button variant="primary" onClick={() => onMove(c.id, "screen")}>Restore to Screen</Button>
-          )}
+        {next && !rejected && (
+          <Button variant="primary" className="mb-2 w-full" onClick={() => onMove(c.id, next)}>
+            Advance to {STAGES.find((s) => s.id === next)!.label} <ArrowRight className="size-3.5" />
+          </Button>
+        )}
+        {rejected && (
+          <Button variant="primary" className="mb-2 w-full" onClick={() => onMove(c.id, "screen")}>Restore to Screen</Button>
+        )}
+        <div className="grid grid-cols-3 gap-2">
           <Button onClick={() => onSchedule(c)}><CalendarClock className="size-3.5" /> Schedule</Button>
           <div className="relative">
-            <Button onClick={() => setMoveOpen(!moveOpen)} aria-expanded={moveOpen}>
+            <Button className="w-full" onClick={() => setMoveOpen(!moveOpen)} aria-expanded={moveOpen}>
               Move to <ChevronDown className="size-3.5" />
             </Button>
             {moveOpen && (
@@ -528,12 +528,10 @@ function PanelBody({
               </div>
             )}
           </div>
-          {!rejected && (
-            <Button variant="ghost" className="text-destructive hover:text-destructive" onClick={() => onMove(c.id, "rejected")}>Reject</Button>
-          )}
+          <Button disabled={rejected} style={{ color: "var(--destructive)" }} onClick={() => onMove(c.id, "rejected")}>Reject</Button>
         </div>
         <ButtonLink to={`/demo/candidates/${c.id}`} variant="ink" className="mt-3 w-full">
-          Open profile <ExternalLink className="size-3.5" />
+          Open profile <ArrowRight className="size-3.5" />
         </ButtonLink>
         <Link to={`/demo/listings`} className="mt-2 flex items-center justify-center gap-1 text-[12px] text-muted hover:text-foreground">
           See how {b.short} · {l.variant} is performing <ChevronRight className="size-3" />
