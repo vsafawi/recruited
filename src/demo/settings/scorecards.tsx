@@ -65,9 +65,9 @@ export default function Scorecards({ rubrics, tiers, onRubrics, onTiers }: { rub
 
         <ul className="divide-y divide-[var(--rim)]">
           {list.map((c) => (
-            <li key={c.id} className="grid gap-2 px-4 py-3 sm:grid-cols-[minmax(0,220px)_minmax(0,1fr)_auto] sm:items-center sm:gap-4">
+            <li key={c.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-4 py-3 sm:grid-cols-[minmax(0,220px)_minmax(0,1fr)_auto] sm:gap-4">
               <input value={c.name} onChange={(e) => patch(c.id, { name: e.target.value })} className={inputCls} aria-label="Criterion name" />
-              <div className="flex min-w-0 items-center gap-3">
+              <div className="col-span-2 order-last flex min-w-0 items-center gap-3 sm:order-none sm:col-span-1">
                 <input
                   type="range" min={0} max={100} step={5} value={c.weight}
                   onChange={(e) => patch(c.id, { weight: Number(e.target.value) })}
