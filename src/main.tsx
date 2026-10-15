@@ -13,6 +13,10 @@ const Candidates = lazy(() => import("./demo/Candidates"));
 const CandidateDetail = lazy(() => import("./demo/CandidateDetail"));
 const Listings = lazy(() => import("./demo/Listings"));
 const NewRole = lazy(() => import("./demo/NewRole"));
+const Inbox = lazy(() => import("./demo/Inbox"));
+const Interviews = lazy(() => import("./demo/Interviews"));
+const Careers = lazy(() => import("./pages/Careers"));
+const Apply = lazy(() => import("./pages/Apply"));
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -27,7 +31,11 @@ createRoot(document.getElementById("root")!).render(
             <Route path="candidates/:id" element={<CandidateDetail />} />
             <Route path="listings" element={<Listings />} />
             <Route path="roles/new" element={<NewRole />} />
+            <Route path="inbox" element={<Inbox />} />
+            <Route path="interviews" element={<Interviews />} />
           </Route>
+          <Route path="/jobs" element={<Careers />} />
+          <Route path="/jobs/:listingId" element={<Apply />} />
           <Route path="*" element={<Landing />} />
         </Routes>
       </Suspense>
