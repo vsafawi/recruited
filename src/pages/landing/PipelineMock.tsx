@@ -1,7 +1,7 @@
-import { LayoutDashboard, Megaphone, Plus, Search, SquareKanban, Star, Users } from "lucide-react";
-import { Avatar, Kbd, TierBadge } from "@/components/ui";
+import { Megaphone, Plus, SquareKanban, Star, Users } from "lucide-react";
+import { Avatar, TierBadge } from "@/components/ui";
 import { Mark } from "@/components/mark";
-import { BOARDS, CANDIDATES, ROLES, STAGES, boardById, listingById, roleById, type Candidate } from "@/data/mock";
+import { BOARDS, CANDIDATES, LISTINGS, ROLES, STAGES, boardById, listingById, roleById, type Candidate } from "@/data/mock";
 
 /**
  * The pipeline board, drawn in HTML at a fixed design size and scaled by its
@@ -73,18 +73,10 @@ export function PipelineMock({ width }: { width: number }) {
               <Mark size={18} />
               Music Market Agency
             </div>
-            <div className="mb-3 flex h-7 items-center gap-2 rounded-control bg-card px-2 text-[12px] text-faint shadow-card">
-              <Search className="size-3.5" />
-              Search
-              <span className="ml-auto">
-                <Kbd>⌘K</Kbd>
-              </span>
-            </div>
             {[
-              { icon: LayoutDashboard, label: "Overview" },
+              { icon: Megaphone, label: "Split tests", n: LISTINGS.length },
               { icon: SquareKanban, label: "Pipeline", active: true },
               { icon: Users, label: "Candidates", n: CANDIDATES.length },
-              { icon: Megaphone, label: "Listings", n: 7 },
             ].map(({ icon: Icon, label, active, n }) => (
               <div
                 key={label}

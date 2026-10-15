@@ -96,3 +96,5 @@ from `CommandPalette.tsx`.
 > main first with the route, nav entry and a stub page. Then build: team members and their
 > interview load, rubric templates per role, connected job boards (OnlineJobs.ph, Indeed,
 > MBW, Roster) with connect/disconnect state, email templates.
+
+> Simplified on 15 Oct: the app is three screens (split tests at /demo, pipeline, candidates with the profile) plus New role and the public job pages. Overview, Inbox, Interviews, Reports, Settings, the command palette and the tour were cut. Old links redirect to /demo.
