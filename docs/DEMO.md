@@ -4,8 +4,9 @@ Run it at **recruited.tools/demo** (or the deploy URL), at 1440px, in a fresh ta
 sample data and nothing saves, so it is safe to click anything. Say "this is the demo scenario"
 once, early.
 
-The app is five screens: split tests (the home screen), pipeline, candidates and the candidate
-profile, the new-role wizard, and the apply page. This script uses all five.
+The app is split tests (the home screen, opening with four headline numbers), pipeline,
+candidates and the candidate profile, the new-role wizard, and the careers index with an apply page
+per listing. Old links redirect to the home screen.
 
 Before you start: open the landing page in tab 1 and `/jobs/l2` in tab 2. Set the theme to light;
 you'll switch it on stage.
@@ -41,7 +42,7 @@ were Tier C, so we paused it."
 
 ### 1:10 — Attribution: the apply page (15s)
 
-**Click:** tab 2, `/jobs/l2`.
+**Click:** tab 2, `/jobs/l2` (or `/jobs`, then the Operations VA listing).
 
 **Say:** "Every variant gets its own apply page. That's how each application knows which listing it
 came from, with no tracking pixels and no board integration needed."
