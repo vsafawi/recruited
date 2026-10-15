@@ -6,9 +6,10 @@ import {
 } from "lucide-react";
 import { Avatar, Button, ButtonLink, Card, cx, Kbd, StageChip, TierBadge } from "@/components/ui";
 import {
-  ACTIVITY, boardById, CANDIDATES, candidateById, listingById, roleById, STAGES, TIER_COLOR, TIER_LABEL,
+  ACTIVITY, boardById, CANDIDATES, listingById, roleById, STAGES, TIER_COLOR, TIER_LABEL,
   type Candidate, type StageId,
 } from "@/data/mock";
+import { updatePerson, usePerson } from "@/data/store";
 
 const FLOW: StageId[] = ["new", "screen", "assess", "interview", "offer", "hired"];
 const stageLabel = (s: StageId) => STAGES.find((x) => x.id === s)!.label;
@@ -84,7 +85,7 @@ interface Event { id: string; when: string; text: ReactNode; icon: typeof Check;
 
 export default function CandidateDetail() {
   const { id = "" } = useParams();
-  const base = candidateById(id);
+  const base = usePerson(id);
   if (!base) return <NotFound id={id} />;
   return <Detail key={base.id} c={base} />;
 }
@@ -115,8 +116,10 @@ function Detail({ c }: { c: Candidate }) {
   const b = boardById(l.board);
   const r = roleById(c.roleId);
 
-  const [stage, setStage] = useState<StageId>(c.stage);
-  const [starred, setStarred] = useState(!!c.starred);
+  const stage = c.stage;
+  const starred = !!c.starred;
+  const setStage = (s: StageId) => updatePerson(c.id, { stage: s });
+  const setStarred = (f: (s: boolean) => boolean) => updatePerson(c.id, { starred: f(starred) });
   const [tab, setTab] = useState<Tab>("overview");
   const [moves, setMoves] = useState<Event[]>([]);
   const [notes, setNotes] = useState<Note[]>(() =>
