@@ -175,7 +175,7 @@ export function SplitTest() {
                           className="grow-x h-full rounded-full"
                           style={{
                             width: `${(perHundred(l) / max) * 100}%`,
-                            background: i === 0 ? "linear-gradient(90deg, oklch(0.62 0.2 290), var(--primary))" : "var(--rim-strong)",
+                            background: i === 0 ? "var(--primary)" : "var(--rim-strong)",
                             ["--d" as string]: i === 0 ? "700ms" : "550ms",
                           }}
                         />

@@ -122,7 +122,7 @@
   color: transparent;
 }
 .violet-grad {
-  background: linear-gradient(135deg, oklch(0.62 0.2 290), oklch(0.5 0.2 270));
+  background: linear-gradient(135deg, var(--foreground), var(--primary));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -150,18 +150,18 @@
 .landing {
   color-scheme: light;
 
-  --page: oklch(0.977 0.012 80);
-  --background: oklch(0.985 0.008 80);
-  --canvas: oklch(0.972 0.012 78);
-  --card: oklch(1 0 0);
-  --inset: oklch(0.962 0.014 78);
+  --page: oklch(0.948 0.019 82);
+  --background: oklch(0.962 0.015 82);
+  --canvas: oklch(0.955 0.017 82);
+  --card: oklch(0.993 0.005 85);
+  --inset: oklch(0.94 0.018 80);
 
-  --foreground: oklch(0.24 0.02 50);
-  --muted: oklch(0.47 0.02 55);
-  --faint: oklch(0.6 0.02 60);
+  --foreground: oklch(0.22 0.012 60);
+  --muted: oklch(0.46 0.016 62);
+  --faint: oklch(0.6 0.018 66);
 
-  --primary: oklch(0.56 0.19 262);
-  --primary-tint: oklch(0.95 0.03 262);
+  --primary: oklch(0.38 0.07 255);
+  --primary-tint: oklch(0.93 0.02 255);
   --on-primary: oklch(1 0 0);
 
   --success: oklch(0.6 0.13 152);
@@ -188,29 +188,29 @@
   --ink-danger: oklch(0.78 0.13 25);
   --ink-hover: oklch(1 0 0 / 0.1);
 
-  --rim: oklch(0.45 0.04 60 / 0.12);
-  --rim-strong: oklch(0.45 0.04 60 / 0.22);
+  --rim: oklch(0.4 0.03 65 / 0.13);
+  --rim-strong: oklch(0.4 0.03 65 / 0.24);
   --grid-line: oklch(0.45 0.04 60 / 0.06);
   --wash: oklch(0.45 0.04 60 / 0.06);
   --hatch: oklch(0.45 0.04 60 / 0.05);
   --dot: oklch(0.6 0.04 60 / 0.2);
 
-  --shadow-card: 0 0 0 1px var(--rim), 0 1px 2px oklch(0.4 0.05 50 / 0.04), 0 6px 18px oklch(0.4 0.05 50 / 0.05);
+  --shadow-card: 0 0 0 1px var(--rim), 0 1px 2px oklch(0.4 0.05 60 / 0.04), 0 4px 14px oklch(0.4 0.05 60 / 0.04);
   --shadow-raised: 0 0 0 1px var(--rim), 0 2px 6px oklch(0.4 0.05 50 / 0.06), 0 14px 32px oklch(0.4 0.05 50 / 0.07);
   --shadow-overlay: 0 0 0 1px var(--rim), 0 4px 12px oklch(0.4 0.05 50 / 0.08), 0 22px 52px oklch(0.4 0.05 50 / 0.12);
   --shadow-lift: 0 0 0 1px var(--rim), 0 4px 12px oklch(0.4 0.05 50 / 0.06), 0 24px 60px oklch(0.4 0.05 50 / 0.1);
 
   /* Soft section tones: a pale ground and a stronger ink for icons on it. */
-  --peach: oklch(0.95 0.035 55);
-  --peach-ink: oklch(0.6 0.15 45);
-  --mint: oklch(0.96 0.025 165);
-  --mint-ink: oklch(0.55 0.12 160);
-  --lavender: oklch(0.95 0.03 295);
-  --lavender-ink: oklch(0.52 0.17 295);
-  --sky: oklch(0.955 0.03 240);
-  --sky-ink: oklch(0.55 0.14 245);
-  --butter: oklch(0.965 0.045 95);
-  --butter-ink: oklch(0.6 0.13 80);
+  --peach: oklch(0.925 0.03 55);
+  --peach-ink: oklch(0.5 0.1 45);
+  --mint: oklch(0.93 0.025 160);
+  --mint-ink: oklch(0.45 0.08 160);
+  --lavender: oklch(0.925 0.022 290);
+  --lavender-ink: oklch(0.42 0.09 290);
+  --sky: oklch(0.925 0.022 245);
+  --sky-ink: oklch(0.42 0.08 250);
+  --butter: oklch(0.93 0.035 90);
+  --butter-ink: oklch(0.5 0.09 80);
 
   background-color: var(--page);
   color: var(--foreground);
@@ -239,7 +239,91 @@
 /* Hero glow: three soft colour pools behind the headline. Static. */
 .hero-glow {
   background:
-    radial-gradient(38% 46% at 22% 30%, color-mix(in oklch, var(--peach-ink) 22%, transparent), transparent 70%),
-    radial-gradient(36% 44% at 78% 26%, color-mix(in oklch, var(--lavender-ink) 18%, transparent), transparent 70%),
-    radial-gradient(40% 40% at 50% 78%, color-mix(in oklch, var(--mint-ink) 16%, transparent), transparent 70%);
+    radial-gradient(50% 55% at 50% 22%, color-mix(in oklch, var(--card) 85%, transparent), transparent 75%),
+    radial-gradient(45% 40% at 50% 85%, color-mix(in oklch, var(--peach-ink) 8%, transparent), transparent 75%);
+}
+
+/* ===========================================================================
+   Résumé desk. Sheets start in a thrown pile in the middle and slide into
+   three piles once the desk is in view. Positions come from CSS variables
+   set per sheet: --col (pile), --k (place in pile), --pr/--px (thrown
+   rotation and offset), --tr (rotation once sorted), --d (delay).
+   =========================================================================== */
+
+.desk {
+  background:
+    radial-gradient(80% 60% at 50% 0%, color-mix(in oklch, var(--card) 70%, transparent), transparent),
+    linear-gradient(180deg, var(--canvas), var(--inset));
+}
+.desk-floor {
+  --s: 0.58;
+  --row: 18px;
+  height: 178px;
+  margin-block: 4px 8px;
+}
+@media (min-width: 640px) {
+  .desk-floor { --s: 0.82; --row: 22px; height: 238px; }
+}
+@media (min-width: 1024px) {
+  .desk-floor { --s: 1; --row: 26px; height: 282px; margin-block: 8px 12px; }
+}
+
+.sheet {
+  position: absolute;
+  width: 168px;
+  left: calc(50% + var(--px));
+  top: var(--row);
+  transform: translateX(-50%) rotate(var(--pr)) scale(var(--s));
+  transform-origin: 50% 0;
+  transition:
+    left 1s var(--settle),
+    top 1s var(--settle),
+    transform 1s var(--settle);
+  transition-delay: var(--d);
+}
+.is-in .sheet {
+  left: calc(var(--col) * 33.333% + 16.666%);
+  top: calc(var(--row) + var(--k) * 12px);
+  transform: translateX(-50%) rotate(var(--tr)) scale(var(--s));
+}
+.sheet-paper { transition: translate 0.25s var(--settle), box-shadow 0.25s var(--settle); }
+@media (hover: hover) {
+  .sheet:hover { z-index: 40 !important; }
+  .sheet:hover .sheet-paper { translate: 0 -6px; box-shadow: var(--shadow-overlay); }
+}
+
+/* The rubber stamp with the suggested tier. Lands after its sheet does. */
+.stamp {
+  position: absolute;
+  bottom: 9px;
+  right: 10px;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 9px;
+  color: var(--tone);
+  border: 2px solid color-mix(in oklch, var(--tone) 80%, transparent);
+  background: color-mix(in oklch, var(--tone) 8%, var(--card));
+  transform: rotate(-12deg) scale(1.6);
+  opacity: 0;
+  transition: transform 0.35s var(--settle), opacity 0.2s;
+  transition-delay: calc(var(--d) + 900ms);
+}
+.is-in .stamp { transform: rotate(-12deg) scale(1); opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet, .stamp { transition: none; }
+  .sheet {
+    left: calc(var(--col) * 33.333% + 16.666%);
+    top: calc(var(--row) + var(--k) * 12px);
+    transform: translateX(-50%) rotate(var(--tr)) scale(var(--s));
+  }
+  .stamp { transform: rotate(-12deg); opacity: 1; }
+}
+
+/* Landing headline: solid ink with a quiet second line. */
+.landing .ink-grad {
+  background: none;
+  color: var(--foreground);
 }

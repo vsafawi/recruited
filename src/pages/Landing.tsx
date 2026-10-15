@@ -2,6 +2,7 @@ import { useRef } from "react";
 import "./landing/landing.css";
 import { Bento } from "./landing/Bento";
 import { Hero } from "./landing/Hero";
+import { ResumeDesk } from "./landing/ResumeDesk";
 import { BoardStrip, CaseStudy, Deploy, FinalCta, Footer, HowItWorks, Nav } from "./landing/Sections";
 import { SplitTest } from "./landing/SplitTest";
 import { useRevealAll } from "./landing/hooks";
@@ -21,6 +22,7 @@ export default function Landing() {
       <main>
         <Hero />
         <BoardStrip />
+        <ResumeDesk />
         <SplitTest />
         <Bento />
         <HowItWorks />
