@@ -49,7 +49,7 @@ It builds to a static site, so it runs anywhere. Every config is already in the 
 
 | Host | How |
 | --- | --- |
-| Cloudflare Pages | `npm run build && npx wrangler pages deploy` (reads `wrangler.toml`), or connect the repo with build command `npm run build` and output `dist` |
+| Cloudflare | Workers & Pages → Create → Import the repo, build command `npm run build`, deploy command `npx wrangler deploy` (reads `wrangler.toml`). Or from your machine: `npm run build && npx wrangler deploy` |
 | Railway | New project → deploy from this repo. It picks up `railway.json` and the `Dockerfile` |
 | Vercel | Import the repo. `vercel.json` sets the build and SPA rewrites |
 | Netlify | Import the repo. `netlify.toml` and `public/_redirects` handle the rest |
