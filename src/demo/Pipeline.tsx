@@ -3,7 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import {
   ArrowRight, CalendarClock, ChevronDown, ChevronRight, Clock, Star, X,
 } from "lucide-react";
-import { Avatar, Button, ButtonLink, cx, Kbd, StageChip, TierBadge } from "@/components/ui";
+import { Avatar, Button, ButtonLink, cx, Kbd, SectionLabel, Segmented, StageChip, Tag } from "@/components/ui";
 import {
   BOARDS, boardById, listingById, roleById, ROLES, STAGES, TIER_COLOR,
   type BoardId, type Candidate, type StageId, type Tier,
@@ -132,32 +132,20 @@ export default function Pipeline() {
       {/* Filters */}
       <div className="flex flex-col gap-3 px-4 md:px-8">
         <div className="scroll-quiet -mx-4 overflow-x-auto px-4 md:mx-0 md:px-0">
-          <div role="tablist" aria-label="Role" className="inline-flex gap-0.5 rounded-control bg-inset p-0.5 shadow-[inset_0_0_0_1px_var(--rim)]">
-            {[{ id: "all", title: "All roles" }, ...ROLES].map((r) => {
-              const n = people.filter((c) => (r.id === "all" || c.roleId === r.id) && c.stage !== "rejected" && c.stage !== "hired").length;
-              const active = role === r.id;
-              return (
-                <button
-                  key={r.id}
-                  role="tab"
-                  aria-selected={active}
-                  onClick={() => {
-                    const p = new URLSearchParams(params);
-                    if (r.id === "all") p.delete("role");
-                    else p.set("role", r.id);
-                    setParams(p, { replace: true });
-                  }}
-                  className={cx(
-                    "flex h-7 items-center gap-1.5 whitespace-nowrap rounded-[6px] px-2.5 text-[12.5px] transition-colors duration-150",
-                    active ? "bg-card font-medium text-foreground shadow-card" : "text-muted hover:text-foreground",
-                  )}
-                >
-                  {r.title}
-                  <span className="tnum text-[11px] text-faint">{n}</span>
-                </button>
-              );
-            })}
-          </div>
+          <Segmented
+            options={[{ id: "all", title: "All roles" }, ...ROLES].map((r) => ({
+              id: r.id,
+              label: r.title,
+              count: people.filter((c) => (r.id === "all" || c.roleId === r.id) && c.stage !== "rejected" && c.stage !== "hired").length,
+            }))}
+            value={role}
+            onChange={(id) => {
+              const p = new URLSearchParams(params);
+              if (id === "all") p.delete("role");
+              else p.set("role", id);
+              setParams(p, { replace: true });
+            }}
+          />
         </div>
 
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
@@ -218,8 +206,9 @@ export default function Pipeline() {
       </div>
 
       {/* Board */}
-      <div className="scroll-quiet mt-4 flex-1 overflow-x-auto pb-6">
-        <div className="flex min-h-full w-max gap-3 px-4 md:px-8">
+      <div className="scroll-quiet mt-4 flex flex-1 flex-col overflow-x-auto pb-6">
+        <div className="flex w-max flex-1 px-4 md:px-8">
+          <div className="flex min-h-[420px] overflow-hidden rounded-panel shadow-[0_0_0_1px_var(--rim)]">
           {columns.map(({ stage, items }) => {
             const over = overStage === stage.id && dragId != null;
             return (
@@ -236,16 +225,16 @@ export default function Pipeline() {
                 }}
                 onDrop={(e) => onDrop(e, stage.id)}
                 className={cx(
-                  "flex w-[264px] shrink-0 flex-col rounded-panel p-1.5 transition-[background,box-shadow] duration-150",
-                  over ? "bg-primary-tint shadow-[inset_0_0_0_1.5px_color-mix(in_oklch,var(--primary)_45%,transparent)]" : "bg-canvas shadow-[inset_0_0_0_1px_var(--rim)]",
+                  "rule-dashed flex w-[264px] shrink-0 flex-col border-r transition-[background,box-shadow] duration-150 last:border-r-0",
+                  over ? "bg-primary-tint shadow-[inset_0_0_0_1.5px_color-mix(in_oklch,var(--primary)_45%,transparent)]" : "hatch",
                 )}
               >
-                <header className="flex h-8 items-center gap-2 px-2">
-                  <span className="size-2 rounded-full" style={{ background: stage.color }} />
+                <header className={cx("rule-dashed flex h-10 items-center gap-2 border-b px-3", over ? "bg-transparent" : "bg-background")}>
+                  <span className="size-1.5 rounded-full" style={{ background: stage.color }} />
                   <span className="text-[12.5px] font-medium">{stage.label}</span>
-                  <span className="tnum text-[12px] text-faint">{items.length}</span>
+                  <span className="tnum ml-auto inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-inset px-1.5 font-mono text-[11px] text-muted shadow-[inset_0_0_0_1px_var(--rim)]">{items.length}</span>
                 </header>
-                <div className="flex flex-col gap-1.5">
+                <div className="flex flex-1 flex-col gap-2 p-2">
                   {items.map((c) => (
                     <PipelineCard
                       key={c.id}
@@ -264,7 +253,7 @@ export default function Pipeline() {
                     />
                   ))}
                   {items.length === 0 && (
-                    <div className={cx("flex h-20 items-center justify-center rounded-card border border-dashed text-[12px] transition-colors", over ? "border-primary/50 text-primary" : "border-rim text-faint")}>
+                    <div className={cx("flex h-20 items-center justify-center rounded-card border border-dashed text-[12px] transition-colors", over ? "border-primary/50 text-primary" : "border-[var(--rim-strong)] bg-background/60 text-faint")}>
                       {over ? "Drop here" : "No one here"}
                     </div>
                   )}
@@ -272,6 +261,7 @@ export default function Pipeline() {
               </section>
             );
           })}
+          </div>
         </div>
       </div>
 
@@ -322,29 +312,31 @@ function PipelineCard({
       tabIndex={0}
       aria-label={`${c.name}, tier ${c.tier}, score ${c.score}`}
       className={cx(
-        "group relative cursor-grab select-none rounded-card bg-card p-2.5 text-left transition-[box-shadow,background,opacity] duration-300 ease-settle active:cursor-grabbing",
-        active || flash ? "shadow-[0_0_0_1.5px_var(--primary),0_4px_10px_oklch(0_0_0/0.06)]" : "shadow-card hover:shadow-raised",
+        "group relative cursor-grab select-none rounded-card bg-card p-3 text-left transition-[box-shadow,background,opacity] duration-300 ease-settle active:cursor-grabbing",
+        active || flash ? "shadow-[0_0_0_1.5px_var(--primary)]" : "shadow-[0_0_0_1px_var(--rim)] hover:shadow-[0_0_0_1px_var(--rim-strong)]",
         flash && !active && "bg-primary-tint",
         dragging && "opacity-40",
       )}
     >
       <div className="flex items-start gap-2.5">
-        <Avatar initials={c.initials} hue={c.hue} size={28} />
+        <Avatar initials={c.initials} hue={c.hue} size={26} />
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5">
             <span className="truncate text-[13px] font-medium leading-5">{c.name}</span>
-            <TierBadge tier={c.tier} className="shrink-0" />
-            <span className="tnum ml-auto text-[12px] font-medium text-muted">{c.score}</span>
+            <span className="tnum ml-auto font-mono text-[12px] text-muted">{c.score}</span>
           </div>
           <p className="truncate text-[12px] leading-[18px] text-muted">{c.headline}</p>
         </div>
       </div>
-      <div className="mt-2 flex items-center gap-2 text-[11.5px] text-faint">
-        <span className="inline-flex items-center gap-1 rounded-[5px] bg-inset px-1.5 py-px font-mono text-[10.5px] text-muted" title={`${b.name}, variant ${l.variant}`}>
-          <span className="size-1.5 rounded-full" style={{ background: b.color }} />
-          {b.short} · {l.variant}
+      <div className="mt-2.5 flex items-center gap-1.5 text-[11.5px] text-faint">
+        <span title={`Tier ${c.tier}`}><Tag color={TIER_COLOR[c.tier]} className="font-mono">{c.tier}</Tag></span>
+        <span title={`${b.name}, variant ${l.variant}`}>
+          <Tag color={b.color}>
+            {b.short}
+            <span className="font-mono text-[10.5px] opacity-75">{l.variant}</span>
+          </Tag>
         </span>
-        <span className="tnum">{ago(c.appliedDaysAgo)}</span>
+        <span className="tnum ml-0.5">{ago(c.appliedDaysAgo)}</span>
         <button
           onClick={(e) => { e.stopPropagation(); onStar(); }}
           aria-label={c.starred ? "Unstar" : "Star"}
@@ -358,7 +350,7 @@ function PipelineCard({
         </button>
       </div>
       {c.nextStep && (
-        <div className="mt-2 flex items-center gap-1.5 border-t border-rim pt-2 text-[11.5px] text-muted">
+        <div className="rule-dashed mt-2.5 flex items-center gap-1.5 border-t pt-2 text-[11.5px] text-muted">
           <CalendarClock className="size-3 shrink-0 text-faint" />
           <span className="truncate">{c.nextStep}</span>
         </div>
@@ -396,7 +388,7 @@ function SlideOver({
         aria-hidden={!isOpen}
         aria-label="Candidate summary"
         className={cx(
-          "scroll-quiet fixed inset-y-0 right-0 z-50 flex w-full max-w-[420px] flex-col overflow-y-auto bg-card shadow-overlay transition-transform duration-300 ease-enter",
+          "scroll-quiet fixed inset-y-0 right-0 z-50 flex w-full max-w-[420px] flex-col overflow-y-auto bg-background shadow-overlay transition-transform duration-300 ease-enter",
           isOpen ? "translate-x-0" : "pointer-events-none translate-x-[calc(100%+24px)]",
         )}
       >
@@ -425,7 +417,7 @@ function PanelBody({
 
   return (
     <>
-      <div className="sticky top-0 z-10 flex h-12 items-center gap-2 border-b border-rim bg-card/90 px-4 backdrop-blur">
+      <div className="rule-dashed sticky top-0 z-10 flex h-12 items-center gap-2 border-b bg-background/90 px-4 backdrop-blur">
         <StageChip stage={c.stage} />
         <span className="hidden items-center gap-1 text-[11.5px] text-faint sm:flex"><Kbd>J</Kbd><Kbd>K</Kbd></span>
         <button onClick={() => onStar(c.id)} aria-label={c.starred ? "Unstar" : "Star"} className={cx("ml-auto rounded-control p-1.5 hover:bg-[var(--wash)]", c.starred ? "text-warning" : "text-muted")}>
@@ -441,18 +433,18 @@ function PanelBody({
           <Avatar initials={c.initials} hue={c.hue} size={44} />
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
-              <h2 className="truncate text-[17px] font-semibold tracking-[-0.01em]">{c.name}</h2>
-              <TierBadge tier={c.tier} />
+              <h2 className="truncate text-[16px] font-semibold tracking-[-0.01em]">{c.name}</h2>
+              <span title={`Tier ${c.tier}`}><Tag color={TIER_COLOR[c.tier]} className="font-mono">{c.tier}</Tag></span>
             </div>
             <p className="text-[13px] text-muted">{c.headline}</p>
           </div>
           <div className="text-right">
-            <div className="tnum text-[22px] font-semibold leading-none tracking-[-0.02em]">{c.score}</div>
+            <div className="tnum font-mono text-[20px] font-medium leading-none">{c.score}</div>
             <div className="mt-1 text-[11px] text-faint">score</div>
           </div>
         </div>
 
-        <dl className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-card bg-rim shadow-[0_0_0_1px_var(--rim)]">
+        <dl className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-card bg-[var(--rim)] shadow-[0_0_0_1px_var(--rim)]">
           {[
             { k: "Role", v: r.title },
             { k: "Applied", v: ago(c.appliedDaysAgo) },
@@ -467,37 +459,36 @@ function PanelBody({
         </dl>
 
         {c.nextStep && (
-          <div className="mt-3 flex items-center gap-2 rounded-card bg-primary-tint px-3 py-2 text-[12.5px] text-foreground">
+          <div className="mt-3 flex items-center gap-2 rounded-full bg-primary-tint px-3 py-1.5 text-[12.5px] text-foreground shadow-[inset_0_0_0_1px_color-mix(in_oklch,var(--primary)_25%,transparent)]">
             <Clock className="size-3.5 text-primary" />
             <span><span className="text-muted">Next:</span> {c.nextStep}</span>
           </div>
         )}
 
-        <div className="mt-5">
-          <div className="text-[11px] font-medium uppercase tracking-[0.06em] text-faint">Source</div>
-          <div className="mt-2 rounded-card p-3 shadow-[0_0_0_1px_var(--rim)]">
-            <div className="flex items-center gap-2 text-[12.5px]">
-              <span className="size-2 rounded-full" style={{ background: b.color }} />
-              <span className="font-medium">{b.name}</span>
-              <span className="rounded-[5px] bg-inset px-1.5 font-mono text-[10.5px] text-muted">Variant {l.variant}</span>
-              {l.status === "winner" && <span className="ml-auto text-[11px] font-medium text-success">Winner</span>}
+        <div className="rule-dashed mt-5 border-t pt-4">
+          <SectionLabel n={1} title="Source">The listing they answered</SectionLabel>
+          <div className="mt-2.5 rounded-card bg-card p-3 shadow-[0_0_0_1px_var(--rim)]">
+            <div className="flex flex-wrap items-center gap-1.5 text-[12.5px]">
+              <Tag color={b.color}>{b.name}</Tag>
+              <Tag color="var(--muted)" className="font-mono text-[11px]">Variant {l.variant}</Tag>
+              {l.status === "winner" && <Tag color="var(--success)" className="ml-auto">Winner</Tag>}
             </div>
             <p className="mt-1.5 text-[12.5px] leading-snug">{l.headline}</p>
             <p className="mt-1 text-[12px] text-muted">Pay band {l.payBand} · testing {l.hypothesis.toLowerCase()}</p>
           </div>
         </div>
 
-        <div className="mt-5">
-          <div className="text-[11px] font-medium uppercase tracking-[0.06em] text-faint">Skills on the application</div>
-          <div className="mt-2 flex flex-wrap gap-1.5">
+        <div className="rule-dashed mt-5 border-t pt-4 pb-5">
+          <SectionLabel n={2} title="Skills">As written on the application</SectionLabel>
+          <div className="mt-2.5 flex flex-wrap gap-1.5">
             {c.skills.map((s) => (
-              <span key={s} className="rounded-chip bg-inset px-2 py-0.5 text-[12px] text-muted shadow-[inset_0_0_0_1px_var(--rim)]">{s}</span>
+              <span key={s} className="rounded-full bg-inset px-2.5 py-0.5 text-[12px] text-muted shadow-[inset_0_0_0_1px_var(--rim)]">{s}</span>
             ))}
           </div>
         </div>
       </div>
 
-      <div className="mt-auto border-t border-rim px-5 py-4">
+      <div className="rule-dashed mt-auto border-t px-5 py-4">
         {next && !rejected && (
           <Button variant="primary" className="mb-2 w-full" onClick={() => onMove(c.id, next)}>
             Advance to {STAGES.find((s) => s.id === next)!.label} <ArrowRight className="size-3.5" />
@@ -534,10 +525,11 @@ function PanelBody({
         <ButtonLink to={`/demo/candidates/${c.id}`} variant="ink" className="mt-3 w-full">
           Open profile <ArrowRight className="size-3.5" />
         </ButtonLink>
-        <Link to={`/demo/listings`} className="mt-2 flex items-center justify-center gap-1 text-[12px] text-muted hover:text-foreground">
+        <Link to={"/demo"} className="mt-2 flex items-center justify-center gap-1 text-[12px] text-muted hover:text-foreground">
           See how {b.short} · {l.variant} is performing <ChevronRight className="size-3" />
         </Link>
       </div>
     </>
   );
 }
+

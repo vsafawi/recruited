@@ -587,7 +587,7 @@ function Published({ basics, assign, variants, reset }: { basics: Basics; assign
           <Button variant="ghost" onClick={reset}><RotateCcw className="size-3.5" /> Post another role</Button>
           <div className="flex flex-wrap gap-2">
             <ButtonLink to="/demo/pipeline">Open pipeline</ButtonLink>
-            <ButtonLink to="/demo/listings" variant="primary">See listings <ArrowRight className="size-4" /></ButtonLink>
+            <ButtonLink to="/demo" variant="primary">See listings <ArrowRight className="size-4" /></ButtonLink>
           </div>
         </div>
       </Card>

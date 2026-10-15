@@ -1,3 +1,8 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/banner-dark.png">
+  <img alt="recruited.tools: hire the right person, not the most applications" src=".github/assets/banner-light.png">
+</picture>
+
 # recruited.tools
 
 An open-source applicant tracking system for small teams. Post one role to every
@@ -26,6 +31,11 @@ seven listings on OnlineJobs.ph, Indeed, Music Business Worldwide and Roster.
 
 ## What's in it
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/ranking-dark.png">
+  <img alt="Seven listings ranked by A-tier candidates per dollar" src=".github/assets/ranking-light.png">
+</picture>
+
 - **Pipeline** — a kanban board per role, drag candidates between stages.
 - **Candidates** — one table across every board, with search, filters and bulk actions.
 - **Candidate profile** — scorecards, an assistant summary drawn only from what the
@@ -33,6 +43,11 @@ seven listings on OnlineJobs.ph, Indeed, Music Business Worldwide and Roster.
 - **Listings & split tests** — A/B variants side by side, tier mix, cost per qualified
   candidate, and a verdict on which variant wins.
 - **New role** — rubric, two variants, pick the boards, publish.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/pipeline-dark.png">
+  <img alt="The pipeline board for one role, with each candidate's tier and source board" src=".github/assets/pipeline-light.png">
+</picture>
 
 ## Run it
 
