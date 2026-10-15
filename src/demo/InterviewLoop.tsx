@@ -14,7 +14,7 @@ import {
 const REC: Record<Recommendation, { label: string; color: string }> = {
   "strong-yes": { label: "Strong yes", color: "var(--success)" },
   yes: { label: "Yes", color: "var(--tier-b)" },
-  no: { label: "No", color: "var(--warning)" },
+  no: { label: "No", color: "color-mix(in oklch, var(--warning) 65%, var(--foreground))" },
   "strong-no": { label: "Strong no", color: "var(--destructive)" },
 };
 

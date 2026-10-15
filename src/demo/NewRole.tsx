@@ -66,7 +66,7 @@ function useToast() {
             className="flex items-center gap-2 rounded-card bg-foreground px-3.5 py-2.5 text-[13px] text-background shadow-overlay"
             role="status"
           >
-            <Check className="size-4 text-[oklch(0.8_0.13_152)]" /> {msg.text}
+            <Check className="size-4 text-ink-success" /> {msg.text}
           </motion.div>
         )}
       </AnimatePresence>
