@@ -1,0 +1,1 @@
+{"root":["./src/main.tsx","./src/components/mark.tsx","./src/components/ui.tsx","./src/data/mock.ts","./src/demo/CandidateDetail.tsx","./src/demo/Candidates.tsx","./src/demo/Listings.tsx","./src/demo/NewRole.tsx","./src/demo/Overview.tsx","./src/demo/Pipeline.tsx","./src/demo/Shell.tsx","./src/pages/Landing.tsx","./vite.config.ts"],"version":"5.9.3"}
