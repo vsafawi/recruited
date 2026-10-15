@@ -1,5 +1,6 @@
 import { Check, CircleDashed, ClipboardList } from "lucide-react";
 import { Avatar, Card, cx } from "@/components/ui";
+import AiSummary from "./AiSummary";
 import {
   ROUND_PLAN, roundsDone, SCORE_CRITERIA, SCORECARDS, teamById, UPCOMING,
   type Candidate, type InterviewRound, type Recommendation, type Scorecard, type StageId,
@@ -32,6 +33,8 @@ export default function InterviewLoop({ c, stage }: { c: Candidate; stage: Stage
 
   return (
     <div className="flex flex-col gap-4">
+      <AiSummary c={c} />
+
       <Card className="p-4 md:p-5">
         <div className="flex items-baseline justify-between gap-3">
           <h2 className="text-[14px] font-semibold">Interview loop</h2>
