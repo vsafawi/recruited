@@ -46,10 +46,10 @@ export interface Board {
 }
 
 export const BOARDS: Board[] = [
-  { id: "onlinejobs", name: "OnlineJobs.ph", short: "OJ", costPerMonth: 69, audience: "Remote, Philippines-based talent", color: "oklch(0.58 0.15 240)" },
-  { id: "indeed", name: "Indeed", short: "IN", costPerMonth: 240, audience: "Broad, every industry", color: "oklch(0.5 0.17 265)" },
-  { id: "mbw", name: "Music Business Worldwide", short: "MB", costPerMonth: 195, audience: "Music-industry professionals", color: "oklch(0.55 0.16 25)" },
-  { id: "roster", name: "Roster", short: "RO", costPerMonth: 49, audience: "Predominantly music creatives", color: "oklch(0.55 0.15 320)" },
+  { id: "onlinejobs", name: "OnlineJobs.ph", short: "OJ", costPerMonth: 69, audience: "Remote, Philippines-based talent", color: "var(--board-onlinejobs)" },
+  { id: "indeed", name: "Indeed", short: "IN", costPerMonth: 240, audience: "Broad, every industry", color: "var(--board-indeed)" },
+  { id: "mbw", name: "Music Business Worldwide", short: "MB", costPerMonth: 195, audience: "Music-industry professionals", color: "var(--board-mbw)" },
+  { id: "roster", name: "Roster", short: "RO", costPerMonth: 49, audience: "Predominantly music creatives", color: "var(--board-roster)" },
 ];
 
 export const boardById = (id: BoardId) => BOARDS.find((b) => b.id === id)!;

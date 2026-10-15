@@ -34,12 +34,12 @@ how we avoid two threads building the same thing or editing the same file.
 | 1 | Pitch deck | `deck/` or a Slides artifact | deck thread | claimed |
 | 2 | Demo script and screenshots | `docs/DEMO.md`, `docs/screenshots/` | deck thread | claimed |
 | 3 | Command palette (⌘K) | `src/demo/CommandPalette.tsx` | lead thread | done |
-| 4 | Public careers page and apply form | `src/pages/Careers.tsx`, `src/pages/Apply.tsx`, `src/pages/apply/*` | lead thread | claimed |
+| 4 | Public careers page and apply form | `src/pages/Careers.tsx`, `src/pages/Apply.tsx`, `src/pages/apply/*` | lead thread (Apply.tsx built by hackathon-plan thread) | Apply done; Careers claimed |
 | 5 | Inbox — every board in one feed | `src/demo/Inbox.tsx` | lead thread | done |
 | 8 | Interviews — calendar and scheduling | `src/demo/Interviews.tsx` | lead thread | claimed |
 | 9 | Shared demo state — a move on one screen shows on every screen | `src/data/store.ts`, `Pipeline.tsx`, `Candidates.tsx`, `CandidateDetail.tsx` | lead thread | done |
 | 12 | Interview loop tab on the candidate profile | `src/demo/InterviewLoop.tsx`, `mock.ts` (interview data) | another thread, PR #1 | done — landed without a claim; claim first next time |
-| 6 | Dark mode | `src/styles.css` (append a dark block), a toggle in `Shell.tsx` | — | open |
+| 6 | Dark mode | `src/styles.css` (append a dark block), `src/components/ThemeToggle.tsx`, a toggle in `Shell.tsx` | hackathon-plan thread | done |
 | 7 | Backend (after the hackathon) | `supabase/`, `src/lib/` | — | open |
 | 10 | Reports — time to hire, source of hire, cost per hire | `src/demo/Reports.tsx` (+ route and nav in the claim commit) | lead thread | claimed |
 | 11 | Team and settings — interviewers, rubric templates, board connections | `src/demo/Settings.tsx` (+ route and nav in the claim commit) | lead thread | claimed |
