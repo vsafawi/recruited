@@ -11,6 +11,7 @@ import {
   aTierPerDollar, boardById, BOARDS, costPerQualified, LISTINGS, ROLES, TIER_COLOR,
   type BoardId, type Listing,
 } from "@/data/mock";
+import { BoardLogo } from "@/components/logo";
 
 /* ---------------------------------------------------------------------------
    Listings & split tests. Every number on this page is derived from LISTINGS;
@@ -69,8 +70,8 @@ function useToasts() {
 
 /* ------------------------------------------------------------------- bits */
 
-function BoardDot({ id, className }: { id: BoardId; className?: string }) {
-  return <span className={cx("inline-block size-1.5 shrink-0 rounded-full", className)} style={{ background: boardById(id).color }} />;
+function BoardDot({ id }: { id: BoardId; className?: string }) {
+  return <BoardLogo id={id} size={14} />;
 }
 
 /** A board as a tinted pill. */
