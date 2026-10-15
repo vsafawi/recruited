@@ -421,3 +421,38 @@ html.theme-switching *::after {
   color: transparent;
   animation: sweep-once 1.4s var(--settle) 1 both;
 }
+
+/* ===========================================================================
+   Beige, v3. Light is the default theme again: a light beige ground,
+   off-white cards, warm deep ink and one navy accent, matching the landing
+   page. Appended so it overrides the light values above; dark mode is
+   unchanged and still wins when data-theme="dark" or the system is dark.
+   =========================================================================== */
+
+:root,
+:root[data-theme="light"] {
+  --page: oklch(0.948 0.019 82);
+  --background: oklch(0.962 0.015 82);
+  --canvas: oklch(0.955 0.017 82);
+  --card: oklch(0.993 0.005 85);
+  --inset: oklch(0.94 0.018 80);
+
+  --foreground: oklch(0.22 0.012 60);
+  --muted: oklch(0.46 0.016 62);
+  --faint: oklch(0.6 0.018 66);
+
+  --primary: oklch(0.38 0.07 255);
+  --primary-tint: oklch(0.93 0.02 255);
+
+  --rim: oklch(0.4 0.03 65 / 0.13);
+  --rim-strong: oklch(0.4 0.03 65 / 0.24);
+  --grid-line: oklch(0.4 0.03 65 / 0.06);
+  --wash: oklch(0.4 0.03 65 / 0.06);
+  --hatch: oklch(0.4 0.03 65 / 0.05);
+  --dot: oklch(0.6 0.04 60 / 0.2);
+
+  --shadow-card: 0 0 0 1px var(--rim), 0 1px 2px oklch(0.4 0.05 60 / 0.04), 0 4px 14px oklch(0.4 0.05 60 / 0.04);
+  --shadow-raised: 0 0 0 1px var(--rim), 0 2px 6px oklch(0.4 0.05 60 / 0.06), 0 14px 32px oklch(0.4 0.05 60 / 0.07);
+  --shadow-overlay: 0 0 0 1px var(--rim), 0 4px 12px oklch(0.4 0.05 60 / 0.08), 0 22px 52px oklch(0.4 0.05 60 / 0.12);
+  --shadow-lift: 0 0 0 1px var(--rim), 0 4px 12px oklch(0.4 0.05 60 / 0.06), 0 24px 60px oklch(0.4 0.05 60 / 0.1);
+}
