@@ -60,6 +60,10 @@ src/demo/NewRole.tsx        /demo/roles/new — 4-step wizard to post variants.
 Dockerfile, Caddyfile, railway.json, wrangler.toml, vercel.json, netlify.toml
                             Deploy configs. It builds to a static site in dist/.
 docs/WORKSTREAMS.md         Who is building what, and the claim-first protocol. Read before starting.
+docs/pitch/DECK.md          The pitch: problem, positioning, pricing, market size, roadmap, with sources.
+                            Product decisions (what's free, what's paid, what we claim) should match it.
+docs/pitch/QA.md            Judge and investor questions with the answers we give.
+docs/DEMO.md                The 2½-minute demo click path. Update it when a screen it uses changes.
 ```
 
 ## Commands

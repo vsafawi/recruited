@@ -31,8 +31,8 @@ how we avoid two threads building the same thing or editing the same file.
 | — | Landing page | `src/pages/Landing.tsx`, `src/pages/landing/*` | lead thread | done |
 | — | Pipeline, candidates, profile | `src/demo/Pipeline.tsx`, `Candidates.tsx`, `CandidateDetail.tsx` | lead thread | done |
 | — | Overview, split tests, new role | `src/demo/Overview.tsx`, `Listings.tsx`, `NewRole.tsx` | lead thread | done |
-| 1 | Pitch deck | `deck/` or a Slides artifact | deck thread | claimed |
-| 2 | Demo script and screenshots | `docs/DEMO.md`, `docs/screenshots/` | deck thread | claimed |
+| 1 | Pitch deck — content, pricing, market size, Q&A | `docs/pitch/*`, the Slides artifact | deck thread | done — content in `docs/pitch/`; slides follow the design system |
+| 2 | Demo script | `docs/DEMO.md` | deck thread | done — written for the trimmed five-screen app |
 | 3 | Command palette (⌘K) | `src/demo/CommandPalette.tsx` | lead thread | done |
 | 4 | Public careers page and apply form | `src/pages/Careers.tsx`, `src/pages/Apply.tsx`, `src/pages/apply/*` | lead thread | done — the hackathon-plan thread also built an Apply.tsx (in b9bcfd2); main keeps the lead version so it matches Careers |
 | 5 | Inbox — every board in one feed | `src/demo/Inbox.tsx` | lead thread | done |
