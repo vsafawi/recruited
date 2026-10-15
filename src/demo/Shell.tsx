@@ -12,7 +12,7 @@ import { resetDemo } from "@/data/store";
 
 const NAV = [
   { to: "/demo", label: "Overview", icon: LayoutDashboard, end: true },
-  { to: "/demo/inbox", label: "Inbox", icon: InboxIcon, count: 5 },
+  { to: "/demo/inbox", label: "Inbox", icon: InboxIcon, count: 6 },
   { to: "/demo/pipeline", label: "Pipeline", icon: Columns3, count: CANDIDATES.filter((c) => !["hired", "rejected"].includes(c.stage)).length },
   { to: "/demo/candidates", label: "Candidates", icon: Users, count: CANDIDATES.length },
   { to: "/demo/listings", label: "Listings & split tests", icon: FlaskConical, count: LISTINGS.length },
