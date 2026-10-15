@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowDown, ArrowUp, Check, ChevronDown, Mail, Minus, Search, Star, X } from "lucide-react";
-import { Avatar, Button, cx, StageChip, TierBadge } from "@/components/ui";
+import { Avatar, Button, cx, Index, Segmented, StageChip, Tag } from "@/components/ui";
 import {
   BOARDS, boardById, listingById, roleById, ROLES, STAGES, TIER_COLOR,
   type BoardId, type Candidate, type StageId, type Tier,
@@ -73,11 +73,11 @@ export default function Candidates() {
     return () => window.removeEventListener("keydown", onKey);
   }, [q]);
 
-  const rows = useMemo(() => {
+  // Everything but the stage filter, so the stage chips can count what each would show.
+  const base = useMemo(() => {
     const needle = q.trim().toLowerCase();
-    const out = people.filter((c) => {
+    return people.filter((c) => {
       const l = listingById(c.listingId);
-      if (stages.length && !stages.includes(c.stage)) return false;
       if (tiers.length && !tiers.includes(c.tier)) return false;
       if (boards.length && !boards.includes(l.board)) return false;
       if (roles.length && !roles.includes(c.roleId)) return false;
@@ -85,13 +85,23 @@ export default function Candidates() {
       return [c.name, c.headline, c.location, roleById(c.roleId).title, boardById(l.board).name, ...c.skills]
         .some((s) => s.toLowerCase().includes(needle));
     });
+  }, [people, q, tiers, boards, roles]);
+
+  const stageCounts = useMemo(() => {
+    const n = Object.fromEntries(STAGES.map((s) => [s.id, 0])) as Record<StageId, number>;
+    for (const c of base) n[c.stage]++;
+    return n;
+  }, [base]);
+
+  const rows = useMemo(() => {
+    const out = base.filter((c) => !stages.length || stages.includes(c.stage));
     const m = sort.dir === "asc" ? 1 : -1;
     return out.sort((a, b) => {
       const va = sortValue(a, sort.key), vb = sortValue(b, sort.key);
       const r = typeof va === "number" ? va - (vb as number) : va.localeCompare(vb as string);
       return r * m || b.score - a.score;
     });
-  }, [people, q, stages, tiers, boards, roles, sort]);
+  }, [base, stages, sort]);
 
   const filtered = stages.length + tiers.length + boards.length + roles.length > 0 || q.length > 0;
   const allOn = rows.length > 0 && rows.every((r) => selected.has(r.id));
@@ -120,53 +130,69 @@ export default function Candidates() {
         subtitle={`${people.length} people across ${ROLES.length} roles and ${BOARDS.length} boards`}
       />
 
-      {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-2 px-4 md:px-8">
-        <label className="relative flex h-8 w-full items-center sm:w-64">
-          <Search className="pointer-events-none absolute left-2.5 size-3.5 text-faint" />
-          <input
-            ref={searchRef}
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Search name, skill, location"
-            className="h-full w-full rounded-control bg-card pr-8 pl-8 text-[13px] shadow-card outline-none placeholder:text-faint focus:shadow-[0_0_0_1.5px_var(--primary)]"
+      {/* Filter header: stage chips with counts, then quieter search and filters */}
+      <div className="flex flex-col gap-3 px-4 md:px-8">
+        <div className="scroll-quiet -mx-4 overflow-x-auto px-4 md:mx-0 md:px-0">
+          <Segmented<StageId | "all" | "multi">
+            options={[
+              { id: "all", label: "All", count: base.length },
+              ...STAGES.map((s) => ({
+                id: s.id,
+                label: (
+                  <>
+                    <span className="size-1.5 rounded-full" style={{ background: s.color }} />
+                    {s.label}
+                  </>
+                ),
+                count: stageCounts[s.id],
+              })),
+            ]}
+            value={stages.length === 0 ? "all" : stages.length === 1 ? stages[0] : "multi"}
+            onChange={(v) => setStages(v === "all" || v === "multi" ? [] : [v])}
           />
-          {q ? (
-            <button onClick={() => setQ("")} aria-label="Clear search" className="absolute right-2 text-faint hover:text-foreground"><X className="size-3.5" /></button>
-          ) : (
-            <span className="pointer-events-none absolute right-2 hidden font-mono text-[10.5px] text-faint sm:block">/</span>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-1.5">
+          <label className="relative flex h-7.5 w-full items-center sm:w-60">
+            <Search className="pointer-events-none absolute left-2.5 size-3.5 text-faint" />
+            <input
+              ref={searchRef}
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Search name, skill, location"
+              className="h-full w-full rounded-full bg-transparent pr-8 pl-8 text-[12.5px] shadow-[inset_0_0_0_1px_var(--rim)] outline-none transition-shadow placeholder:text-faint hover:shadow-[inset_0_0_0_1px_var(--rim-strong)] focus:shadow-[inset_0_0_0_1.5px_var(--primary)]"
+            />
+            {q ? (
+              <button onClick={() => setQ("")} aria-label="Clear search" className="absolute right-2.5 text-faint hover:text-foreground"><X className="size-3.5" /></button>
+            ) : (
+              <span className="pointer-events-none absolute right-2.5 hidden font-mono text-[10.5px] text-faint sm:block">/</span>
+            )}
+          </label>
+          <FilterMenu
+            label="Tier"
+            options={(["A", "B", "C"] as Tier[]).map((t) => ({ id: t, label: `Tier ${t}`, dot: TIER_COLOR[t] }))}
+            value={tiers}
+            onChange={(v) => setTiers(v as Tier[])}
+          />
+          <FilterMenu
+            label="Board"
+            options={BOARDS.map((b) => ({ id: b.id, label: b.name, dot: b.color }))}
+            value={boards}
+            onChange={(v) => setBoards(v as BoardId[])}
+          />
+          <FilterMenu
+            label="Role"
+            options={ROLES.map((r) => ({ id: r.id, label: r.title }))}
+            value={roles}
+            onChange={setRoles}
+          />
+          {filtered && (
+            <button onClick={clearAll} className="h-7.5 px-1.5 text-[12px] text-muted hover:text-foreground">Clear</button>
           )}
-        </label>
-        <FilterMenu
-          label="Stage"
-          options={STAGES.map((s) => ({ id: s.id, label: s.label, dot: s.color }))}
-          value={stages}
-          onChange={(v) => setStages(v as StageId[])}
-        />
-        <FilterMenu
-          label="Tier"
-          options={(["A", "B", "C"] as Tier[]).map((t) => ({ id: t, label: `Tier ${t}`, dot: TIER_COLOR[t] }))}
-          value={tiers}
-          onChange={(v) => setTiers(v as Tier[])}
-        />
-        <FilterMenu
-          label="Board"
-          options={BOARDS.map((b) => ({ id: b.id, label: b.name, dot: b.color }))}
-          value={boards}
-          onChange={(v) => setBoards(v as BoardId[])}
-        />
-        <FilterMenu
-          label="Role"
-          options={ROLES.map((r) => ({ id: r.id, label: r.title }))}
-          value={roles}
-          onChange={setRoles}
-        />
-        {filtered && (
-          <button onClick={clearAll} className="h-8 px-1.5 text-[12.5px] text-muted hover:text-foreground">Clear</button>
-        )}
-        <span className="tnum ml-auto text-[12px] text-faint">
-          {rows.length === people.length ? `${rows.length} candidates` : `${rows.length} of ${people.length}`}
-        </span>
+          <span className="tnum ml-auto text-[12px] text-faint">
+            {rows.length === people.length ? `${rows.length} candidates` : `${rows.length} of ${people.length}`}
+          </span>
+        </div>
       </div>
 
       {/* Desktop table */}
@@ -175,10 +201,11 @@ export default function Candidates() {
           <div className="scroll-quiet overflow-x-auto">
             <table className="w-full min-w-[880px] border-collapse text-[13px]">
               <thead>
-                <tr className="h-9 border-b border-rim text-left text-[11.5px] text-muted">
+                <tr className="h-9 border-b border-rim text-left text-[12px] text-faint">
                   <th className="w-11 pr-1 pl-4">
                     <Checkbox checked={allOn} indeterminate={!allOn && someOn} onChange={toggleAll} label="Select all" />
                   </th>
+                  <th className="w-9 pr-3 font-normal"><span className="sr-only">Row</span></th>
                   <Th k="name" sort={sort} onSort={clickSort}>Candidate</Th>
                   <Th k="role" sort={sort} onSort={clickSort}>Role</Th>
                   <Th k="source" sort={sort} onSort={clickSort}>Source</Th>
@@ -190,7 +217,7 @@ export default function Candidates() {
                 </tr>
               </thead>
               <tbody>
-                {rows.map((c) => {
+                {rows.map((c, i) => {
                   const l = listingById(c.listingId);
                   const b = boardById(l.board);
                   const on = selected.has(c.id);
@@ -199,13 +226,14 @@ export default function Candidates() {
                       key={c.id}
                       onClick={() => navigate(`/demo/candidates/${c.id}`)}
                       className={cx(
-                        "group h-12 cursor-pointer border-b border-rim transition-colors duration-100 last:border-0",
+                        "group h-12 cursor-pointer border-b border-rim transition-colors duration-100",
                         on ? "bg-primary-tint/70" : "hover:bg-[var(--wash)]",
                       )}
                     >
                       <td className="pr-1 pl-4" onClick={(e) => e.stopPropagation()}>
                         <Checkbox checked={on} onChange={() => toggle(c.id)} label={`Select ${c.name}`} />
                       </td>
+                      <td className="pr-3"><Index n={i + 1} /></td>
                       <td className="py-1.5 pr-4">
                         <div className="flex max-w-[260px] items-center gap-2.5">
                           <Avatar initials={c.initials} hue={c.hue} size={28} />
@@ -222,14 +250,15 @@ export default function Candidates() {
                       </td>
                       <td className="pr-4 text-muted"><div className="max-w-[150px] truncate">{roleById(c.roleId).title}</div></td>
                       <td className="pr-4 whitespace-nowrap">
-                        <span className="inline-flex items-center gap-1.5">
-                          <span className="size-1.5 rounded-full" style={{ background: b.color }} />
-                          <span className="max-w-[120px] truncate text-muted">{b.name}</span>
-                          <span className="rounded-[4px] bg-inset px-1 font-mono text-[10.5px] text-muted">{l.variant}</span>
+                        <span title={`${b.name}, variant ${l.variant}`}>
+                          <Tag color={b.color}>
+                            {b.short}
+                            <span className="font-mono text-[10.5px] opacity-75">{l.variant}</span>
+                          </Tag>
                         </span>
                       </td>
                       <td className="pr-4"><StageChip stage={c.stage} /></td>
-                      <td className="pr-4"><TierBadge tier={c.tier} /></td>
+                      <td className="pr-4"><span title={`Tier ${c.tier}`}><Tag color={TIER_COLOR[c.tier]} className="font-mono">{c.tier}</Tag></span></td>
                       <td className="pr-4"><ScoreBar score={c.score} tier={c.tier} /></td>
                       <td className="tnum pr-4 text-right whitespace-nowrap text-muted">{c.ask}</td>
                       <td className="tnum pr-4 text-right whitespace-nowrap text-faint">{ago(c.appliedDaysAgo)}</td>
@@ -237,6 +266,18 @@ export default function Candidates() {
                   );
                 })}
               </tbody>
+              {rows.length > 0 && (
+                <tfoot>
+                  <tr className="h-10 text-[12px] text-faint">
+                    <td />
+                    <td colSpan={9} className="pr-4">
+                      <span className="tnum font-medium text-muted">{rows.length}</span>{" "}
+                      {rows.length === 1 ? "candidate" : "candidates"}
+                      {someOn && <span className="tnum"> · {rows.filter((r) => selected.has(r.id)).length} selected</span>}
+                    </td>
+                  </tr>
+                </tfoot>
+              )}
             </table>
           </div>
           {rows.length === 0 && <Empty onClear={clearAll} />}
@@ -277,15 +318,16 @@ export default function Candidates() {
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5">
                       <span className="truncate text-[13.5px] font-medium">{c.name}</span>
-                      <TierBadge tier={c.tier} className="shrink-0" />
+                      <Tag color={TIER_COLOR[c.tier]} className="shrink-0 font-mono">{c.tier}</Tag>
                       <span className="tnum ml-auto text-[13px] font-medium">{c.score}</span>
                     </div>
                     <div className="truncate text-[12px] text-muted">{c.headline}</div>
                     <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11.5px] text-faint">
                       <StageChip stage={c.stage} />
-                      <span className="inline-flex items-center gap-1 font-mono text-[10.5px] text-muted">
-                        <span className="size-1.5 rounded-full" style={{ background: b.color }} />{b.short} · {l.variant}
-                      </span>
+                      <Tag color={b.color}>
+                        {b.short}
+                        <span className="font-mono text-[10.5px] opacity-75">{l.variant}</span>
+                      </Tag>
                       <span className="tnum">{c.ask}</span>
                       <span className="tnum">{ago(c.appliedDaysAgo)}</span>
                     </div>
@@ -295,6 +337,11 @@ export default function Candidates() {
             );
           })}
           {rows.length === 0 && <Empty onClear={clearAll} />}
+          {rows.length > 0 && (
+            <div className="tnum flex h-10 items-center border-t border-rim px-3 text-[12px] text-faint">
+              <span className="font-medium text-muted">{rows.length}</span>&nbsp;{rows.length === 1 ? "candidate" : "candidates"}
+            </div>
+          )}
         </div>
       </div>
 
@@ -360,9 +407,9 @@ function Checkbox({ checked, indeterminate, onChange, label }: { checked: boolea
 function ScoreBar({ score, tier }: { score: number; tier: Tier }) {
   return (
     <div className="flex items-center gap-2">
-      <span className="tnum w-6 text-right font-medium">{score}</span>
-      <span className="h-1 w-14 overflow-hidden rounded-full bg-inset">
-        <span className="block h-full rounded-full" style={{ width: `${score}%`, background: TIER_COLOR[tier] }} />
+      <span className="tnum w-6 text-right font-mono text-[12px] text-foreground">{score}</span>
+      <span className="h-[3px] w-14 overflow-hidden rounded-full bg-[var(--rim)]">
+        <span className="block h-full rounded-full" style={{ width: `${score}%`, background: `color-mix(in oklch, ${TIER_COLOR[tier]} 70%, var(--muted))` }} />
       </span>
     </div>
   );
@@ -403,13 +450,13 @@ function FilterMenu({
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         className={cx(
-          "flex h-8 items-center gap-1.5 rounded-control px-2.5 text-[12.5px] transition-colors",
-          value.length ? "bg-primary-tint text-foreground shadow-[inset_0_0_0_1px_color-mix(in_oklch,var(--primary)_30%,transparent)]" : "bg-card text-muted shadow-card hover:text-foreground",
+          "flex h-7.5 items-center gap-1.5 rounded-full px-2.5 text-[12px] transition-[color,box-shadow,background]",
+          value.length ? "bg-primary-tint text-foreground shadow-[inset_0_0_0_1px_color-mix(in_oklch,var(--primary)_30%,transparent)]" : "text-muted shadow-[inset_0_0_0_1px_var(--rim)] hover:text-foreground hover:shadow-[inset_0_0_0_1px_var(--rim-strong)]",
         )}
       >
         {label}
         {summary && <span className="max-w-28 truncate font-medium text-foreground">{summary}</span>}
-        <ChevronDown className={cx("size-3.5 transition-transform duration-150", open && "rotate-180")} />
+        <ChevronDown className={cx("size-3 opacity-70 transition-transform duration-150", open && "rotate-180")} />
       </button>
       {open && (
         <div className="absolute left-0 top-full z-30 mt-1.5 w-56 rounded-card bg-card p-1 shadow-overlay">
@@ -456,11 +503,15 @@ function BulkBar({
         show ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-3 opacity-0",
       )}
     >
-      <div className="flex items-center gap-1 rounded-panel bg-foreground p-1.5 pl-3.5 text-background shadow-lift">
-        <span className="tnum mr-1.5 text-[12.5px] whitespace-nowrap">{count} selected</span>
+      <div role="toolbar" aria-label="Selection actions" className="flex items-center gap-0.5 rounded-full bg-card p-1 text-foreground shadow-overlay">
+        <span className="tnum flex h-7.5 items-center gap-1.5 rounded-full bg-inset pr-2.5 pl-1.5 text-[12px] whitespace-nowrap shadow-[inset_0_0_0_1px_var(--rim)]">
+          <span className="flex size-4.5 items-center justify-center rounded-full bg-primary font-mono text-[10.5px] font-medium text-on-primary">{count}</span>
+          selected
+        </span>
+        <span className="mx-1 h-4 w-px bg-[var(--rim-strong)]" />
         <div ref={ref} className="relative">
-          <button onClick={() => setMenu((m) => !m)} aria-expanded={menu} className="flex h-7.5 items-center gap-1 rounded-control px-2.5 text-[12.5px] whitespace-nowrap hover:bg-ink-hover">
-            Move to <ChevronDown className="size-3.5 opacity-70" />
+          <button onClick={() => setMenu((m) => !m)} aria-expanded={menu} className="flex h-7.5 items-center gap-1 rounded-full px-2.5 text-[12.5px] whitespace-nowrap hover:bg-[var(--wash)]">
+            Move to <ChevronDown className="size-3.5 text-faint" />
           </button>
           {menu && (
             <div className="absolute bottom-full left-0 mb-2 w-44 rounded-card bg-card p-1 text-foreground shadow-overlay">
@@ -472,14 +523,14 @@ function BulkBar({
             </div>
           )}
         </div>
-        <button onClick={onEmail} className="flex h-7.5 items-center gap-1.5 rounded-control px-2.5 text-[12.5px] hover:bg-ink-hover">
-          <Mail className="size-3.5 opacity-70" /> <span className="max-sm:hidden">Email</span>
+        <button onClick={onEmail} aria-label="Email" className="flex h-7.5 items-center gap-1.5 rounded-full px-2.5 text-[12.5px] hover:bg-[var(--wash)]">
+          <Mail className="size-3.5 text-faint" /> <span className="max-sm:hidden">Email</span>
         </button>
-        <button onClick={onReject} className="flex h-7.5 items-center rounded-control px-2.5 text-[12.5px] text-ink-danger hover:bg-ink-hover">
+        <button onClick={onReject} className="flex h-7.5 items-center rounded-full px-2.5 text-[12.5px] text-destructive hover:bg-[color-mix(in_oklch,var(--destructive)_10%,transparent)]">
           Reject
         </button>
-        <span className="mx-0.5 h-4 w-px bg-background/20" />
-        <button onClick={onClear} aria-label="Clear selection" className="flex size-7.5 items-center justify-center rounded-control hover:bg-ink-hover">
+        <span className="mx-1 h-4 w-px bg-[var(--rim-strong)]" />
+        <button onClick={onClear} aria-label="Clear selection" className="flex size-7.5 items-center justify-center rounded-full text-muted hover:bg-[var(--wash)] hover:text-foreground">
           <X className="size-3.5" />
         </button>
       </div>
