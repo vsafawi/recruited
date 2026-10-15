@@ -18,7 +18,8 @@ how we avoid two threads building the same thing or editing the same file.
    Set **Status** to `done` in the same merge.
 4. **`styles.css`, `ui.tsx`, `mock.ts` are append-only.** Add a token, a component, a
    field. Don't rename or restyle what's there.
-5. **Hand a stream to a fresh Claude session** by pasting its prompt from below.
+5. **Use `usePeople()` from `src/data/store.ts`**, not `CANDIDATES`, for anything a person can change (stage, star, next step), so every screen agrees.
+6. **Hand a stream to a fresh Claude session** by pasting its prompt from below.
    `CLAUDE.md` loads on its own and gives it the rest of the context.
 
 ## Board
@@ -32,11 +33,12 @@ how we avoid two threads building the same thing or editing the same file.
 | — | Overview, split tests, new role | `src/demo/Overview.tsx`, `Listings.tsx`, `NewRole.tsx` | lead thread | done |
 | 1 | Pitch deck | `deck/` or a Slides artifact | deck thread | claimed |
 | 2 | Demo script and screenshots | `docs/DEMO.md`, `docs/screenshots/` | deck thread | claimed |
-| 3 | Command palette (⌘K) | `src/demo/CommandPalette.tsx` | lead thread | claimed |
+| 3 | Command palette (⌘K) | `src/demo/CommandPalette.tsx` | lead thread | done |
 | 4 | Public careers page and apply form | `src/pages/Careers.tsx`, `src/pages/Apply.tsx`, `src/pages/apply/*` | lead thread | claimed |
 | 5 | Inbox — every board in one feed | `src/demo/Inbox.tsx` | lead thread | claimed |
 | 8 | Interviews — calendar and scheduling | `src/demo/Interviews.tsx` | lead thread | claimed |
-| 9 | Shared demo state — a move on one screen shows on every screen | `src/data/store.ts` (new), then `Pipeline.tsx`, `Candidates.tsx`, `CandidateDetail.tsx` | lead thread | claimed — starts once 3–8 land |
+| 9 | Shared demo state — a move on one screen shows on every screen | `src/data/store.ts`, `Pipeline.tsx`, `Candidates.tsx`, `CandidateDetail.tsx` | lead thread | done |
+| 12 | Interview loop tab on the candidate profile | `src/demo/InterviewLoop.tsx`, `mock.ts` (interview data) | another thread, PR #1 | done — landed without a claim; claim first next time |
 | 6 | Dark mode | `src/styles.css` (append a dark block), a toggle in `Shell.tsx` | — | open |
 | 7 | Backend (after the hackathon) | `supabase/`, `src/lib/` | — | open |
 | 10 | Reports — time to hire, source of hire, cost per hire | `src/demo/Reports.tsx` (+ route and nav in the claim commit) | — | open |
