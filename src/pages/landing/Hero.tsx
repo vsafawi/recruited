@@ -87,8 +87,8 @@ export function Hero() {
           className="rise mt-5 text-[clamp(2.4rem,7vw,4.6rem)] leading-[0.98] font-semibold tracking-[-0.045em] text-balance"
           style={{ ["--d" as string]: "140ms" }}
         >
-          <span className="ink-grad">Hire the right person, </span>
-          <span className="text-faint">not the most applications.</span>
+          <span className="ink-grad">See which job post brings </span>
+          <span className="text-faint">the people worth hiring.</span>
         </h1>
         <p
           className="rise mt-6 max-w-[600px] text-[clamp(15px,2vw,17.5px)] leading-[1.55] text-pretty text-muted"
