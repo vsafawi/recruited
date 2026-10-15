@@ -17,7 +17,7 @@ function read(): Theme {
   } catch {
     /* storage blocked: fall through to the default */
   }
-  return "dark";
+  return "light";
 }
 
 function apply(theme: Theme) {
