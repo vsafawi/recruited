@@ -103,7 +103,7 @@ export const LISTINGS: Listing[] = [
     hypothesis: "Entry pay band, generic title",
     payBand: "$600 / mo", status: "live", daysLive: 23,
     views: 4120, applies: 186, qualified: 31, interviews: 6, offers: 0,
-    tierMix: { A: 6, B: 34, C: 60 }, spend: 52,
+    tierMix: { A: 3, B: 31, C: 66 }, spend: 52,
     trend: [9, 14, 12, 11, 8, 10, 13, 9, 7, 8, 6, 9, 7, 5],
   },
   {
