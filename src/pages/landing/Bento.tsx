@@ -227,7 +227,7 @@ export function InterviewLoopMock() {
                 <Sparkles className="size-3.5 text-faint" />
                 Read {cards.length} scorecards
                 <span className="ml-auto inline-flex items-center gap-1 text-[11px] text-faint">
-                  <Lock className="size-3" /> Drawn only from what he sent and what the team wrote
+                  <Lock className="size-3" /> Drawn only from what the candidate sent and what the team wrote
                 </span>
               </div>
               <ul className="mt-3 space-y-2.5 border-l border-rim-strong pl-3.5">
