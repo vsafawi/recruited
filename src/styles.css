@@ -151,3 +151,171 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* ===========================================================================
+   Dark mode. Appended; the light tokens above stay the source of truth.
+
+   New tokens (light values here, dark values below):
+   --board-*    board colours, so text and lines drawn in a board colour lift
+                in dark mode. mock.ts can point BOARDS[].color at these.
+   --ink-*      colours for things sitting on an inverted bg-foreground surface
+                (toasts, the bulk-action bar): a tick, a reject, a hover wash.
+   --dot        the dot-grid dot.
+
+   The theme is chosen by data-theme on <html> ("light" | "dark"); with no
+   attribute it follows the system. See src/components/ThemeToggle.tsx.
+   =========================================================================== */
+
+:root {
+  --board-onlinejobs: oklch(0.58 0.15 240);
+  --board-indeed: oklch(0.5 0.17 265);
+  --board-mbw: oklch(0.55 0.16 25);
+  --board-roster: oklch(0.55 0.15 320);
+  --ink-success: oklch(0.8 0.13 152);
+  --ink-danger: oklch(0.78 0.13 25);
+  --ink-hover: oklch(1 0 0 / 0.1);
+  --dot: oklch(0.86 0.004 265);
+}
+
+@theme inline {
+  --color-board-onlinejobs: var(--board-onlinejobs);
+  --color-board-indeed: var(--board-indeed);
+  --color-board-mbw: var(--board-mbw);
+  --color-board-roster: var(--board-roster);
+  --color-ink-success: var(--ink-success);
+  --color-ink-danger: var(--ink-danger);
+  --color-ink-hover: var(--ink-hover);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --page: oklch(0.145 0.006 265);
+  --background: oklch(0.165 0.007 265);
+  --canvas: oklch(0.155 0.006 265);
+  --card: oklch(0.205 0.008 265);
+  --inset: oklch(0.185 0.007 265);
+
+  --foreground: oklch(0.955 0.004 265);
+  --muted: oklch(0.72 0.01 265);
+  --faint: oklch(0.56 0.01 265);
+
+  --primary: oklch(0.68 0.17 285);
+  --primary-tint: oklch(0.28 0.06 285);
+  --on-primary: oklch(1 0 0);
+
+  --success: oklch(0.74 0.14 152);
+  --warning: oklch(0.8 0.14 75);
+  --destructive: oklch(0.7 0.18 25);
+
+  --stage-new: oklch(0.7 0.012 265);
+  --stage-screen: oklch(0.72 0.12 235);
+  --stage-assess: oklch(0.72 0.13 268);
+  --stage-interview: oklch(0.72 0.15 300);
+  --stage-offer: oklch(0.78 0.13 70);
+  --stage-hired: oklch(0.74 0.14 152);
+  --stage-rejected: oklch(0.7 0.17 25);
+
+  --tier-a: oklch(0.74 0.14 152);
+  --tier-b: oklch(0.72 0.12 235);
+  --tier-c: oklch(0.6 0.012 265);
+
+  --board-onlinejobs: oklch(0.72 0.13 240);
+  --board-indeed: oklch(0.7 0.14 265);
+  --board-mbw: oklch(0.7 0.15 25);
+  --board-roster: oklch(0.72 0.14 320);
+  --ink-success: oklch(0.55 0.14 152);
+  --ink-danger: oklch(0.55 0.19 25);
+  --ink-hover: oklch(0 0 0 / 0.08);
+
+  --rim: oklch(1 0 0 / 0.075);
+  --rim-strong: oklch(1 0 0 / 0.16);
+  --grid-line: oklch(1 0 0 / 0.06);
+  --wash: oklch(1 0 0 / 0.055);
+  --dot: oklch(1 0 0 / 0.09);
+
+  --shadow-card: 0 0 0 1px var(--rim), inset 0 1px 0 oklch(1 0 0 / 0.035),
+    0 1px 2px oklch(0 0 0 / 0.3), 0 4px 12px oklch(0 0 0 / 0.22);
+  --shadow-raised: 0 0 0 1px var(--rim), inset 0 1px 0 oklch(1 0 0 / 0.045),
+    0 2px 4px oklch(0 0 0 / 0.35), 0 8px 22px oklch(0 0 0 / 0.3);
+  --shadow-overlay: 0 0 0 1px oklch(1 0 0 / 0.1), inset 0 1px 0 oklch(1 0 0 / 0.05),
+    0 4px 10px oklch(0 0 0 / 0.4), 0 16px 40px oklch(0 0 0 / 0.45), 0 32px 72px oklch(0 0 0 / 0.4);
+  --shadow-lift: 0 0 0 1px oklch(1 0 0 / 0.12), inset 0 1px 0 oklch(1 0 0 / 0.06),
+    0 4px 12px oklch(0 0 0 / 0.45), 0 20px 48px oklch(0 0 0 / 0.5), 0 44px 96px oklch(0 0 0 / 0.45);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --page: oklch(0.145 0.006 265);
+    --background: oklch(0.165 0.007 265);
+    --canvas: oklch(0.155 0.006 265);
+    --card: oklch(0.205 0.008 265);
+    --inset: oklch(0.185 0.007 265);
+
+    --foreground: oklch(0.955 0.004 265);
+    --muted: oklch(0.72 0.01 265);
+    --faint: oklch(0.56 0.01 265);
+
+    --primary: oklch(0.68 0.17 285);
+    --primary-tint: oklch(0.28 0.06 285);
+    --on-primary: oklch(1 0 0);
+
+    --success: oklch(0.74 0.14 152);
+    --warning: oklch(0.8 0.14 75);
+    --destructive: oklch(0.7 0.18 25);
+
+    --stage-new: oklch(0.7 0.012 265);
+    --stage-screen: oklch(0.72 0.12 235);
+    --stage-assess: oklch(0.72 0.13 268);
+    --stage-interview: oklch(0.72 0.15 300);
+    --stage-offer: oklch(0.78 0.13 70);
+    --stage-hired: oklch(0.74 0.14 152);
+    --stage-rejected: oklch(0.7 0.17 25);
+
+    --tier-a: oklch(0.74 0.14 152);
+    --tier-b: oklch(0.72 0.12 235);
+    --tier-c: oklch(0.6 0.012 265);
+
+    --board-onlinejobs: oklch(0.72 0.13 240);
+    --board-indeed: oklch(0.7 0.14 265);
+    --board-mbw: oklch(0.7 0.15 25);
+    --board-roster: oklch(0.72 0.14 320);
+    --ink-success: oklch(0.55 0.14 152);
+    --ink-danger: oklch(0.55 0.19 25);
+    --ink-hover: oklch(0 0 0 / 0.08);
+
+    --rim: oklch(1 0 0 / 0.075);
+    --rim-strong: oklch(1 0 0 / 0.16);
+    --grid-line: oklch(1 0 0 / 0.06);
+    --wash: oklch(1 0 0 / 0.055);
+    --dot: oklch(1 0 0 / 0.09);
+
+    --shadow-card: 0 0 0 1px var(--rim), inset 0 1px 0 oklch(1 0 0 / 0.035),
+      0 1px 2px oklch(0 0 0 / 0.3), 0 4px 12px oklch(0 0 0 / 0.22);
+    --shadow-raised: 0 0 0 1px var(--rim), inset 0 1px 0 oklch(1 0 0 / 0.045),
+      0 2px 4px oklch(0 0 0 / 0.35), 0 8px 22px oklch(0 0 0 / 0.3);
+    --shadow-overlay: 0 0 0 1px oklch(1 0 0 / 0.1), inset 0 1px 0 oklch(1 0 0 / 0.05),
+      0 4px 10px oklch(0 0 0 / 0.4), 0 16px 40px oklch(0 0 0 / 0.45), 0 32px 72px oklch(0 0 0 / 0.4);
+    --shadow-lift: 0 0 0 1px oklch(1 0 0 / 0.12), inset 0 1px 0 oklch(1 0 0 / 0.06),
+      0 4px 12px oklch(0 0 0 / 0.45), 0 20px 48px oklch(0 0 0 / 0.5), 0 44px 96px oklch(0 0 0 / 0.45);
+  }
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+.dot-grid {
+  background-image: radial-gradient(circle at 1px 1px, var(--dot) 1px, transparent 0);
+}
+
+/* A theme switch cross-fades surfaces once instead of snapping. */
+html.theme-switching,
+html.theme-switching *,
+html.theme-switching *::before,
+html.theme-switching *::after {
+  transition: background-color 180ms var(--settle), border-color 180ms var(--settle),
+    color 180ms var(--settle), fill 180ms var(--settle), box-shadow 180ms var(--settle) !important;
+}
