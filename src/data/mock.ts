@@ -412,3 +412,46 @@ export function roundsDone(c: Candidate) {
   if (cards) return cards;
   return { new: 0, screen: 0, assess: 1, interview: 2, offer: 4, hired: 4, rejected: 1 }[c.stage];
 }
+
+/* ---------------------------------------------------------------------------
+   AI summaries, demo mode. Pre-written so the demo never calls a model. Each
+   line cites the scorecard or application it was drawn from; nothing here
+   goes beyond what the candidate sent and what the team wrote.
+   --------------------------------------------------------------------------- */
+
+export interface SummaryLine {
+  kind: "summary" | "strength" | "question";
+  text: string;
+  /** Where the line comes from, e.g. "Theo, round 2" or "Application". */
+  source: string;
+}
+
+export const AI_SUMMARIES: Record<string, SummaryLine[]> = {
+  c8: [
+    { kind: "summary", text: "Four rounds done, four yes votes. Every interviewer rated her 3 or 4 on every criterion, and the founder approved an offer at $62k, inside the $55–65k band.", source: "All scorecards" },
+    { kind: "strength", text: "Has run 40+ independent release campaigns at a distributor.", source: "Dana, screening" },
+    { kind: "strength", text: "Strongest brief received: 60% of budget to pre-save and TikTok creators, with a kill switch at day 5.", source: "Theo, round 2" },
+    { kind: "strength", text: "Reports weekly in a one-page doc; calm in difficult-artist scenarios.", source: "Nia, round 3" },
+    { kind: "question", text: "Has not managed people yet. She is fine without reports for now and wants a title review at six months.", source: "Nia, round 3 · Sam, round 4" },
+  ],
+  c9: [
+    { kind: "summary", text: "Two rounds done, two yes votes, averaging 3.4 of 4. Solid on email, radio and budgeting; the open gap is short-form video.", source: "Dana, screening · Theo, round 2" },
+    { kind: "strength", text: "Five years at a country imprint, owning the email list and Meta spend.", source: "Dana, screening" },
+    { kind: "strength", text: "Conservative, clear campaign brief with a full budget table.", source: "Theo, round 2" },
+    { kind: "question", text: "Light on TikTok. Ask him to show a short-form campaign he ran.", source: "Theo, round 2" },
+    { kind: "question", text: "Only country releases so far, and a four-week notice period.", source: "Dana, screening" },
+  ],
+  c2: [
+    { kind: "summary", text: "Three rounds done, three yes votes. Two interviewers rated ownership 4 of 4. He asks $900, under the $950 band for variant B.", source: "All scorecards" },
+    { kind: "strength", text: "Coordinated release days for a K-pop fan agency and uses Asana daily.", source: "Dana, screening" },
+    { kind: "strength", text: "Finished the trial task in 70 of 90 minutes and caught a missing ISRC without being asked.", source: "Dana, round 2" },
+    { kind: "question", text: "Quieter on video than in writing. Confirm he can cover 9am to 1pm Eastern, and his start date.", source: "Rhea, round 3" },
+  ],
+  c17: [
+    { kind: "summary", text: "Two rounds done, both strong yes. The pitch exercise scored 4 of 4 on every criterion.", source: "Dana, screening · Rhea, round 2" },
+    { kind: "strength", text: "Curates three playlists with 180k followers combined and already knows half the curator list.", source: "Dana, screening" },
+    { kind: "strength", text: "Five personalised pitches, each under 80 words.", source: "Rhea, round 2" },
+    { kind: "question", text: "Conflict of interest: would he pitch to his own playlists, and will he keep curating on the side? Raised twice, still open.", source: "Dana, screening · Rhea, round 2" },
+    { kind: "question", text: "No evidence yet of label-side editorial pitching through Spotify for Artists.", source: "Rhea, round 2" },
+  ],
+};
