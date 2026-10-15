@@ -18,6 +18,8 @@ const Listings = lazy(() => import("./demo/Listings"));
 const NewRole = lazy(() => import("./demo/NewRole"));
 const Inbox = lazy(() => import("./demo/Inbox"));
 const Interviews = lazy(() => import("./demo/Interviews"));
+const Reports = lazy(() => import("./demo/Reports"));
+const Settings = lazy(() => import("./demo/Settings"));
 const Careers = lazy(() => import("./pages/Careers"));
 const Apply = lazy(() => import("./pages/Apply"));
 
@@ -36,6 +38,8 @@ createRoot(document.getElementById("root")!).render(
             <Route path="roles/new" element={<NewRole />} />
             <Route path="inbox" element={<Inbox />} />
             <Route path="interviews" element={<Interviews />} />
+            <Route path="reports" element={<Reports />} />
+            <Route path="settings" element={<Settings />} />
           </Route>
           <Route path="/jobs" element={<Careers />} />
           <Route path="/jobs/:listingId" element={<Apply />} />
