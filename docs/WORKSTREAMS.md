@@ -42,7 +42,7 @@ how we avoid two threads building the same thing or editing the same file.
 | 6 | Dark mode | `src/styles.css` (append a dark block), `src/components/ThemeToggle.tsx`, a toggle in `Shell.tsx` | hackathon-plan thread | done |
 | 7 | Backend (after the hackathon) | `supabase/`, `src/lib/` | — | open |
 | 10 | Reports — time to hire, source of hire, cost per hire | `src/demo/Reports.tsx`, `src/demo/reports/*` | lead thread | done |
-| 11 | Team and settings — interviewers, rubric templates, board connections | `src/demo/Settings.tsx` (+ route and nav in the claim commit) | lead thread | claimed |
+| 11 | Team and settings — interviewers, rubric templates, board connections | `src/demo/Settings.tsx`, `src/demo/settings/*` | lead thread | done |
 
 Already wired and stubbed until their stream lands: `/demo/inbox`, `/demo/interviews`,
 `/jobs`, `/jobs/:listingId`, and the rail's search box, which calls `openPalette()`
