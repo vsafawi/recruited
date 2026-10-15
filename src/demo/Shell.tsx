@@ -8,6 +8,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { ButtonLink, cx, GithubIcon, Kbd } from "@/components/ui";
 import { CANDIDATES, LISTINGS, ROLES } from "@/data/mock";
 import CommandPalette, { openPalette } from "./CommandPalette";
+import Tour from "./Tour";
 import { resetDemo } from "@/data/store";
 
 const NAV = [
@@ -103,6 +104,7 @@ export default function Shell() {
       </aside>
 
       <CommandPalette />
+      <Tour />
       {open && <div className="fixed inset-0 z-30 bg-black/20 md:hidden" onClick={() => setOpen(false)} />}
 
       <div className="flex min-w-0 flex-1 flex-col md:pl-60">
