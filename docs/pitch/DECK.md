@@ -3,6 +3,8 @@
 Copy, data and visual direction only. Design comes from the design system thread.
 Each slide has: **Headline**, **On the slide**, **Visual / data**, **Speaker notes**, **Sources**.
 
+**Slides:** https://claude.ai/artifact/P5MAQCeHAjWq4jTEaeS7W3 (built from this file in the recruited.tools design system).
+
 **What changed from draft 1:** the deck now argues a business, not a product. The order follows the
 questions an investor or judge asks: what hurts, for whom, what we do about it, why it works, why
 we win, how it makes money, how big it gets, who we are, what we want. The product walkthrough is
@@ -420,7 +422,8 @@ investors, lead with the design-partner ask and keep the funding line. End on th
 - **Pipeline:** every applicant from every board on one kanban, tagged with its variant.
 - **Interview loop:** rounds, owners and scorecards on one profile. Each interviewer scores before
   seeing the others, and the next round gets a brief compiled only from what earlier rounds flagged.
-- **Apply page:** one per listing variant (/jobs/l2), which is how attribution works.
+- **Careers and apply pages:** /jobs lists open roles, and each listing variant has its own apply
+  page (/jobs/l2), which is how attribution works.
 - **Post once:** a four-step wizard drafts a variant per board.
 - Full click path in `docs/DEMO.md`. Screenshot:
   `/mnt/project-files/screenshots/candidate-profile-1440.png`.
