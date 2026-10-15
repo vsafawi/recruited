@@ -2,7 +2,7 @@ import { Suspense, useState } from "react";
 import { motion } from "motion/react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import {
-  BarChart3, Columns3, FlaskConical, Menu, Plus, Users, X,
+  BarChart3, Columns3, FlaskConical, Menu, Plug, Plus, Users, X,
 } from "lucide-react";
 import { Wordmark } from "@/components/mark";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -14,6 +14,7 @@ const NAV = [
   { to: "/demo", label: "Split tests", icon: FlaskConical, end: true, count: LISTINGS.length },
   { to: "/demo/pipeline", label: "Pipeline", icon: Columns3, count: CANDIDATES.filter((c) => !["hired", "rejected"].includes(c.stage)).length },
   { to: "/demo/candidates", label: "Candidates", icon: Users, count: CANDIDATES.length },
+  { to: "/demo/integrations", label: "Integrations", icon: Plug, count: undefined },
 ];
 
 export const GITHUB_URL = "https://github.com/vsafawi/recruited";
