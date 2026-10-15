@@ -7,6 +7,7 @@ import { Wordmark } from "@/components/mark";
 import { ButtonLink, cx, GithubIcon, Kbd } from "@/components/ui";
 import { CANDIDATES, LISTINGS, ROLES } from "@/data/mock";
 import CommandPalette, { openPalette } from "./CommandPalette";
+import { resetDemo } from "@/data/store";
 
 const NAV = [
   { to: "/demo", label: "Overview", icon: LayoutDashboard, end: true },
@@ -86,7 +87,10 @@ export default function Shell() {
           <ButtonLink to="/demo/roles/new" variant="ink" className="w-full"><Plus className="size-4" /> New role</ButtonLink>
           <div className="rounded-card bg-card p-3 text-[12px] text-muted shadow-card">
             <div className="font-medium text-foreground">This is a demo.</div>
-            Sample data for a music agency hiring three roles across four boards. Nothing you click saves.
+            Sample data for a music agency hiring three roles across four boards. Changes last until you close the tab.
+            <button type="button" onClick={resetDemo} className="mt-1 block text-[12px] text-muted underline decoration-rim-strong underline-offset-2 hover:text-foreground">
+              Reset the sample data
+            </button>
             <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="mt-2 flex items-center gap-1.5 font-medium text-foreground hover:underline">
               <GithubIcon className="size-3.5" /> Deploy your own
             </a>

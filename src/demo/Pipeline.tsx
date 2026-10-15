@@ -5,9 +5,10 @@ import {
 } from "lucide-react";
 import { Avatar, Button, ButtonLink, cx, Kbd, StageChip, TierBadge } from "@/components/ui";
 import {
-  BOARDS, boardById, CANDIDATES, listingById, roleById, ROLES, STAGES, TIER_COLOR,
+  BOARDS, boardById, listingById, roleById, ROLES, STAGES, TIER_COLOR,
   type BoardId, type Candidate, type StageId, type Tier,
 } from "@/data/mock";
+import { usePeople } from "@/data/store";
 import { PageHeader } from "./Shell";
 
 const FLOW: StageId[] = ["new", "screen", "assess", "interview", "offer", "hired"];
@@ -29,7 +30,7 @@ export default function Pipeline() {
   const roleParam = params.get("role");
   const role = ROLES.some((r) => r.id === roleParam) ? roleParam! : "all";
 
-  const [people, setPeople] = useState<Candidate[]>(() => CANDIDATES.map((c) => ({ ...c })));
+  const [people, setPeople] = usePeople();
   const [boards, setBoards] = useState<BoardId[]>([]);
   const [tiers, setTiers] = useState<Tier[]>([]);
   const [showRejected, setShowRejected] = useState(false);

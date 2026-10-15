@@ -3,9 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { ArrowDown, ArrowUp, Check, ChevronDown, Mail, Minus, Search, Star, X } from "lucide-react";
 import { Avatar, Button, cx, StageChip, TierBadge } from "@/components/ui";
 import {
-  BOARDS, boardById, CANDIDATES, listingById, roleById, ROLES, STAGES, TIER_COLOR,
+  BOARDS, boardById, listingById, roleById, ROLES, STAGES, TIER_COLOR,
   type BoardId, type Candidate, type StageId, type Tier,
 } from "@/data/mock";
+import { usePeople } from "@/data/store";
 import { PageHeader } from "./Shell";
 
 type SortKey = "name" | "role" | "source" | "stage" | "tier" | "score" | "ask" | "applied";
@@ -41,7 +42,7 @@ function ago(days: number) {
 
 export default function Candidates() {
   const navigate = useNavigate();
-  const [people, setPeople] = useState<Candidate[]>(() => CANDIDATES.map((c) => ({ ...c })));
+  const [people, setPeople] = usePeople();
   const [q, setQ] = useState("");
   const [stages, setStages] = useState<StageId[]>([]);
   const [tiers, setTiers] = useState<Tier[]>([]);
