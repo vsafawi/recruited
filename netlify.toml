@@ -1,3 +1,9 @@
 [build]
   command = "npm run build"
   publish = "dist"
+
+# Serve the app for every path so deep links load.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
