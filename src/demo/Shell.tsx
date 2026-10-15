@@ -4,6 +4,7 @@ import {
   BarChart3, CalendarDays, Columns3, Inbox as InboxIcon, FlaskConical, LayoutDashboard, Menu, Plus, Search, Users, X,
 } from "lucide-react";
 import { Wordmark } from "@/components/mark";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { ButtonLink, cx, GithubIcon, Kbd } from "@/components/ui";
 import { CANDIDATES, LISTINGS, ROLES } from "@/data/mock";
 import CommandPalette, { openPalette } from "./CommandPalette";
@@ -35,6 +36,7 @@ export default function Shell() {
       >
         <div className="flex h-9 items-center justify-between px-2">
           <NavLink to="/"><Wordmark className="text-[14px]" /></NavLink>
+          <ThemeToggle className="ml-auto mr-1 md:mr-0" />
           <button className="md:hidden" onClick={() => setOpen(false)} aria-label="Close menu"><X className="size-4" /></button>
         </div>
 

@@ -459,7 +459,7 @@ function BulkBar({
       <div className="flex items-center gap-1 rounded-panel bg-foreground p-1.5 pl-3.5 text-background shadow-lift">
         <span className="tnum mr-1.5 text-[12.5px] whitespace-nowrap">{count} selected</span>
         <div ref={ref} className="relative">
-          <button onClick={() => setMenu((m) => !m)} aria-expanded={menu} className="flex h-7.5 items-center gap-1 rounded-control px-2.5 text-[12.5px] whitespace-nowrap hover:bg-white/10">
+          <button onClick={() => setMenu((m) => !m)} aria-expanded={menu} className="flex h-7.5 items-center gap-1 rounded-control px-2.5 text-[12.5px] whitespace-nowrap hover:bg-ink-hover">
             Move to <ChevronDown className="size-3.5 opacity-70" />
           </button>
           {menu && (
@@ -472,14 +472,14 @@ function BulkBar({
             </div>
           )}
         </div>
-        <button onClick={onEmail} className="flex h-7.5 items-center gap-1.5 rounded-control px-2.5 text-[12.5px] hover:bg-white/10">
+        <button onClick={onEmail} className="flex h-7.5 items-center gap-1.5 rounded-control px-2.5 text-[12.5px] hover:bg-ink-hover">
           <Mail className="size-3.5 opacity-70" /> <span className="max-sm:hidden">Email</span>
         </button>
-        <button onClick={onReject} className="flex h-7.5 items-center rounded-control px-2.5 text-[12.5px] text-[oklch(0.78_0.13_25)] hover:bg-white/10">
+        <button onClick={onReject} className="flex h-7.5 items-center rounded-control px-2.5 text-[12.5px] text-ink-danger hover:bg-ink-hover">
           Reject
         </button>
-        <span className="mx-0.5 h-4 w-px bg-white/15" />
-        <button onClick={onClear} aria-label="Clear selection" className="flex size-7.5 items-center justify-center rounded-control hover:bg-white/10">
+        <span className="mx-0.5 h-4 w-px bg-background/20" />
+        <button onClick={onClear} aria-label="Clear selection" className="flex size-7.5 items-center justify-center rounded-control hover:bg-ink-hover">
           <X className="size-3.5" />
         </button>
       </div>

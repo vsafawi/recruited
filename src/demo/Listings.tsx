@@ -53,7 +53,7 @@ function useToasts() {
             className="pointer-events-auto flex max-w-md items-center gap-2.5 rounded-card bg-foreground px-3.5 py-2.5 text-[13px] text-background shadow-overlay"
             role="status"
           >
-            <Check className="size-4 shrink-0 text-[oklch(0.8_0.13_152)]" />
+            <Check className="size-4 shrink-0 text-ink-success" />
             {t.text}
           </motion.div>
         ))}
@@ -722,8 +722,8 @@ function Scatter() {
                 className="cursor-pointer"
                 style={{ transition: "opacity 160ms", opacity: dim ? 0.35 : 1 }}
               >
-                <circle cx={cx} cy={cy} r={rr} fill={col} fillOpacity={0.18} stroke={col} strokeWidth={hover === l.id ? 2 : 1.25} />
-                <text x={cx} y={cy + 3.5} fontSize={10} textAnchor="middle" fill={col} fontWeight={600} className="pointer-events-none font-mono">
+                <circle cx={cx} cy={cy} r={rr} style={{ fill: col, stroke: col }} fillOpacity={0.18} strokeWidth={hover === l.id ? 2 : 1.25} />
+                <text x={cx} y={cy + 3.5} fontSize={10} textAnchor="middle" style={{ fill: col }} fontWeight={600} className="pointer-events-none font-mono">
                   {boardById(l.board).short}·{l.variant}
                 </text>
               </g>
