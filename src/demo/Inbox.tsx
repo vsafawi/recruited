@@ -258,6 +258,7 @@ export default function Inbox() {
     if (opts.open) {
       setMobileReading(true);
       paneRef.current?.scrollTo({ top: 0 });
+      if (window.matchMedia("(max-width: 1023px)").matches) window.scrollTo({ top: 0 });
     }
   }
 
@@ -449,9 +450,9 @@ export default function Inbox() {
             </div>
           </div>
 
-          <div className="grid min-h-0 flex-1 lg:grid-cols-[minmax(330px,390px)_1fr]">
+          <div className={cx("grid min-h-0 flex-1", inbox.length > 0 && "lg:grid-cols-[minmax(330px,390px)_1fr]")}>
             {/* List */}
-            <div className={cx("scroll-quiet min-h-0 overflow-y-auto lg:border-r lg:border-rim", mobileReading && "max-lg:hidden")}>
+            <div className={cx("scroll-quiet min-h-0 overflow-y-auto", inbox.length > 0 && "lg:border-r lg:border-rim", mobileReading && "max-lg:hidden")}>
               {visible.length === 0 ? (
                 <Empty filtered={filtered} onClear={() => { setFilter("all"); setBoards([]); }} onReset={() => restore({ done: new Set(), read: new Set(), stages: initialStages(), starred: initialStars(), selected: ITEMS[0].id })} />
               ) : (
@@ -482,7 +483,7 @@ export default function Inbox() {
             </div>
 
             {/* Reading pane */}
-            <div ref={paneRef} className={cx("@container scroll-quiet min-h-0 min-w-0 overflow-y-auto bg-background/60", !mobileReading && "max-lg:hidden")}>
+            <div ref={paneRef} className={cx("@container scroll-quiet min-h-0 min-w-0 overflow-y-auto bg-background/60", !mobileReading && "max-lg:hidden", !inbox.length && "hidden!")}>
               {current ? (
                 <Reader
                   key={current.id}
