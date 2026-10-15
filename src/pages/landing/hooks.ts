@@ -22,7 +22,7 @@ export function useRevealAll(root: RefObject<HTMLElement | null>) {
           }
         }
       },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.08 },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.12 },
     );
     nodes.forEach((n) => io.observe(n));
     return () => io.disconnect();
@@ -36,7 +36,7 @@ export function useInView<T extends HTMLElement>() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (prefersReducedMotion() || !("IntersectionObserver" in window)) return setSeen(true);
+    if (prefersReducedMotion()) return setSeen(true);
     const io = new IntersectionObserver(
       ([e]) => {
         if (e.isIntersecting) {
@@ -44,7 +44,7 @@ export function useInView<T extends HTMLElement>() {
           io.disconnect();
         }
       },
-      { threshold: 0.25 },
+      { threshold: 0.3 },
     );
     io.observe(el);
     return () => io.disconnect();
@@ -69,27 +69,6 @@ export function useCountUp(to: number, run: boolean, ms = 1100) {
     return () => cancelAnimationFrame(raf);
   }, [to, run, ms]);
   return v;
-}
-
-/** The id of the section currently in the middle of the viewport. */
-export function useScrollSpy(ids: string[]) {
-  const [active, setActive] = useState(ids[0]);
-  const key = ids.join(",");
-  useEffect(() => {
-    if (!("IntersectionObserver" in window)) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) if (e.isIntersecting) setActive(e.target.id);
-      },
-      { rootMargin: "-35% 0px -60% 0px" },
-    );
-    key.split(",").forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) io.observe(el);
-    });
-    return () => io.disconnect();
-  }, [key]);
-  return active;
 }
 
 /**
