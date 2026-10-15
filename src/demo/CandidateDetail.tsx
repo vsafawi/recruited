@@ -5,6 +5,7 @@ import {
   MessageSquare, MoveRight, Send, Sparkles, Star, Trophy, UserPlus, Wallet,
 } from "lucide-react";
 import { Avatar, Button, ButtonLink, Card, cx, Kbd, StageChip, TierBadge } from "@/components/ui";
+import InterviewLoop, { hasWrittenScorecards } from "./InterviewLoop";
 import {
   ACTIVITY, boardById, CANDIDATES, candidateById, listingById, roleById, STAGES, TIER_COLOR, TIER_LABEL,
   type Candidate, type StageId,
@@ -78,7 +79,7 @@ function scorecard(c: Candidate, interviewer: string) {
   });
 }
 
-type Tab = "overview" | "scorecard" | "activity" | "notes";
+type Tab = "overview" | "loop" | "scorecard" | "activity" | "notes";
 interface Note { id: string; text: string; when: string; author: string }
 interface Event { id: string; when: string; text: ReactNode; icon: typeof Check; tone?: string }
 
@@ -117,7 +118,7 @@ function Detail({ c }: { c: Candidate }) {
 
   const [stage, setStage] = useState<StageId>(c.stage);
   const [starred, setStarred] = useState(!!c.starred);
-  const [tab, setTab] = useState<Tab>("overview");
+  const [tab, setTab] = useState<Tab>(() => (hasWrittenScorecards(c) ? "loop" : "overview"));
   const [moves, setMoves] = useState<Event[]>([]);
   const [notes, setNotes] = useState<Note[]>(() =>
     ACTIVITY.filter((a) => a.kind === "note" && a.candidateId === c.id).map((a) => ({
@@ -192,6 +193,7 @@ function Detail({ c }: { c: Candidate }) {
 
   const tabs: { id: Tab; label: string; count?: number }[] = [
     { id: "overview", label: "Overview" },
+    { id: "loop", label: "Interview loop" },
     { id: "scorecard", label: "Scorecard" },
     { id: "activity", label: "Activity", count: timeline.length },
     { id: "notes", label: "Notes", count: notes.length },
@@ -342,6 +344,8 @@ function Detail({ c }: { c: Candidate }) {
                 </Card>
               </div>
             )}
+
+            {tab === "loop" && <InterviewLoop c={c} stage={stage} />}
 
             {tab === "scorecard" && (
               <Scorecard c={c} interviewers={interviewers} ready={hasScorecards} />
