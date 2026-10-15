@@ -42,7 +42,7 @@ export function CandidateCard({ c, className = "" }: { c: Candidate; className?:
       <div className="mt-1.5 truncate pl-[30px] text-[11px] text-faint">{c.headline}</div>
       <div className="mt-2 flex items-center gap-1.5 pl-[30px]">
         <BoardChip id={c.listingId} />
-        <span className="text-[10.5px] text-muted">{SHORT_ROLE[c.roleId]}</span>
+        <span className="min-w-0 truncate text-[10.5px] whitespace-nowrap text-muted">{SHORT_ROLE[c.roleId]}</span>
         <span className="tnum ml-auto font-mono text-[10.5px] text-muted">{c.score}</span>
       </div>
     </div>
@@ -68,7 +68,7 @@ export function PipelineMock({ width }: { width: number }) {
 
       <div className="flex min-h-0 flex-1">
         {!narrow && (
-          <aside className="flex w-[208px] shrink-0 flex-col gap-0.5 border-r border-rim bg-canvas/60 p-3">
+          <aside className="flex w-[196px] shrink-0 flex-col gap-0.5 border-r border-rim bg-canvas/60 p-3">
             <div className="mb-3 flex items-center gap-2 px-1.5 text-[13px] font-semibold tracking-[-0.01em]">
               <Mark size={18} />
               Music Market Agency
@@ -136,11 +136,11 @@ export function PipelineMock({ width }: { width: number }) {
             </div>
           </div>
 
-          <div className="flex min-h-0 flex-1 gap-2.5 overflow-hidden">
+          <div className="flex min-h-0 flex-1 gap-2.5 overflow-hidden [mask-image:linear-gradient(180deg,#000_78%,transparent)]">
             {BOARD_STAGES.map((s) => {
               const list = CANDIDATES.filter((c) => c.stage === s.id).sort((a, b) => b.score - a.score);
               return (
-                <div key={s.id} className="flex w-[190px] min-w-[190px] flex-1 flex-col rounded-panel bg-canvas p-1.5">
+                <div key={s.id} className="flex w-[164px] min-w-[164px] flex-1 flex-col rounded-panel bg-canvas p-1.5">
                   <div className="flex items-center gap-1.5 px-1.5 pt-1 pb-2 text-[12px] font-medium">
                     <span className="size-1.5 rounded-full" style={{ background: s.color }} />
                     {s.label}
