@@ -44,8 +44,8 @@ export function Confirmation({
 
       <Card className="j-rise mt-10 overflow-hidden" >
         <div className="flex items-center justify-between gap-3 border-b border-rim bg-primary-tint px-5 py-3">
-          <p className="text-[12px] font-medium uppercase tracking-[0.07em] text-primary">Behind the scenes</p>
-          <p className="text-[11.5px] text-muted">Shown for the demo · candidates don't see this</p>
+          <p className="shrink-0 text-[12px] font-medium uppercase tracking-[0.07em] text-primary">Behind the scenes</p>
+          <p className="text-[11.5px] text-muted"><span className="sm:hidden">Demo only</span><span className="hidden sm:inline">Shown for the demo · candidates don't see this</span></p>
         </div>
 
         <ol className="divide-y divide-rim">
@@ -68,9 +68,9 @@ export function Confirmation({
 
           <Step n={3} icon={<MoveRight className="size-4" />} title="Lands in the New column">
             The hiring manager sees it at the top of the pipeline, tagged with its board and variant.
-            <div className="mt-3 grid grid-cols-5 gap-1.5" aria-hidden>
+            <div className="mt-3 grid grid-cols-3 gap-1.5 sm:grid-cols-5" aria-hidden>
               {lanes.map((s, i) => (
-                <div key={s.id} className={cx("min-w-0 rounded-card p-1.5", i === 0 ? "bg-inset shadow-[inset_0_0_0_1px_var(--rim)]" : "bg-inset/50")}>
+                <div key={s.id} className={cx("min-w-0 rounded-card p-1.5", i > 2 && "hidden sm:block", i === 0 ? "bg-inset shadow-[inset_0_0_0_1px_var(--rim)]" : "bg-inset/50")}>
                   <p className="flex items-center gap-1 truncate text-[10.5px] font-medium text-muted">
                     <span className="size-1.5 shrink-0 rounded-full" style={{ background: s.color }} />
                     <span className="truncate">{s.label}</span>
@@ -79,7 +79,7 @@ export function Confirmation({
                     <div className="j-rise mt-1.5 rounded-[7px] bg-card p-1.5 shadow-raised" style={{ "--d": "450ms" } as CSSProperties}>
                       <span className="flex size-5 items-center justify-center rounded-full bg-primary text-[8.5px] font-medium text-on-primary">{initials}</span>
                       <span className="mt-1 block truncate text-[10.5px] font-medium">{first}</span>
-                      <span className="block truncate font-mono text-[9.5px] text-faint">{board.short} · {variant}</span>
+                      <span className="block truncate font-mono text-[9.5px] text-faint">{board.short}·{variant}</span>
                     </div>
                   ) : (
                     <div className="mt-1.5 space-y-1">

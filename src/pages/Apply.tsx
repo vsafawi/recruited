@@ -1,6 +1,6 @@
 import { ArrowDown, ArrowRight, Briefcase, Clock, MapPin, PauseCircle, Users, Wallet } from "lucide-react";
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { ButtonLink, Card } from "@/components/ui";
 import { BOARDS, boardById, LISTINGS, ROLES, type BoardId } from "@/data/mock";
 import { ApplyForm, type Submission } from "./apply/ApplyForm";
@@ -109,16 +109,21 @@ export default function Apply() {
                 <Card className="p-6">
                   <div className="flex items-start gap-3">
                     <PauseCircle className="mt-0.5 size-5 shrink-0 text-warning" />
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <h2 className="text-[16px] font-semibold">This listing isn't taking applications</h2>
                       <p className="mt-1 text-[13.5px] text-muted">
                         The role is still open. Apply through {siblings.length === 1 ? "its live listing" : "one of its live listings"} instead.
                       </p>
-                      <div className="mt-4 flex flex-wrap gap-2">
+                      <div className="mt-4 space-y-2">
                         {siblings.map((s) => (
-                          <ButtonLink key={s.id} to={`/jobs/${s.id}?src=${s.board}&v=${s.variant}`} variant="secondary">
-                            {s.headline.length > 42 ? `${s.headline.slice(0, 40)}…` : s.headline} <ArrowRight className="size-3.5" />
-                          </ButtonLink>
+                          <Link
+                            key={s.id}
+                            to={`/jobs/${s.id}?src=${s.board}&v=${s.variant}`}
+                            className="flex min-w-0 items-center gap-2 rounded-control bg-card px-3 py-2 text-[13px] font-medium shadow-card hover:bg-inset"
+                          >
+                            <span className="min-w-0 flex-1 truncate">{s.headline}</span>
+                            <ArrowRight className="size-3.5 shrink-0 text-muted" />
+                          </Link>
                         ))}
                       </div>
                     </div>
