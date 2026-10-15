@@ -1,5 +1,5 @@
 import { Equal, FlaskConical, Trophy } from "lucide-react";
-import { TierBar, cx } from "@/components/ui";
+import { Sparkline, TierBar, cx } from "@/components/ui";
 import { TIER_COLOR, aTierPerDollar, boardById, costPerQualified, listingById, roleById, type Listing } from "@/data/mock";
 import { useCountUp, useInView } from "./hooks";
 
@@ -70,10 +70,16 @@ function Variant({ l, win, run }: { l: Listing; win?: boolean; run: boolean }) {
         </div>
       </div>
 
-      <div className="mt-4 flex items-baseline justify-between gap-3 rounded-card bg-inset px-3 py-2.5">
-        <div className="text-[12.5px] text-muted">Strong candidates (tier A)</div>
-        <div className="tnum text-[22px] leading-tight font-semibold tracking-[-0.03em]" style={{ color: win ? "var(--tier-a)" : undefined }}>
-          {Math.round(aTier)}
+      <div className="mt-4 flex items-end justify-between gap-3 rounded-card bg-inset px-3 py-2.5">
+        <div>
+          <div className="text-[11px] text-muted">Strong candidates (tier A)</div>
+          <div className="tnum text-[22px] leading-tight font-semibold tracking-[-0.03em]" style={{ color: win ? "var(--tier-a)" : undefined }}>
+            {Math.round(aTier)}
+          </div>
+        </div>
+        <div className="text-right">
+          <div className="mb-0.5 text-[10.5px] text-faint">Applicants per day</div>
+          <Sparkline data={l.trend} width={84} height={24} color={win ? "var(--primary)" : "var(--faint)"} />
         </div>
       </div>
     </div>
@@ -95,7 +101,7 @@ export function SplitTest() {
   const max = perHundred(B);
 
   return (
-    <section id="split-tests" className="band band-lavender relative scroll-mt-20 px-4 py-20 sm:py-24">
+    <section id="split-tests" className="relative scroll-mt-20 px-4 py-20 sm:py-28">
       <div className="mx-auto max-w-[1120px]">
         <div className="reveal mx-auto max-w-[720px] text-center">
           <div className="inline-flex items-center gap-1.5 text-[12.5px] font-medium text-primary">

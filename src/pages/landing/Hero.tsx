@@ -98,10 +98,10 @@ export function Hero() {
             Open the live demo <ArrowRight className="size-4" />
           </ButtonLink>
           <a
-            href="#how"
+            href="#deploy"
             className="inline-flex h-11 items-center justify-center gap-1.5 rounded-control bg-card px-5 text-[14.5px] font-medium shadow-card transition-colors hover:bg-inset"
           >
-            See how it works
+            Deploy in five minutes
           </a>
         </div>
         <p className="rise mt-4 text-[12.5px] text-faint" style={{ ["--d" as string]: "360ms" }}>
