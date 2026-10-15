@@ -1,4 +1,5 @@
 import { Suspense, useState } from "react";
+import { motion } from "motion/react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import {
   BarChart3, CalendarDays, LineChart, Settings as SettingsIcon, Columns3, Inbox as InboxIcon, FlaskConical, LayoutDashboard, Menu, Plus, Search, Users, X,
@@ -29,11 +30,11 @@ export default function Shell() {
   const { pathname } = useLocation();
 
   return (
-    <div className="flex min-h-dvh bg-background text-foreground">
+    <div className="hatch flex min-h-dvh text-foreground">
       {/* Rail */}
       <aside
         className={cx(
-          "fixed inset-y-0 left-0 z-40 flex w-60 flex-col border-r border-rim bg-canvas px-3 py-3 transition-transform duration-200 ease-settle md:translate-x-0",
+          "rule-dashed fixed inset-y-0 left-0 z-40 flex w-60 flex-col border-r bg-background px-3 py-3 transition-transform duration-200 ease-settle md:translate-x-0",
           open ? "translate-x-0" : "-translate-x-full",
         )}
       >
@@ -46,7 +47,7 @@ export default function Shell() {
         <button
           type="button"
           onClick={openPalette}
-          className="mt-3 flex w-full items-center gap-2 rounded-control bg-card px-2.5 py-1.5 text-left text-[12.5px] text-faint shadow-card hover:text-muted"
+          className="mt-3 flex w-full items-center gap-2 rounded-[10px] bg-inset px-2.5 py-1.5 text-left text-[12.5px] text-faint shadow-[inset_0_0_0_1px_var(--rim)] hover:text-muted"
         >
           <Search className="size-3.5" /> Search candidates
           <span className="ml-auto"><Kbd>⌘K</Kbd></span>
@@ -61,14 +62,25 @@ export default function Shell() {
               onClick={() => setOpen(false)}
               className={({ isActive }) =>
                 cx(
-                  "flex h-8 items-center gap-2.5 rounded-control px-2.5 text-[13px] transition-colors",
-                  isActive ? "bg-card font-medium text-foreground shadow-card" : "text-muted hover:bg-[var(--wash)] hover:text-foreground",
+                  "relative flex h-8 items-center gap-2.5 rounded-control px-2.5 text-[13px] transition-colors",
+                  isActive ? "font-medium text-foreground" : "text-muted hover:bg-[var(--wash)] hover:text-foreground",
                 )
               }
             >
-              <Icon className="size-4" strokeWidth={1.75} />
-              {label}
-              {count != null && <span className="tnum ml-auto text-[11.5px] text-faint">{count}</span>}
+              {({ isActive }) => (
+                <>
+                  {isActive && (
+                    <motion.span
+                      layoutId="rail-active"
+                      className="absolute inset-0 rounded-control bg-inset shadow-[inset_0_0_0_1px_var(--rim)]"
+                      transition={{ type: "spring", stiffness: 520, damping: 42 }}
+                    />
+                  )}
+                  <Icon className="relative size-4" strokeWidth={1.75} />
+                  <span className="relative">{label}</span>
+                  {count != null && <span className="tnum relative ml-auto text-[11.5px] text-faint">{count}</span>}
+                </>
+              )}
             </NavLink>
           ))}
         </nav>
@@ -90,7 +102,7 @@ export default function Shell() {
 
         <div className="mt-auto flex flex-col gap-2">
           <ButtonLink to="/demo/roles/new" variant="ink" className="w-full"><Plus className="size-4" /> New role</ButtonLink>
-          <div className="rounded-card bg-card p-3 text-[12px] text-muted shadow-card">
+          <div className="rule-dashed rounded-card border p-3 text-[12px] text-muted">
             <div className="font-medium text-foreground">This is a demo.</div>
             Sample data for a music agency hiring three roles across four boards. Changes last until you close the tab.
             <button type="button" onClick={resetDemo} className="mt-1 block text-[12px] text-muted underline decoration-rim-strong underline-offset-2 hover:text-foreground">
@@ -108,11 +120,11 @@ export default function Shell() {
       {open && <div className="fixed inset-0 z-30 bg-black/20 md:hidden" onClick={() => setOpen(false)} />}
 
       <div className="flex min-w-0 flex-1 flex-col md:pl-60">
-        <header className="sticky top-0 z-20 flex h-12 items-center gap-3 border-b border-rim bg-background/85 px-4 backdrop-blur md:hidden">
+        <header className="rule-dashed sticky top-0 z-20 flex h-12 items-center gap-3 border-b bg-background/85 px-4 backdrop-blur md:hidden">
           <button onClick={() => setOpen(true)} aria-label="Open menu"><Menu className="size-5" /></button>
           <Wordmark className="text-[14px]" />
         </header>
-        <main key={pathname} className="min-w-0 flex-1">
+        <main key={pathname} className="rule-dashed mx-auto w-full min-w-0 max-w-[1320px] flex-1 bg-background xl:border-x">
           <Suspense fallback={<div className="p-8 text-muted">Loading…</div>}>
             <Outlet />
           </Suspense>
@@ -127,7 +139,7 @@ export function PageHeader({ title, subtitle, actions }: { title: string; subtit
   return (
     <div className="flex flex-wrap items-end justify-between gap-3 px-4 pt-6 pb-4 md:px-8 md:pt-8">
       <div className="min-w-0">
-        <h1 className="text-[22px] font-semibold tracking-[-0.02em]">{title}</h1>
+        <h1 className="text-[20px] font-semibold tracking-[-0.015em]">{title}</h1>
         {subtitle && <p className="mt-0.5 text-[13.5px] text-muted">{subtitle}</p>}
       </div>
       {actions && <div className="flex items-center gap-2">{actions}</div>}

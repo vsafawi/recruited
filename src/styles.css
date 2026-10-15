@@ -319,3 +319,105 @@ html.theme-switching *::after {
   transition: background-color 180ms var(--settle), border-color 180ms var(--settle),
     color 180ms var(--settle), fill 180ms var(--settle), box-shadow 180ms var(--settle) !important;
 }
+
+/* ===========================================================================
+   Refresh, v2. Graphite surfaces, hairline rims, dashed rules, a hatched page
+   ground and one blue accent. Appended so it overrides the blocks above; the
+   token names are unchanged, so every screen picks it up.
+   =========================================================================== */
+
+:root,
+:root[data-theme="light"] {
+  --page: oklch(0.955 0.002 264);
+  --background: oklch(0.985 0.001 264);
+  --canvas: oklch(0.975 0.001 264);
+  --card: oklch(1 0 0);
+  --inset: oklch(0.965 0.002 264);
+
+  --foreground: oklch(0.2 0.004 264);
+  --muted: oklch(0.48 0.006 264);
+  --faint: oklch(0.63 0.006 264);
+
+  --primary: oklch(0.57 0.18 256);
+  --primary-tint: oklch(0.955 0.025 256);
+
+  --rim: oklch(0 0 0 / 0.085);
+  --rim-strong: oklch(0 0 0 / 0.16);
+  --hatch: oklch(0 0 0 / 0.05);
+
+  --shadow-card: 0 0 0 1px var(--rim), 0 1px 2px oklch(0 0 0 / 0.03);
+  --shadow-raised: 0 0 0 1px var(--rim), 0 2px 6px oklch(0 0 0 / 0.05);
+  --shadow-overlay: 0 0 0 1px var(--rim-strong), 0 12px 32px oklch(0 0 0 / 0.12), 0 2px 6px oklch(0 0 0 / 0.06);
+}
+
+:root[data-theme="dark"] {
+  --page: oklch(0.185 0.003 264);
+  --background: oklch(0.205 0.004 264);
+  --canvas: oklch(0.205 0.004 264);
+  --card: oklch(0.226 0.004 264);
+  --inset: oklch(0.25 0.004 264);
+
+  --foreground: oklch(0.964 0.002 248);
+  --muted: oklch(0.72 0.006 264);
+  --faint: oklch(0.56 0.006 264);
+
+  --primary: oklch(0.66 0.16 254);
+  --primary-tint: oklch(0.3 0.06 254);
+
+  --rim: oklch(1 0 0 / 0.08);
+  --rim-strong: oklch(1 0 0 / 0.15);
+  --wash: oklch(1 0 0 / 0.05);
+  --hatch: oklch(1 0 0 / 0.04);
+
+  --shadow-card: 0 0 0 1px var(--rim);
+  --shadow-raised: 0 0 0 1px var(--rim), 0 4px 14px oklch(0 0 0 / 0.25);
+  --shadow-overlay: 0 0 0 1px var(--rim-strong), 0 16px 48px oklch(0 0 0 / 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: oklch(0.185 0.003 264);
+    --background: oklch(0.205 0.004 264);
+    --canvas: oklch(0.205 0.004 264);
+    --card: oklch(0.226 0.004 264);
+    --inset: oklch(0.25 0.004 264);
+    --foreground: oklch(0.964 0.002 248);
+    --muted: oklch(0.72 0.006 264);
+    --faint: oklch(0.56 0.006 264);
+    --primary: oklch(0.66 0.16 254);
+    --primary-tint: oklch(0.3 0.06 254);
+    --rim: oklch(1 0 0 / 0.08);
+    --rim-strong: oklch(1 0 0 / 0.15);
+    --wash: oklch(1 0 0 / 0.05);
+    --hatch: oklch(1 0 0 / 0.04);
+    --shadow-card: 0 0 0 1px var(--rim);
+    --shadow-raised: 0 0 0 1px var(--rim), 0 4px 14px oklch(0 0 0 / 0.25);
+    --shadow-overlay: 0 0 0 1px var(--rim-strong), 0 16px 48px oklch(0 0 0 / 0.5);
+  }
+}
+
+@theme inline {
+  --radius-card: 12px;
+  --radius-panel: 16px;
+  --color-hatch: var(--hatch);
+}
+
+/* Diagonal hatching for page gutters and empty grounds. */
+.hatch {
+  background-color: var(--page);
+  background-image: repeating-linear-gradient(135deg, var(--hatch) 0 1px, transparent 1px 9px);
+}
+
+/* Dashed hairlines, the section dividers. */
+.rule-dashed { border-color: var(--rim-strong); border-style: dashed; }
+
+/* Text that sweeps once while something is "working". Plays once, never loops. */
+@keyframes sweep-once { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+.shimmer-once {
+  background: linear-gradient(90deg, var(--muted) 0%, var(--muted) 40%, var(--foreground) 50%, var(--muted) 60%, var(--muted) 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: sweep-once 1.4s var(--settle) 1 both;
+}
