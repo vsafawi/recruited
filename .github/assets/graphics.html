@@ -1,0 +1,214 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+/* Values copied from src/styles.css on main (the graphite + blue refresh). */
+:root {
+  --page: oklch(0.955 0.002 264); --card: oklch(1 0 0); --inset: oklch(0.965 0.002 264);
+  --fg: oklch(0.2 0.004 264); --muted: oklch(0.48 0.006 264); --faint: oklch(0.63 0.006 264);
+  --primary: oklch(0.57 0.18 256); --primary-tint: oklch(0.94 0.035 256); --on-primary: oklch(1 0 0);
+  --rim: oklch(0 0 0 / 0.085); --rim-strong: oklch(0 0 0 / 0.16); --hatch: oklch(0 0 0 / 0.05);
+  --tier-a: oklch(0.55 0.13 152); --tier-b: oklch(0.55 0.13 235); --tier-c: oklch(0.6 0.012 265);
+  --stage-new: oklch(0.6 0.012 265); --stage-screen: oklch(0.55 0.13 235); --stage-assess: oklch(0.53 0.15 268);
+  --stage-interview: oklch(0.52 0.17 300); --stage-offer: oklch(0.58 0.14 68);
+  --b-oj: oklch(0.58 0.15 240); --b-in: oklch(0.5 0.17 265); --b-mb: oklch(0.55 0.16 25); --b-ro: oklch(0.55 0.15 320);
+  --shadow: 0 0 0 1px var(--rim), 0 2px 6px oklch(0 0 0 / 0.05), 0 24px 60px oklch(0 0 0 / 0.08);
+  --mark-tile: var(--fg); --mark-cut: oklch(0.985 0.001 264);
+}
+html.dark {
+  --page: oklch(0.185 0.003 264); --card: oklch(0.226 0.004 264); --inset: oklch(0.25 0.004 264);
+  --fg: oklch(0.964 0.002 248); --muted: oklch(0.72 0.006 264); --faint: oklch(0.56 0.006 264);
+  --primary: oklch(0.66 0.16 254); --primary-tint: oklch(0.3 0.06 254); --on-primary: oklch(1 0 0);
+  --rim: oklch(1 0 0 / 0.08); --rim-strong: oklch(1 0 0 / 0.15); --hatch: oklch(1 0 0 / 0.04);
+  --tier-a: oklch(0.74 0.14 152); --tier-b: oklch(0.72 0.12 235); --tier-c: oklch(0.6 0.012 265);
+  --stage-new: oklch(0.7 0.012 265); --stage-screen: oklch(0.72 0.12 235); --stage-assess: oklch(0.72 0.13 268);
+  --stage-interview: oklch(0.72 0.15 300); --stage-offer: oklch(0.78 0.13 70);
+  --b-oj: oklch(0.72 0.13 240); --b-in: oklch(0.7 0.14 265); --b-mb: oklch(0.7 0.15 25); --b-ro: oklch(0.72 0.14 320);
+  --shadow: 0 0 0 1px var(--rim), inset 0 1px 0 oklch(1 0 0 / 0.04), 0 24px 60px oklch(0 0 0 / 0.45);
+  --mark-tile: var(--fg); --mark-cut: oklch(0.205 0.004 264);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { font-family: Inter, system-ui, sans-serif; font-feature-settings: "cv02","cv03","cv04","cv11","ss01"; color: var(--fg); -webkit-font-smoothing: antialiased; background: transparent; }
+.scene { display: none; position: relative; overflow: hidden; background-color: var(--page);
+  background-image: repeating-linear-gradient(135deg, var(--hatch) 0 1px, transparent 1px 9px); }
+.scene.on { display: block; }
+.rounded { border-radius: 20px; box-shadow: inset 0 0 0 1px var(--rim); }
+.mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+.tnum { font-variant-numeric: tabular-nums; }
+h1, .muted { text-wrap: balance; }
+.muted { color: var(--muted); } .faint { color: var(--faint); }
+.card { background: var(--card); border-radius: 16px; box-shadow: var(--shadow); }
+.wordmark { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; letter-spacing: -0.01em; }
+.eyebrow { font-size: 12px; font-weight: 500; letter-spacing: .07em; text-transform: uppercase; color: var(--faint); }
+.dash { border-top: 1px dashed var(--rim-strong); }
+.tierbar { display: flex; height: 8px; border-radius: 99px; overflow: hidden; background: var(--inset); }
+.tierbar span { height: 100%; }
+.tier { display: inline-flex; height: 20px; min-width: 20px; padding: 0 4px; align-items: center; justify-content: center; border-radius: 5px; font: 500 11px "JetBrains Mono", monospace; }
+.chip { display: inline-flex; align-items: center; gap: 6px; border-radius: 6px; padding: 2px 7px; font-size: 12px; font-weight: 500; }
+.dot { width: 6px; height: 6px; border-radius: 99px; }
+.code { display: inline-flex; width: 26px; height: 26px; align-items: center; justify-content: center; border-radius: 7px; font: 600 10.5px "JetBrains Mono", monospace; color: #fff; }
+.pill { display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 9px; border-radius: 99px; font-size: 11.5px; font-weight: 600; }
+
+/* --- split card, shared by banner and social --- */
+.split { width: 470px; padding: 22px 24px; }
+.split .head { display: flex; align-items: center; gap: 10px; }
+.variant { display: grid; gap: 10px; padding: 16px 0; }
+.variant .row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.vname { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+.vhyp { font-size: 12.5px; color: var(--muted); }
+.big { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; }
+.legend { display: flex; gap: 14px; font-size: 11.5px; color: var(--muted); }
+.legend i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 5px; vertical-align: 0; }
+</style>
+</head>
+<body>
+
+<template id="mark"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="15" fill="var(--mark-tile)"/><circle cx="32" cy="24" r="8" fill="var(--mark-cut)"/><rect x="16" y="37" width="32" height="7" rx="3.5" fill="var(--mark-cut)"/><rect x="22" y="47" width="20" height="5" rx="2.5" fill="var(--mark-cut)" opacity=".55"/></svg></template>
+
+<template id="splitcard">
+  <div class="card split">
+    <div class="head">
+      <span class="code" style="background:var(--b-oj)">OJ</span>
+      <div style="min-width:0">
+        <div style="font-size:14px;font-weight:600">Operations Virtual Assistant</div>
+        <div class="muted" style="font-size:12px">OnlineJobs.ph · 23 days live · $52 each</div>
+      </div>
+    </div>
+    <div class="variant" style="margin-top:6px">
+      <div class="row"><span class="vname">Variant A</span><span class="tnum muted" style="font-size:13px">186 applies</span></div>
+      <div class="vhyp">$600 / mo, generic title</div>
+      <div class="tierbar"><span style="width:3%;background:var(--tier-a)"></span><span style="width:31%;background:var(--tier-b)"></span><span style="width:66%;background:var(--tier-c)"></span></div>
+      <div class="row"><span class="muted" style="font-size:12.5px">3% A-tier</span><span class="tnum"><span class="big">0.11</span> <span class="muted" style="font-size:12.5px">A-tier per $</span></span></div>
+    </div>
+    <div class="dash"></div>
+    <div class="variant">
+      <div class="row"><span class="vname">Variant B <span class="pill" style="background:var(--primary-tint);color:var(--primary)">Winner</span></span><span class="tnum muted" style="font-size:13px">94 applies</span></div>
+      <div class="vhyp">$950 / mo, tools named in the title</div>
+      <div class="tierbar"><span style="width:22%;background:var(--tier-a)"></span><span style="width:51%;background:var(--tier-b)"></span><span style="width:27%;background:var(--tier-c)"></span></div>
+      <div class="row"><span class="muted" style="font-size:12.5px">22% A-tier</span><span class="tnum"><span class="big" style="color:var(--tier-a)">0.40</span> <span class="muted" style="font-size:12.5px">A-tier per $</span></span></div>
+    </div>
+    <div class="dash"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding-top:14px">
+      <div class="legend"><span><i style="background:var(--tier-a)"></i>A</span><span><i style="background:var(--tier-b)"></i>B</span><span><i style="background:var(--tier-c)"></i>C</span></div>
+      <div style="font-size:12.5px;font-weight:500">Half the applies, <span style="color:var(--primary)">3.7× the A-tier per dollar</span></div>
+    </div>
+  </div>
+</template>
+
+<!-- 1. README banner, 1280 x 400 -->
+<section class="scene" id="banner" style="width:1280px;height:440px">
+  <div style="position:absolute;left:64px;top:72px;width:640px">
+    <div class="wordmark" style="font-size:19px"><span data-mark style="width:30px;height:30px"></span><span>recruited<span class="faint">.tools</span></span></div>
+    <h1 style="margin:34px 0 0;font-size:50px;line-height:1.02;font-weight:600;letter-spacing:-0.045em">Hire the right person,<br><span class="faint">not the most applications.</span></h1>
+    <p class="muted" style="margin:22px 0 0;font-size:17px;line-height:1.5;max-width:560px">The open-source applicant tracker for small teams. Split-test your job listings and count A-tier candidates per dollar.</p>
+  </div>
+  <div data-split style="position:absolute;right:64px;top:40px;transform:scale(.9);transform-origin:top right"></div>
+</section>
+
+<!-- 2. Social preview, 1280 x 640 -->
+<section class="scene" id="social" style="width:1280px;height:640px">
+  <div style="position:absolute;left:80px;top:80px;width:660px">
+    <div class="wordmark" style="font-size:24px"><span data-mark style="width:38px;height:38px"></span><span>recruited<span class="faint">.tools</span></span></div>
+    <h1 style="margin:56px 0 0;font-size:52px;line-height:1;font-weight:600;letter-spacing:-0.045em">Hire the right person,<br><span class="faint">not the most applications.</span></h1>
+    <p class="muted" style="margin:28px 0 0;font-size:20px;line-height:1.5;max-width:560px">Post one role to every job board. Split-test the listing. See which variant brings the candidates worth hiring.</p>
+    <div style="display:flex;gap:10px;margin-top:40px">
+      <span class="pill" style="height:30px;padding:0 14px;font-size:13.5px;background:var(--card);box-shadow:0 0 0 1px var(--rim)">Open source · MIT</span>
+      <span class="pill" style="height:30px;padding:0 14px;font-size:13.5px;background:var(--card);box-shadow:0 0 0 1px var(--rim)">Deploys anywhere</span>
+    </div>
+  </div>
+  <div data-split style="position:absolute;right:80px;top:140px;transform:scale(1.08);transform-origin:top right"></div>
+</section>
+
+<!-- 3. Every listing, ranked, 1280 x 640 -->
+<section class="scene" id="ranking" style="width:1280px;height:640px">
+  <div class="card" style="position:absolute;inset:56px 64px;padding:36px 44px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px">
+      <div>
+        <div class="eyebrow">Split tests · 7 listings · 4 boards</div>
+        <div style="margin-top:8px;font-size:30px;font-weight:600;letter-spacing:-0.03em">A-tier candidates per dollar</div>
+      </div>
+      <div class="muted" style="font-size:14px;text-align:right;max-width:380px">The number that matters. Applies count everyone; this counts the people you would hire.</div>
+    </div>
+    <div class="dash" style="margin:26px 0 8px"></div>
+    <div id="rows"></div>
+  </div>
+</section>
+
+<!-- 4. Pipeline, 1280 x 640 -->
+<section class="scene" id="pipeline" style="width:1280px;height:640px">
+  <div style="position:absolute;left:64px;right:64px;top:52px;display:flex;justify-content:space-between;align-items:flex-end">
+    <div>
+      <div class="eyebrow">Pipeline · Artist Campaign Manager</div>
+      <div style="margin-top:8px;font-size:30px;font-weight:600;letter-spacing:-0.03em">Every board, one board</div>
+    </div>
+    <div class="muted" style="font-size:14px;text-align:right;max-width:420px">Each card knows which listing it came from and what tier it scored.</div>
+  </div>
+  <div id="lanes" style="position:absolute;left:64px;right:64px;top:150px;bottom:0;display:grid;grid-template-columns:repeat(5,1fr);gap:14px"></div>
+</section>
+
+<script>
+const theme = new URLSearchParams(location.search).get("theme") || "dark";
+const scene = new URLSearchParams(location.search).get("scene") || "banner";
+document.documentElement.classList.toggle("dark", theme === "dark");
+document.getElementById(scene).classList.add("on");
+if (new URLSearchParams(location.search).get("rounded")) document.getElementById(scene).classList.add("rounded");
+document.querySelectorAll("[data-mark]").forEach(el => el.innerHTML = document.getElementById("mark").innerHTML);
+document.querySelectorAll("[data-mark] svg").forEach(s => { s.style.width = "100%"; s.style.height = "100%"; s.style.display = "block"; });
+document.querySelectorAll("[data-split]").forEach(el => el.innerHTML = document.getElementById("splitcard").innerHTML);
+
+// Every number below is from src/data/mock.ts LISTINGS; aTierPerDollar = applies * A% / spend.
+const BOARD = { onlinejobs: ["OJ", "var(--b-oj)", "OnlineJobs.ph"], indeed: ["IN", "var(--b-in)", "Indeed"], mbw: ["MB", "var(--b-mb)", "Music Business Worldwide"], roster: ["RO", "var(--b-ro)", "Roster"] };
+const L = [
+  ["onlinejobs", "B", "Senior Operations VA, tools in the title", 94, 22, 52, true],
+  ["roster", "A", "Playlist Pitching Coordinator", 41, 27, 49],
+  ["onlinejobs", "A", "Virtual Assistant, entry pay band", 186, 3, 52],
+  ["indeed", "B", "Artist Campaign Manager, salary in the headline", 131, 9, 128],
+  ["mbw", "A", "Artist Campaign Manager, industry language", 38, 34, 195],
+  ["indeed", "A", "Campaign Manager, salary hidden", 212, 3, 128],
+  ["indeed", "B", "Music Playlist Coordinator, specialist wording", 77, 5, 112],
+].map(r => ({ board: r[0], v: r[1], name: r[2], applies: r[3], a: r[4], spend: r[5], win: r[6], val: r[3] * r[4] / 100 / r[5] }))
+ .sort((x, y) => y.val - x.val);
+const max = 0.4;
+document.getElementById("rows").innerHTML = L.map(l => {
+  const b = BOARD[l.board];
+  return `<div style="display:grid;grid-template-columns:34px 380px 1fr 70px;align-items:center;gap:14px;height:52px">
+    <span class="code" style="background:${b[1]}">${b[0]}</span>
+    <div style="min-width:0"><div style="font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${l.name}</div>
+      <div class="muted tnum" style="font-size:12px">${b[2]} · variant ${l.v} · ${l.applies} applies · $${l.spend}</div></div>
+    <div style="height:10px;border-radius:99px;background:var(--inset);overflow:hidden"><div style="height:100%;width:${(l.val / max * 100).toFixed(1)}%;border-radius:99px;background:${l.win ? "var(--primary)" : "var(--tier-c)"};opacity:${l.win ? 1 : .55}"></div></div>
+    <div class="tnum" style="text-align:right;font-size:17px;font-weight:600;${l.win ? "color:var(--primary)" : ""}">${l.val.toFixed(2)}</div>
+  </div>`;
+}).join("");
+
+// Artist Campaign Manager candidates from CANDIDATES.
+const STG = [["New", "--stage-new"], ["Screen", "--stage-screen"], ["Assessment", "--stage-assess"], ["Interview", "--stage-interview"], ["Offer", "--stage-offer"]];
+const C = {
+  New: [["Hannah Lee", "B", 190, "indeed", "Content marketing, B2B SaaS"], ["Isabel Romero", "C", 60, "indeed", "Recent graduate, marketing"]],
+  Screen: [["Elena Petrova", "B", 300, "mbw", "PR assistant, classical label"], ["Marcus Hill", "B", 140, "indeed", "Event promoter turned digital marketer"], ["Andre Thompson", "C", 20, "indeed", "Social media coordinator"]],
+  Assessment: [["Sofia Alvarez", "A", 350, "mbw", "Artist manager's assistant, 3 yrs"]],
+  Interview: [["Daniel Mercer", "A", 220, "mbw", "Marketing manager, country imprint"], ["Priya Raman", "B", 290, "indeed", "Growth marketer, consumer apps"]],
+  Offer: [["Jasmine Okafor", "A", 10, "mbw", "Ran 40+ independent release campaigns"]],
+};
+const tierCol = { A: "var(--tier-a)", B: "var(--tier-b)", C: "var(--tier-c)" };
+document.getElementById("lanes").innerHTML = STG.map(([s, v]) => {
+  const col = `var(${v})`;
+  return `<div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:0 2px 4px">
+      <span class="chip" style="color:${col};background:color-mix(in oklch, ${col} 14%, transparent)"><span class="dot" style="background:${col}"></span>${s}</span>
+      <span class="faint tnum" style="font-size:12px">${C[s].length}</span></div>
+    ${C[s].map(([n, t, h, b, line]) => `<div class="card" style="padding:14px;border-radius:12px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="width:30px;height:30px;border-radius:99px;flex:none;display:inline-flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:500;color:#fff;background:linear-gradient(140deg, oklch(0.68 0.12 ${h}), oklch(0.5 0.14 ${h + 25}))">${n.split(" ").map(p => p[0]).join("")}</span>
+        <span style="font-size:13.5px;font-weight:600;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${n}</span>
+        <span class="tier" style="color:${tierCol[t]};background:color-mix(in oklch, ${tierCol[t]} 14%, transparent);box-shadow:inset 0 0 0 1px color-mix(in oklch, ${tierCol[t]} 28%, transparent)">${t}</span></div>
+      <div class="muted" style="font-size:12px;margin-top:9px;line-height:1.4">${line}</div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:10px"><span class="code" style="width:20px;height:20px;border-radius:5px;font-size:9px;background:${BOARD[b][1]}">${BOARD[b][0]}</span><span class="faint" style="font-size:11.5px">${BOARD[b][2]}</span></div>
+    </div>`).join("")}
+  </div>`;
+}).join("");
+</script>
+</body>
+</html>
