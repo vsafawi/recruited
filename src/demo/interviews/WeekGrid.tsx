@@ -3,14 +3,14 @@ import { Faces } from "./parts";
 import { roleById, stageById, type Candidate } from "@/data/mock";
 import {
   BUSY, DAYS, fmtRange, fmtTime, GRID_END, GRID_START, interviewerById, isLive, isPast, layoutDay, NOW,
-  type Busy, type Interview,
+  type Interview,
 } from "./data";
 
-const HOUR = 52;
+const HOUR = 60;
 const px = (min: number) => ((min - GRID_START) / 60) * HOUR;
 const HOURS = Array.from({ length: (GRID_END - GRID_START) / 60 + 1 }, (_, i) => GRID_START + i * 60);
 
-type Item = ({ kind: "interview" } & Interview) | ({ kind: "busy" } & Busy);
+type Item = { kind: "interview" } & Interview;
 
 export function WeekGrid({
   schedule, people, onOpen, selectedId,
@@ -40,7 +40,9 @@ export function WeekGrid({
                 >
                   {d.date}
                 </span>
-                <span className="truncate text-[11px] text-faint">{count ? `${count} ${count === 1 ? "interview" : "interviews"}` : "Free"}</span>
+                <span className="truncate text-[11px] text-faint">
+                  {count ? <>{count}<span className="hidden xl:inline"> {count === 1 ? "interview" : "interviews"}</span></> : "Free"}
+                </span>
               </div>
             </div>
           );
@@ -59,10 +61,8 @@ export function WeekGrid({
         </div>
 
         {DAYS.map((d, day) => {
-          const items: Item[] = [
-            ...BUSY.filter((b) => b.day === day).map((b) => ({ kind: "busy" as const, ...b })),
-            ...schedule.filter((e) => e.day === day).map((e) => ({ kind: "interview" as const, ...e })),
-          ];
+          const busy = BUSY.filter((b) => b.day === day);
+          const items: Item[] = schedule.filter((e) => e.day === day).map((e) => ({ kind: "interview" as const, ...e }));
           const placed = layoutDay(items);
           return (
             <div key={d.short} className={cx("relative border-l border-rim", day === NOW.day && "bg-primary-tint/25", day < NOW.day && "bg-inset/40")}>
@@ -74,6 +74,21 @@ export function WeekGrid({
                 <div key={`h${m}`} className="absolute inset-x-0 border-t border-dashed border-[var(--grid-line)] opacity-60" style={{ top: px(m + 30) + 4 }} />
               ))}
 
+              {busy.map((b) => (
+                <div
+                  key={b.id}
+                  style={{
+                    top: px(b.start) + 5,
+                    height: (b.duration / 60) * HOUR - 2,
+                    backgroundImage: "repeating-linear-gradient(135deg, var(--wash) 0 4px, transparent 4px 8px)",
+                  }}
+                  className="absolute inset-x-[3px] overflow-hidden rounded-[6px] px-1.5 py-0.5 text-[10.5px] leading-tight text-faint shadow-[inset_0_0_0_1px_var(--rim)]"
+                  title={`${b.label} · ${b.who.map((w) => interviewerById(w).name).join(", ")}`}
+                >
+                  <span className="block truncate">{b.label}</span>
+                </div>
+              ))}
+
               {placed.map(({ item, lane, lanes }) => {
                 const style = {
                   top: px(item.start) + 5,
@@ -81,21 +96,6 @@ export function WeekGrid({
                   left: `calc(${(lane / lanes) * 100}% + 3px)`,
                   width: `calc(${100 / lanes}% - 6px)`,
                 };
-                if (item.kind === "busy") {
-                  return (
-                    <div
-                      key={item.id}
-                      style={{
-                        ...style,
-                        backgroundImage: "repeating-linear-gradient(135deg, var(--wash) 0 4px, transparent 4px 8px)",
-                      }}
-                      className="absolute overflow-hidden rounded-[6px] px-1.5 py-0.5 text-[10.5px] leading-tight text-faint shadow-[inset_0_0_0_1px_var(--rim)]"
-                      title={`${item.label} · ${item.who.map((w) => interviewerById(w).name).join(", ")}`}
-                    >
-                      <span className="truncate">{item.label}</span>
-                    </div>
-                  );
-                }
                 const c = people.get(item.candidateId);
                 if (!c) return null;
                 return (
@@ -151,7 +151,8 @@ function Block({
       onClick={onOpen}
       style={{
         ...style,
-        background: `color-mix(in oklch, ${color} ${past ? 7 : 12}%, var(--card))`,
+        backgroundColor: "var(--card)",
+        backgroundImage: `linear-gradient(color-mix(in oklch, ${color} ${past ? 8 : 13}%, transparent), color-mix(in oklch, ${color} ${past ? 8 : 13}%, transparent))`,
         boxShadow: selected
           ? `inset 3px 0 0 ${color}, 0 0 0 1.5px ${color}, 0 4px 12px oklch(0 0 0 / 0.1)`
           : `inset 3px 0 0 ${color}, inset 0 0 0 1px color-mix(in oklch, ${color} 22%, transparent)`,
@@ -164,21 +165,19 @@ function Block({
       aria-label={`${e.type} with ${c.name}, ${fmtRange(e.start, e.duration)}`}
     >
       {short ? (
-        <div className="flex min-w-0 items-center gap-1 text-[11px] leading-tight">
+        <div className="flex min-w-0 shrink-0 items-center gap-1 text-[11px] leading-tight">
           <span className="truncate font-medium text-foreground">{c.name}</span>
           <span className="tnum hidden shrink-0 text-muted xl:inline">{fmtTime(e.start, false)}</span>
         </div>
       ) : (
         <>
-          <div className="tnum flex items-center gap-1 text-[10.5px] leading-tight" style={{ color }}>
+          <div className="tnum flex shrink-0 items-center gap-1 text-[10.5px] leading-[14px]" style={{ color }}>
             {live && <span className="size-1.5 shrink-0 rounded-full bg-destructive" />}
-            <span className="truncate font-medium">{fmtRange(e.start, e.duration)}</span>
+            <span className="min-w-0 flex-1 truncate font-medium">{fmtRange(e.start, e.duration)}</span>
+            {e.duration >= 60 && <Faces ids={e.with} size={14} className="hidden shrink-0 lg:flex" />}
           </div>
-          <div className="truncate text-[12px] leading-snug font-medium text-foreground">{c.name}</div>
-          <div className="truncate text-[11px] leading-snug text-muted">{e.type} · {roleById(c.roleId).title}</div>
-          {e.duration >= 60 && (
-            <Faces ids={e.with} size={16} className="mt-auto pt-0.5" />
-          )}
+          <div className="shrink-0 truncate text-[12px] leading-4 font-medium text-foreground">{c.name}</div>
+          {e.duration >= 60 && <div className="shrink-0 truncate text-[11px] leading-4 text-muted">{e.type} · {roleById(c.roleId).title}</div>}
         </>
       )}
     </button>

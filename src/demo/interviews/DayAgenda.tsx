@@ -53,13 +53,13 @@ export function DayAgenda({
           const c = people.get(e.candidateId)!;
           const color = stageById(c.stage).color;
           return (
-            <div key={e.id}>
+            <div key={e.id} className="border-t border-rim first:border-t-0">
               {i === nowAt && day === NOW.day && <NowRule />}
               <button
                 type="button"
                 onClick={() => onOpen(e.id)}
                 className={cx(
-                  "flex w-full items-stretch gap-3 border-t border-rim px-3.5 py-3 text-left first:border-t-0 hover:bg-[var(--wash)]",
+                  "flex w-full items-stretch gap-3 px-3.5 py-3 text-left hover:bg-[var(--wash)]",
                   isPast(e) && "opacity-60",
                 )}
               >
