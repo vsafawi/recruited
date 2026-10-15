@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ArrowLeft, ArrowRight, Compass, ExternalLink, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Compass, X } from "lucide-react";
 import { Button, cx, GithubIcon, Kbd } from "@/components/ui";
 
 /**
@@ -17,13 +17,14 @@ import { Button, cx, GithubIcon, Kbd } from "@/components/ui";
 const GITHUB_URL = "https://github.com/vsafawi/recruited";
 const DISMISS_KEY = "rt-tour-dismissed";
 
-type Target = { selector: string; text?: string; closest?: string };
+type Target = { selector: string; text?: string; closest?: string; noScroll?: boolean };
 
 type Step = {
   path?: string;
   title: string;
   body: string;
-  target?: Target;
+  /** Tried in order; the first one on the page gets the ring. */
+  target?: Target | Target[];
 };
 
 const STEPS: Step[] = [
@@ -48,8 +49,11 @@ const STEPS: Step[] = [
   {
     path: "/demo/candidates/c8",
     title: "One candidate, in full",
-    body: "The screening summary is drawn only from what she sent in her application. Scorecards from each interviewer sit under it.",
-    target: { selector: "h2", text: "Screening summary", closest: ".rounded-panel" },
+    body: "The summary is drawn only from her application and the interviewers' scorecards, and it's marked as a draft for you to check. Each round's scorecard sits under it.",
+    target: [
+      { selector: "h2", text: "Summary for the hiring team", closest: ".rounded-panel" },
+      { selector: "h2", text: "Screening summary", closest: ".rounded-panel" },
+    ],
   },
   {
     path: "/demo/interviews",
@@ -60,7 +64,7 @@ const STEPS: Step[] = [
   {
     title: "Try it as a candidate",
     body: "Open a live listing and apply the way a candidate would. The code is open source if you want to run your own.",
-    target: { selector: `aside a[href="${GITHUB_URL}"]` },
+    target: { selector: `aside a[href="${GITHUB_URL}"]`, noScroll: true },
   },
 ];
 
@@ -80,7 +84,14 @@ function writeDismissed() {
   }
 }
 
-function findTarget(t: Target): HTMLElement | null {
+function findTarget(t: Target | Target[]): HTMLElement | null {
+  if (Array.isArray(t)) {
+    for (const x of t) {
+      const el = findTarget(x);
+      if (el) return el;
+    }
+    return null;
+  }
   const nodes = Array.from(document.querySelectorAll<HTMLElement>(t.selector));
   const hit = t.text ? nodes.find((n) => n.textContent?.trim() === t.text) : nodes[0];
   if (!hit) return null;
@@ -90,7 +101,7 @@ function findTarget(t: Target): HTMLElement | null {
 type Box = { top: number; left: number; width: number; height: number };
 
 /** Tracks the step's target: waits for lazy pages, follows resize and every scroll container. */
-function useTargetBox(target: Target | undefined, key: number, reduce: boolean) {
+function useTargetBox(target: Target | Target[] | undefined, key: number, reduce: boolean) {
   const [box, setBox] = useState<Box | null>(null);
 
   useEffect(() => {
@@ -118,10 +129,13 @@ function useTargetBox(target: Target | undefined, key: number, reduce: boolean) 
         return;
       }
       const r = el.getBoundingClientRect();
-      // Leave room for the step card, which is a bottom sheet on phones.
-      const reserve = window.innerWidth < 640 ? 260 : 24;
-      if (r.top < 0 || r.top > window.innerHeight - reserve - Math.min(r.height, 160)) {
-        el.scrollIntoView({ block: "center", behavior: reduce ? "auto" : "smooth" });
+      // Keep the target clear of the step card, which sits along the bottom.
+      const reserve = 250;
+      if (!(!Array.isArray(target) && target.noScroll) && (r.top < 0 || r.bottom > window.innerHeight - reserve)) {
+        const prev = el.style.scrollMarginTop;
+        el.style.scrollMarginTop = window.innerWidth < 768 ? "64px" : "24px";
+        el.scrollIntoView({ block: "start", behavior: reduce ? "auto" : "smooth" });
+        el.style.scrollMarginTop = prev;
       }
       measure();
       ro.observe(el);
@@ -193,14 +207,18 @@ export default function Tour() {
       const t = e.target as HTMLElement | null;
       if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
       if (document.querySelector('[role="dialog"][aria-modal="true"]') && !cardRef.current?.contains(t)) return;
-      if (e.key === "ArrowRight" && step! < STEPS.length - 1) go(step! + 1);
-      else if (e.key === "ArrowLeft" && step! > 0) go(step! - 1);
-      else if (e.key === "Escape") end();
+      if (e.key === "ArrowRight") {
+        if (step! < STEPS.length - 1) go(step! + 1);
+      } else if (e.key === "ArrowLeft") {
+        if (step! > 0) go(step! - 1);
+      } else if (e.key === "Escape") end();
       else return;
+      // Pages have their own arrow keys (tabs, next candidate); the tour wins while it's open.
       e.preventDefault();
+      e.stopImmediatePropagation();
     };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener("keydown", onKey, true);
+    return () => window.removeEventListener("keydown", onKey, true);
   }, [active, step, go, end]);
 
   // Move focus into the card when the tour opens, so the keyboard follows.
@@ -326,16 +344,16 @@ export default function Tour() {
 
             {last && (
               <div className="mt-3.5 flex flex-col gap-2 sm:flex-row">
-                <Button variant="primary" onClick={tryAsCandidate} className="flex-1">
+                <Button variant="primary" onClick={tryAsCandidate} className="sm:flex-1">
                   Apply to a listing <ArrowRight className="size-3.5" />
                 </Button>
                 <a
                   href={GITHUB_URL}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex h-8.5 flex-1 items-center justify-center gap-1.5 rounded-control bg-card px-3.5 text-[13px] font-medium text-foreground shadow-card transition-colors hover:bg-inset"
+                  className="inline-flex h-8.5 items-center whitespace-nowrap sm:flex-1 justify-center gap-1.5 rounded-control bg-card px-3.5 text-[13px] font-medium text-foreground shadow-card transition-colors hover:bg-inset"
                 >
-                  <GithubIcon className="size-3.5" /> Deploy your own <ExternalLink className="size-3 text-faint" />
+                  <GithubIcon className="size-3.5" /> Deploy your own
                 </a>
               </div>
             )}
