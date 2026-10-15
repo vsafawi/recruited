@@ -45,6 +45,7 @@ how we avoid two threads building the same thing or editing the same file.
 | 7 | Backend (after the hackathon) | `supabase/`, `src/lib/` | — | open |
 | 10 | Reports — time to hire, source of hire, cost per hire | `src/demo/Reports.tsx`, `src/demo/reports/*` | lead thread | done |
 | 11 | Team and settings — interviewers, rubric templates, board connections | `src/demo/Settings.tsx`, `src/demo/settings/*` | lead thread | done |
+| 15 | UI refresh v2 (beautifului.dev style): tokens, primitives, shell, then every screen | appended blocks in `styles.css` and `ui.tsx`, `Shell.tsx`, then page files one agent each | hackathon-plan thread | claimed — restyles only, no behaviour or data changes |
 
 Already wired and stubbed until their stream lands: `/demo/inbox`, `/demo/interviews`,
 `/jobs`, `/jobs/:listingId`, and the rail's search box, which calls `openPalette()`

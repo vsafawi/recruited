@@ -15,9 +15,9 @@ function read(): Theme {
     const v = localStorage.getItem(KEY);
     if (v === "light" || v === "dark" || v === "system") return v;
   } catch {
-    /* storage blocked: fall through to system */
+    /* storage blocked: fall through to the default */
   }
-  return "system";
+  return "dark";
 }
 
 function apply(theme: Theme) {
