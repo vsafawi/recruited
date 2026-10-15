@@ -525,7 +525,7 @@ function PanelBody({
         <ButtonLink to={`/demo/candidates/${c.id}`} variant="ink" className="mt-3 w-full">
           Open profile <ArrowRight className="size-3.5" />
         </ButtonLink>
-        <Link to={`/demo/listings`} className="mt-2 flex items-center justify-center gap-1 text-[12px] text-muted hover:text-foreground">
+        <Link to={"/demo"} className="mt-2 flex items-center justify-center gap-1 text-[12px] text-muted hover:text-foreground">
           See how {b.short} · {l.variant} is performing <ChevronRight className="size-3" />
         </Link>
       </div>

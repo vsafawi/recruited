@@ -2,25 +2,18 @@ import { Suspense, useState } from "react";
 import { motion } from "motion/react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import {
-  BarChart3, CalendarDays, LineChart, Settings as SettingsIcon, Columns3, Inbox as InboxIcon, FlaskConical, LayoutDashboard, Menu, Plus, Search, Users, X,
+  BarChart3, Columns3, FlaskConical, Menu, Plus, Users, X,
 } from "lucide-react";
 import { Wordmark } from "@/components/mark";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { ButtonLink, cx, GithubIcon, Kbd } from "@/components/ui";
+import { ButtonLink, cx, GithubIcon } from "@/components/ui";
 import { CANDIDATES, LISTINGS, ROLES } from "@/data/mock";
-import CommandPalette, { openPalette } from "./CommandPalette";
-import Tour from "./Tour";
 import { resetDemo } from "@/data/store";
 
 const NAV = [
-  { to: "/demo", label: "Overview", icon: LayoutDashboard, end: true },
-  { to: "/demo/inbox", label: "Inbox", icon: InboxIcon, count: 6 },
+  { to: "/demo", label: "Split tests", icon: FlaskConical, end: true, count: LISTINGS.length },
   { to: "/demo/pipeline", label: "Pipeline", icon: Columns3, count: CANDIDATES.filter((c) => !["hired", "rejected"].includes(c.stage)).length },
   { to: "/demo/candidates", label: "Candidates", icon: Users, count: CANDIDATES.length },
-  { to: "/demo/listings", label: "Listings & split tests", icon: FlaskConical, count: LISTINGS.length },
-  { to: "/demo/interviews", label: "Interviews", icon: CalendarDays },
-  { to: "/demo/reports", label: "Reports", icon: LineChart },
-  { to: "/demo/settings", label: "Settings", icon: SettingsIcon },
 ];
 
 export const GITHUB_URL = "https://github.com/vsafawi/recruited";
@@ -44,14 +37,6 @@ export default function Shell() {
           <button className="md:hidden" onClick={() => setOpen(false)} aria-label="Close menu"><X className="size-4" /></button>
         </div>
 
-        <button
-          type="button"
-          onClick={openPalette}
-          className="mt-3 flex w-full items-center gap-2 rounded-[10px] bg-inset px-2.5 py-1.5 text-left text-[12.5px] text-faint shadow-[inset_0_0_0_1px_var(--rim)] hover:text-muted"
-        >
-          <Search className="size-3.5" /> Search candidates
-          <span className="ml-auto"><Kbd>⌘K</Kbd></span>
-        </button>
 
         <nav className="mt-4 flex flex-col gap-0.5">
           {NAV.map(({ to, label, icon: Icon, end, count }) => (
@@ -115,8 +100,6 @@ export default function Shell() {
         </div>
       </aside>
 
-      <CommandPalette />
-      <Tour />
       {open && <div className="fixed inset-0 z-30 bg-black/20 md:hidden" onClick={() => setOpen(false)} />}
 
       <div className="flex min-w-0 flex-1 flex-col md:pl-60">

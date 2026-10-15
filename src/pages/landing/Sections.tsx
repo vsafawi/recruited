@@ -99,7 +99,7 @@ export function Scenario() {
 
 export function SplitTests() {
   return (
-    <Entry id="split-tests" desc="See which listing brings A-tier candidates per dollar." action={<DemoLink to="/demo/listings">Listings</DemoLink>}>
+    <Entry id="split-tests" desc="See which listing brings A-tier candidates per dollar." action={<DemoLink to="/demo">Listings</DemoLink>}>
       <SplitTestMock />
     </Entry>
   );
@@ -156,7 +156,7 @@ export function InterviewLoop() {
     <Entry
       id="interview-loop"
       desc="Every round leaves a scorecard, so the next interviewer starts with the full picture."
-      action={<DemoLink to="/demo/interviews">Interviews</DemoLink>}
+      action={<DemoLink to="/demo/candidates/c2">Jomar's profile</DemoLink>}
     >
       <InterviewLoopMock />
     </Entry>

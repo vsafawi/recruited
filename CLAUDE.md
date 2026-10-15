@@ -51,11 +51,10 @@ src/components/ui.tsx       Button, ButtonLink, StageChip, TierBadge, Avatar, Ca
 src/components/mark.tsx     Logo: Mark, Wordmark, Mark3D (CSS 3D, no WebGL).
 src/pages/Landing.tsx       Landing page (+ src/pages/landing/).
 src/demo/Shell.tsx          App layout (left rail) and PageHeader.
-src/demo/Overview.tsx       /demo — KPIs, funnel, board ROI, today's to-dos.
 src/demo/Pipeline.tsx       /demo/pipeline — kanban, drag between stages.
 src/demo/Candidates.tsx     /demo/candidates — table, filters, bulk actions.
 src/demo/CandidateDetail.tsx /demo/candidates/:id — profile, scorecard, notes.
-src/demo/Listings.tsx       /demo/listings — the split-test showpiece.
+src/demo/Listings.tsx       /demo — the split-test showpiece, and the app's home.
 src/demo/NewRole.tsx        /demo/roles/new — 4-step wizard to post variants.
 Dockerfile, Caddyfile, railway.json, wrangler.toml, vercel.json, netlify.toml
                             Deploy configs. It builds to a static site in dist/.

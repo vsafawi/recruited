@@ -119,7 +119,7 @@ export function Confirmation({
           <ButtonLink to={`/demo/pipeline?role=${role.id}`} variant="primary" className="w-full sm:w-auto">
             See it in the pipeline <ArrowRight className="size-3.5" />
           </ButtonLink>
-          <Link to="/demo/listings" className="text-center text-[13px] text-muted hover:text-foreground">
+          <Link to="/demo" className="text-center text-[13px] text-muted hover:text-foreground">
             Or see how this variant is performing
           </Link>
         </div>

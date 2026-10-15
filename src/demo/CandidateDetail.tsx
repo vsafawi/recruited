@@ -458,7 +458,7 @@ function Detail({ c }: { c: Candidate }) {
               <div><dt className="text-faint">Tier A share</dt><dd className="tnum font-mono font-medium">{l.tierMix.A}%</dd></div>
               <div><dt className="text-faint">Applies</dt><dd className="tnum font-mono font-medium">{l.applies}</dd></div>
             </dl>
-            <Link to="/demo/listings" className="mt-3 flex items-center gap-1 text-[12px] font-medium text-primary hover:underline">
+            <Link to="/demo" className="mt-3 flex items-center gap-1 text-[12px] font-medium text-primary hover:underline">
               Compare variants <ChevronRight className="size-3" />
             </Link>
           </Card>
