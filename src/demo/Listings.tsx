@@ -809,7 +809,7 @@ export default function Listings() {
   return (
     <div className="pb-16">
       <PageHeader
-        title="Listings & split tests"
+        title="Split tests"
         subtitle="The same role, posted as different variants on different boards. Judge them on A-tier candidates per dollar, not applies."
         actions={
           <ButtonLink to="/demo/roles/new" variant="ink" size="md">
