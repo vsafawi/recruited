@@ -140,3 +140,106 @@
   .fade-in { opacity: 1; }
   .hero-stage { transform: none; }
 }
+
+/* ===========================================================================
+   Warm landing palette. The landing page is always light and warm: cream
+   ground, white cards, soft colour bands between sections. The tokens are
+   redefined on the landing root only, so /demo keeps its own theme.
+   =========================================================================== */
+
+.landing {
+  color-scheme: light;
+
+  --page: oklch(0.977 0.012 80);
+  --background: oklch(0.985 0.008 80);
+  --canvas: oklch(0.972 0.012 78);
+  --card: oklch(1 0 0);
+  --inset: oklch(0.962 0.014 78);
+
+  --foreground: oklch(0.24 0.02 50);
+  --muted: oklch(0.47 0.02 55);
+  --faint: oklch(0.6 0.02 60);
+
+  --primary: oklch(0.56 0.19 262);
+  --primary-tint: oklch(0.95 0.03 262);
+  --on-primary: oklch(1 0 0);
+
+  --success: oklch(0.6 0.13 152);
+  --warning: oklch(0.72 0.14 70);
+  --destructive: oklch(0.58 0.21 25);
+
+  --stage-new: oklch(0.6 0.012 265);
+  --stage-screen: oklch(0.55 0.13 235);
+  --stage-assess: oklch(0.53 0.15 268);
+  --stage-interview: oklch(0.52 0.17 300);
+  --stage-offer: oklch(0.58 0.14 68);
+  --stage-hired: oklch(0.55 0.13 152);
+  --stage-rejected: oklch(0.55 0.19 25);
+
+  --tier-a: oklch(0.55 0.13 152);
+  --tier-b: oklch(0.55 0.13 235);
+  --tier-c: oklch(0.62 0.015 60);
+
+  --board-onlinejobs: oklch(0.58 0.15 240);
+  --board-indeed: oklch(0.5 0.17 265);
+  --board-mbw: oklch(0.55 0.16 25);
+  --board-roster: oklch(0.55 0.15 320);
+  --ink-success: oklch(0.8 0.13 152);
+  --ink-danger: oklch(0.78 0.13 25);
+  --ink-hover: oklch(1 0 0 / 0.1);
+
+  --rim: oklch(0.45 0.04 60 / 0.12);
+  --rim-strong: oklch(0.45 0.04 60 / 0.22);
+  --grid-line: oklch(0.45 0.04 60 / 0.06);
+  --wash: oklch(0.45 0.04 60 / 0.06);
+  --hatch: oklch(0.45 0.04 60 / 0.05);
+  --dot: oklch(0.6 0.04 60 / 0.2);
+
+  --shadow-card: 0 0 0 1px var(--rim), 0 1px 2px oklch(0.4 0.05 50 / 0.04), 0 6px 18px oklch(0.4 0.05 50 / 0.05);
+  --shadow-raised: 0 0 0 1px var(--rim), 0 2px 6px oklch(0.4 0.05 50 / 0.06), 0 14px 32px oklch(0.4 0.05 50 / 0.07);
+  --shadow-overlay: 0 0 0 1px var(--rim), 0 4px 12px oklch(0.4 0.05 50 / 0.08), 0 22px 52px oklch(0.4 0.05 50 / 0.12);
+  --shadow-lift: 0 0 0 1px var(--rim), 0 4px 12px oklch(0.4 0.05 50 / 0.06), 0 24px 60px oklch(0.4 0.05 50 / 0.1);
+
+  /* Soft section tones: a pale ground and a stronger ink for icons on it. */
+  --peach: oklch(0.95 0.035 55);
+  --peach-ink: oklch(0.6 0.15 45);
+  --mint: oklch(0.96 0.025 165);
+  --mint-ink: oklch(0.55 0.12 160);
+  --lavender: oklch(0.95 0.03 295);
+  --lavender-ink: oklch(0.52 0.17 295);
+  --sky: oklch(0.955 0.03 240);
+  --sky-ink: oklch(0.55 0.14 245);
+  --butter: oklch(0.965 0.045 95);
+  --butter-ink: oklch(0.6 0.13 80);
+
+  background-color: var(--page);
+  color: var(--foreground);
+}
+
+/* A full-width rounded band that tints a whole section. */
+.band {
+  margin-inline: 12px;
+  border-radius: 32px;
+}
+@media (min-width: 640px) {
+  .band { margin-inline: 20px; border-radius: 40px; }
+}
+.band-lavender { background: linear-gradient(180deg, var(--lavender), color-mix(in oklch, var(--sky) 70%, var(--page))); }
+.band-peach { background: linear-gradient(180deg, var(--peach), color-mix(in oklch, var(--butter) 60%, var(--page))); }
+.band-mint { background: linear-gradient(180deg, var(--mint), color-mix(in oklch, var(--sky) 50%, var(--page))); }
+
+/* A rounded icon chip in one of the section tones. */
+.tone { display: inline-grid; place-items: center; border-radius: 10px; }
+.tone-peach { background: var(--peach); color: var(--peach-ink); }
+.tone-mint { background: var(--mint); color: var(--mint-ink); }
+.tone-lavender { background: var(--lavender); color: var(--lavender-ink); }
+.tone-sky { background: var(--sky); color: var(--sky-ink); }
+.tone-butter { background: var(--butter); color: var(--butter-ink); }
+
+/* Hero glow: three soft colour pools behind the headline. Static. */
+.hero-glow {
+  background:
+    radial-gradient(38% 46% at 22% 30%, color-mix(in oklch, var(--peach-ink) 22%, transparent), transparent 70%),
+    radial-gradient(36% 44% at 78% 26%, color-mix(in oklch, var(--lavender-ink) 18%, transparent), transparent 70%),
+    radial-gradient(40% 40% at 50% 78%, color-mix(in oklch, var(--mint-ink) 16%, transparent), transparent 70%);
+}

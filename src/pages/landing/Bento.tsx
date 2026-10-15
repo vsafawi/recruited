@@ -11,6 +11,7 @@ function Tile({
   children,
   className,
   d = 0,
+  tone = "sky",
 }: {
   icon: typeof Inbox;
   title: string;
@@ -18,6 +19,7 @@ function Tile({
   children: ReactNode;
   className?: string;
   d?: number;
+  tone?: "peach" | "mint" | "lavender" | "sky" | "butter";
 }) {
   return (
     <div
@@ -28,8 +30,10 @@ function Tile({
         {children}
       </div>
       <div className="p-5">
-        <div className="flex items-center gap-2 text-[14.5px] font-semibold tracking-[-0.015em]">
-          <Icon className="size-4 text-primary" />
+        <div className="flex items-center gap-2.5 text-[14.5px] font-semibold tracking-[-0.015em]">
+          <span className={`tone tone-${tone} size-7 shrink-0`}>
+            <Icon className="size-3.5" />
+          </span>
           {title}
         </div>
         <p className="mt-1.5 text-[13.5px] leading-relaxed text-pretty text-muted">{body}</p>
@@ -146,8 +150,8 @@ function RoiMock() {
   return (
     <div className="mx-auto w-full max-w-[560px]">
       <div className="mb-2.5 flex justify-between text-[11px] text-faint">
-        <span>Board · spend</span>
-        <span>A-tier candidates per $100</span>
+        <span>Job site · what you paid</span>
+        <span>Strong candidates per $100</span>
       </div>
       <div className="space-y-2.5">
         {rows.map(({ b, per100, spend, n }, i) => (
@@ -155,7 +159,7 @@ function RoiMock() {
             <div className="min-w-0">
               <div className="truncate text-[12.5px] font-medium">{b.name}</div>
               <div className="text-[10.5px] text-faint">
-                ${spend} · {n} listing{n > 1 ? "s" : ""}
+                ${spend} · {n} post{n > 1 ? "s" : ""}
               </div>
             </div>
             <div className="h-2 overflow-hidden rounded-full bg-inset">
@@ -276,7 +280,7 @@ export function Bento() {
             Everything a small team needs to hire, and nothing it doesn’t.
           </h2>
           <p className="mt-5 text-[16px] leading-relaxed text-pretty text-muted">
-            No seat pricing, no sales call, no module you have to unlock. One pipeline for every role and every board.
+            No seat pricing, no sales call, no module you have to unlock. One place for every job and every job site.
           </p>
         </div>
 
@@ -284,22 +288,25 @@ export function Bento() {
           <Tile
             className="md:col-span-2"
             icon={Inbox}
-            title="One inbox for every board"
-            body="Applicants from OnlineJobs.ph, Indeed, Music Business Worldwide and Roster land in one list, tagged with the board and the variant that brought them."
+            tone="sky"
+            title="Every applicant in one place"
+            body="Applicants from OnlineJobs.ph, Indeed, Music Business Worldwide and Roster land in one list, marked with the site and the version of the post that brought them."
           >
             <InboxMock />
           </Tile>
           <Tile
             d={80}
             icon={ClipboardCheck}
-            title="Tiered scoring rubric"
-            body="Write the rubric once per role. Every applicant lands in tier A, B or C, so the first pass takes minutes."
+            tone="mint"
+            title="Score everyone the same way"
+            body="Say once what a strong candidate looks like. Every applicant lands in tier A, B or C, so the first pass takes minutes."
           >
             <RubricMock />
           </Tile>
           <Tile
             icon={SquareKanban}
-            title="Kanban pipeline"
+            tone="lavender"
+            title="See where everyone stands"
             body="New, Screen, Assessment, Interview, Offer. Drag a card to move it; the stage colour tells you how far along it is."
           >
             <KanbanMock />
@@ -308,14 +315,16 @@ export function Bento() {
             d={80}
             className="md:col-span-2"
             icon={ChartNoAxesColumn}
-            title="Board ROI"
-            body="Which site is worth paying for. Spend per board against the A-tier candidates it brought, across every listing you ran there."
+            tone="butter"
+            title="Which job site is worth paying for"
+            body="What you paid each site, next to the strong candidates it brought, across every post you ran there."
           >
             <RoiMock />
           </Tile>
           <Tile
             icon={Star}
-            title="Scorecards and interview kits"
+            tone="peach"
+            title="Interview scorecards"
             body="Each interviewer rates the same criteria, so the debrief compares notes instead of impressions."
           >
             <ScorecardMock />
@@ -324,7 +333,8 @@ export function Bento() {
             d={80}
             className="md:col-span-2"
             icon={Sparkles}
-            title="AI screening that never invents"
+            tone="lavender"
+            title="AI summaries that stick to the facts"
             body="The assistant summarises what the candidate sent and shows where each line came from. It suggests a tier; you decide."
           >
             <AiMock />

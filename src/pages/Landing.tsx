@@ -16,7 +16,7 @@ export default function Landing() {
   const root = useRef<HTMLDivElement>(null);
   useRevealAll(root);
   return (
-    <div id="top" ref={root} className="min-h-dvh overflow-x-clip bg-page">
+    <div id="top" ref={root} className="landing min-h-dvh overflow-x-clip bg-page">
       <Nav />
       <main>
         <Hero />

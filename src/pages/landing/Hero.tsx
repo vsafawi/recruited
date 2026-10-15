@@ -1,14 +1,15 @@
 import { useEffect, useRef } from "react";
 import { ArrowRight, Trophy } from "lucide-react";
-import { ButtonLink, TierBadge, TierBar } from "@/components/ui";
+import { ButtonLink, TierBadge } from "@/components/ui";
 import { Mark3D } from "@/components/mark";
-import { aTierPerDollar, candidateById, listingById } from "@/data/mock";
+import { candidateById, listingById } from "@/data/mock";
 import { prefersReducedMotion, useFit } from "./hooks";
 import { CandidateCard, PipelineMock } from "./PipelineMock";
 
 const A = listingById("l1");
 const B = listingById("l2");
-export const LIFT = aTierPerDollar(B) / aTierPerDollar(A);
+/** Candidates a post brought that the rubric put in tier A. */
+const STRONG = (l: typeof A) => Math.round((l.applies * l.tierMix.A) / 100);
 
 const DESIGN_W = 1180;
 const DESIGN_H = 660;
@@ -63,12 +64,7 @@ export function Hero() {
 
   return (
     <section className="relative overflow-x-clip pt-24 sm:pt-32">
-      <div aria-hidden className="dot-grid dot-fade pointer-events-none absolute inset-x-0 top-0 h-[900px]" />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute top-[420px] left-1/2 h-[520px] w-[min(1100px,140vw)] -translate-x-1/2 rounded-full opacity-70 blur-[80px]"
-        style={{ background: "radial-gradient(closest-side, color-mix(in oklch, var(--primary) 22%, transparent), transparent)" }}
-      />
+      <div aria-hidden className="hero-glow pointer-events-none absolute inset-x-0 top-0 h-[1000px]" />
 
       <div className="relative mx-auto flex max-w-[880px] flex-col items-center px-4 text-center">
         <div className="rise" style={{ ["--d" as string]: "0ms" }}>
@@ -79,8 +75,8 @@ export function Hero() {
           className="rise mt-8 inline-flex h-7 items-center gap-2 rounded-full bg-card/80 pr-3 pl-1 text-[12.5px] text-muted shadow-card backdrop-blur transition-colors hover:text-foreground"
           style={{ ["--d" as string]: "80ms" }}
         >
-          <span className="rounded-full bg-primary-tint px-2 py-0.5 text-[11px] font-medium text-primary">New</span>
-          Split tests for job listings
+          <span className="rounded-full bg-primary-tint px-2 py-0.5 text-[11px] font-medium text-primary">Free</span>
+          Open source, no sign-up
           <ArrowRight className="size-3" />
         </a>
         <h1
@@ -94,22 +90,22 @@ export function Hero() {
           className="rise mt-6 max-w-[600px] text-[clamp(15px,2vw,17.5px)] leading-[1.55] text-pretty text-muted"
           style={{ ["--d" as string]: "220ms" }}
         >
-          One applicant tracker for every board you post on. Split-test your listings to see which board and which
-          wording bring the candidates worth hiring, and what each one costs you.
+          Post your job on the sites you already use and keep every applicant in one place. Try two versions of the
+          same post, and see which one brings you stronger candidates.
         </p>
         <div className="rise mt-8 flex flex-wrap items-center justify-center gap-2.5" style={{ ["--d" as string]: "300ms" }}>
           <ButtonLink to="/demo" variant="primary" size="lg">
             Open the live demo <ArrowRight className="size-4" />
           </ButtonLink>
           <a
-            href="#deploy"
+            href="#how"
             className="inline-flex h-11 items-center justify-center gap-1.5 rounded-control bg-card px-5 text-[14.5px] font-medium shadow-card transition-colors hover:bg-inset"
           >
-            Deploy in five minutes
+            See how it works
           </a>
         </div>
         <p className="rise mt-4 text-[12.5px] text-faint" style={{ ["--d" as string]: "360ms" }}>
-          Open source · MIT · No account needed for the demo
+          Free to use · Open source · No account needed to try it
         </p>
       </div>
 
@@ -146,33 +142,34 @@ export function Hero() {
               <div className="float-in rounded-panel bg-card p-4 shadow-overlay" style={{ ["--d" as string]: "1150ms" }}>
                 <div className="flex items-center gap-2 text-[11.5px] font-medium text-muted">
                   <Trophy className="size-3.5 text-success" />
-                  Split test · OnlineJobs.ph
-                  <span className="ml-auto rounded-chip bg-[color-mix(in_oklch,var(--success)_12%,transparent)] px-1.5 py-0.5 text-[10.5px] text-success">
-                    Winner
-                  </span>
+                  Same job, two posts
                 </div>
-                <div className="mt-3 flex items-baseline gap-2">
-                  <span className="text-[34px] leading-none font-semibold tracking-[-0.04em]">{LIFT.toFixed(1)}×</span>
-                  <span className="text-[12px] leading-tight text-muted">
-                    more A-tier
-                    <br />
-                    per dollar
-                  </span>
-                </div>
-                <div className="mt-3.5 space-y-2.5">
-                  {[
-                    { l: B, label: "B · $950" },
-                    { l: A, label: "A · $600" },
-                  ].map(({ l, label }) => (
+                <div className="mt-3 space-y-3">
+                  {[B, A].map((l, i) => (
                     <div key={l.id}>
-                      <div className="mb-1 flex justify-between text-[11px] text-muted">
-                        <span className="font-medium text-foreground">{label}</span>
-                        <span className="tnum">{l.tierMix.A}% tier A</span>
+                      <div className="mb-1 flex items-baseline justify-between gap-2 text-[12px]">
+                        <span className="text-muted">
+                          Pays <span className="font-medium text-foreground">{l.payBand.replace(" / mo", " a month")}</span>
+                        </span>
+                        <span className="tnum font-semibold" style={{ color: i === 0 ? "var(--tier-a)" : undefined }}>
+                          {STRONG(l)} strong
+                        </span>
                       </div>
-                      <TierBar mix={l.tierMix} />
+                      <div className="h-2 overflow-hidden rounded-full bg-inset">
+                        <div
+                          className="h-full rounded-full"
+                          style={{
+                            width: `${(STRONG(l) / STRONG(B)) * 100}%`,
+                            background: i === 0 ? "var(--tier-a)" : "var(--rim-strong)",
+                          }}
+                        />
+                      </div>
                     </div>
                   ))}
                 </div>
+                <p className="mt-3 text-[11.5px] leading-snug text-muted">
+                  The better-paid post brought half the applicants and more than {Math.floor(STRONG(B) / STRONG(A))} times as many strong ones.
+                </p>
               </div>
             </div>
 

@@ -1,5 +1,5 @@
 import { Equal, FlaskConical, Trophy } from "lucide-react";
-import { Sparkline, TierBar, cx } from "@/components/ui";
+import { TierBar, cx } from "@/components/ui";
 import { TIER_COLOR, aTierPerDollar, boardById, costPerQualified, listingById, roleById, type Listing } from "@/data/mock";
 import { useCountUp, useInView } from "./hooks";
 
@@ -32,13 +32,13 @@ function Variant({ l, win, run }: { l: Listing; win?: boolean; run: boolean }) {
         >
           {l.variant}
         </span>
-        <span className="text-[13px] font-medium">Variant {l.variant}</span>
+        <span className="text-[13px] font-medium">Version {l.variant}</span>
         {win ? (
           <span className="ml-auto inline-flex items-center gap-1 rounded-chip bg-primary-tint px-1.5 py-0.5 text-[11px] font-medium text-primary">
-            <Trophy className="size-3" /> Winner
+            <Trophy className="size-3" /> Better
           </span>
         ) : (
-          <span className="ml-auto rounded-chip bg-inset px-1.5 py-0.5 text-[11px] text-muted">Control</span>
+          <span className="ml-auto rounded-chip bg-inset px-1.5 py-0.5 text-[11px] text-muted">Original</span>
         )}
       </div>
 
@@ -48,14 +48,14 @@ function Variant({ l, win, run }: { l: Listing; win?: boolean; run: boolean }) {
       </div>
 
       <div className="mt-4 grid grid-cols-3 gap-3 border-t border-rim pt-4">
-        <Stat label="Applies" value={Math.round(applies).toString()} />
+        <Stat label="Applicants" value={Math.round(applies).toString()} />
         <Stat label="Qualified" value={l.qualified.toString()} />
-        <Stat label="Per qualified" value={`$${costPerQualified(l).toFixed(2)}`} />
+        <Stat label="Cost per qualified" value={`$${costPerQualified(l).toFixed(2)}`} />
       </div>
 
       <div className="mt-4">
         <div className="mb-1.5 flex items-center justify-between text-[11.5px] text-muted">
-          <span>Tier mix</span>
+          <span>Candidate quality</span>
           <span className="flex gap-2.5">
             {(["A", "B", "C"] as const).map((t) => (
               <span key={t} className="tnum inline-flex items-center gap-1">
@@ -70,16 +70,10 @@ function Variant({ l, win, run }: { l: Listing; win?: boolean; run: boolean }) {
         </div>
       </div>
 
-      <div className="mt-4 flex items-end justify-between gap-3 rounded-card bg-inset px-3 py-2.5">
-        <div>
-          <div className="text-[11px] text-muted">A-tier candidates</div>
-          <div className="tnum text-[22px] leading-tight font-semibold tracking-[-0.03em]" style={{ color: win ? "var(--tier-a)" : undefined }}>
-            {Math.round(aTier)}
-          </div>
-        </div>
-        <div className="text-right">
-          <div className="mb-0.5 text-[10.5px] text-faint">Applies / day</div>
-          <Sparkline data={l.trend} width={84} height={24} color={win ? "var(--primary)" : "var(--faint)"} />
+      <div className="mt-4 flex items-baseline justify-between gap-3 rounded-card bg-inset px-3 py-2.5">
+        <div className="text-[12.5px] text-muted">Strong candidates (tier A)</div>
+        <div className="tnum text-[22px] leading-tight font-semibold tracking-[-0.03em]" style={{ color: win ? "var(--tier-a)" : undefined }}>
+          {Math.round(aTier)}
         </div>
       </div>
     </div>
@@ -101,18 +95,18 @@ export function SplitTest() {
   const max = perHundred(B);
 
   return (
-    <section id="split-tests" className="relative scroll-mt-20 px-4 py-20 sm:py-28">
+    <section id="split-tests" className="band band-lavender relative scroll-mt-20 px-4 py-20 sm:py-24">
       <div className="mx-auto max-w-[1120px]">
         <div className="reveal mx-auto max-w-[720px] text-center">
           <div className="inline-flex items-center gap-1.5 text-[12.5px] font-medium text-primary">
-            <FlaskConical className="size-3.5" /> Split tests
+            <FlaskConical className="size-3.5" /> Try two versions
           </div>
           <h2 className="mt-3 text-[clamp(2rem,5vw,3.25rem)] leading-[1.02] font-semibold tracking-[-0.04em] text-balance">
-            Count the hires a listing brings, not the applies.
+            Find out which version of your job post works.
           </h2>
           <p className="mx-auto mt-5 max-w-[600px] text-[16px] leading-relaxed text-pretty text-muted">
-            Post two versions of one role to the same board with the same spend. Every applicant is scored against the
-            role’s rubric, so you can see which version buys more A-tier candidates per dollar.
+            Post the same job twice on one job site, worded or paid differently. Every applicant is scored against what
+            the job needs, so you can see which version brings more strong candidates for what the site charges you.
           </p>
         </div>
 
@@ -133,9 +127,9 @@ export function SplitTest() {
                   <span className="size-1.5 rounded-full" style={{ background: board.color }} />
                   {board.name}
                 </span>
-                <span className="text-[12.5px] text-faint">${A.spend} each</span>
+                <span className="text-[12.5px] text-faint">${A.spend} per post, paid to the job site</span>
                 <span className="ml-auto inline-flex items-center gap-1.5 text-[12px] text-muted">
-                  <Equal className="size-3.5" /> Same board, same spend, same {A.daysLive} days
+                  <Equal className="size-3.5" /> Same site, same fee, same {A.daysLive} days
                 </span>
               </div>
 
@@ -150,24 +144,24 @@ export function SplitTest() {
               {/* The verdict */}
               <div className="mt-3 grid items-center gap-6 rounded-panel bg-card p-5 shadow-card sm:p-6 md:grid-cols-[auto_1fr] md:gap-10">
                 <div>
-                  <div className="text-[12px] font-medium text-muted">Variant B, per dollar spent</div>
+                  <div className="text-[12px] font-medium text-muted">For the same fee, version B brought</div>
                   <div className="mt-1 flex items-baseline gap-2">
                     <span className="violet-grad tnum text-[clamp(56px,10vw,84px)] leading-[0.9] font-semibold tracking-[-0.055em]">
                       {lift.toFixed(1)}×
                     </span>
                   </div>
-                  <div className="mt-2 text-[14px] font-medium tracking-[-0.01em]">more A-tier candidates</div>
+                  <div className="mt-2 text-[14px] font-medium tracking-[-0.01em]">as many strong candidates</div>
                 </div>
                 <div className="space-y-4">
                   {[B, A].map((l, i) => (
                     <div key={l.id}>
                       <div className="mb-1.5 flex items-baseline justify-between gap-3 text-[12.5px]">
                         <span>
-                          <span className="font-medium">Variant {l.variant}</span>{" "}
-                          <span className="text-muted">· {l.payBand}</span>
+                          <span className="font-medium">Version {l.variant}</span>{" "}
+                          <span className="text-muted">· pays {l.payBand}</span>
                         </span>
                         <span className="tnum text-muted">
-                          <span className="font-medium text-foreground">{perHundred(l).toFixed(1)}</span> A-tier per $100
+                          <span className="font-medium text-foreground">{perHundred(l).toFixed(1)}</span> strong per $100 spent
                         </span>
                       </div>
                       <div className="h-2.5 overflow-hidden rounded-full bg-inset">
@@ -183,9 +177,9 @@ export function SplitTest() {
                     </div>
                   ))}
                   <p className="fade-in text-[13px] leading-relaxed text-pretty text-muted" style={{ ["--d" as string]: "1300ms" }}>
-                    Variant A got {(A.applies / B.applies).toFixed(1)}× the applies and {A.tierMix.C}% of them were tier C.
-                    Variant B got half the inbox and {aCount(B)} candidates you would actually interview. An applies
-                    count would have picked the wrong one.
+                    Version A got {(A.applies / B.applies).toFixed(1)} times the applicants, but {A.tierMix.C}% of them
+                    were a poor fit. Version B got half as many and {aCount(B)} you would actually interview. Counting
+                    applicants alone would have picked the wrong one.
                   </p>
                 </div>
               </div>
@@ -195,9 +189,9 @@ export function SplitTest() {
 
         <div className="mt-12 grid gap-6 sm:grid-cols-3 sm:gap-8">
           {[
-            ["Change only what you’re testing", "Pay band, title, wording or board. The rest of the listing stays the same, so the difference means something."],
-            ["Every applicant is scored", "Your rubric puts each one in tier A, B or C the moment they apply, whichever board they came from."],
-            ["The winner is per dollar", "Board fees and boosts go in with the listing. The verdict divides A-tier candidates by what you spent."],
+            ["Change one thing at a time", "Pay, title, wording or job site. Keep the rest of the post the same, so you know what made the difference."],
+            ["Every applicant is scored", "You set what a strong candidate looks like once. Each applicant is placed in tier A, B or C as they apply."],
+            ["Only the job site costs money", "recruited is free. What you pay a job site to post goes in with the post, so you see what each strong candidate cost."],
           ].map(([t, d], i) => (
             <div key={t} className="reveal" style={{ ["--d" as string]: `${i * 90}ms` }}>
               <div className="text-[14px] font-semibold tracking-[-0.01em]">{t}</div>
