@@ -1,10 +1,11 @@
 import { ArrowRight, Check, ClipboardCheck, Link2, MoveRight } from "lucide-react";
-import { useEffect, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { ButtonLink, Card, cx } from "@/components/ui";
 import { STAGES, type Board, type Listing, type Role } from "@/data/mock";
 import type { RoleCopy } from "./content";
 import type { Submission } from "./ApplyForm";
+import { addApplicant } from "@/data/store";
 
 /* ---------------------------------------------------------------------------
    After submit: what the candidate sees, then a card for whoever is giving the
@@ -25,6 +26,27 @@ export function Confirmation({
   copy: RoleCopy;
 }) {
   useEffect(() => window.scrollTo({ top: 0 }), []);
+
+  // Put the applicant into the demo pipeline once, so "See it in the pipeline"
+  // shows their card in New. The ref survives StrictMode's double effect.
+  const added = useRef<string | null>(null);
+  useEffect(() => {
+    if (added.current) return;
+    const answered = copy.questions.filter((q) => {
+      const v = submission.answers[q.id];
+      return Array.isArray(v) ? v.length > 0 : !!v?.trim();
+    }).length;
+    added.current = addApplicant({
+      name: submission.name,
+      location: submission.location,
+      pay: submission.pay,
+      link: submission.link,
+      hasResume: !!submission.resume,
+      answered,
+      questions: copy.questions.length,
+      listing,
+    }).id;
+  }, [copy.questions, listing, submission]);
   const first = submission.name.trim().split(/\s+/)[0];
   const lanes = STAGES.filter((s) => s.id !== "rejected" && s.id !== "hired");
   const initials = submission.name.trim().split(/\s+/).map((p) => p[0]).join("").slice(0, 2).toUpperCase();
@@ -94,7 +116,7 @@ export function Confirmation({
         </ol>
 
         <div className="flex flex-col gap-2 border-t border-rim bg-inset/50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-          <ButtonLink to="/demo/pipeline" variant="primary" className="w-full sm:w-auto">
+          <ButtonLink to={`/demo/pipeline?role=${role.id}`} variant="primary" className="w-full sm:w-auto">
             See it in the pipeline <ArrowRight className="size-3.5" />
           </ButtonLink>
           <Link to="/demo/listings" className="text-center text-[13px] text-muted hover:text-foreground">
