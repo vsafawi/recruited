@@ -5,15 +5,15 @@ work at once without stepping on each other. Put your name next to one before yo
 start. To hand a stream to Claude, paste its **Prompt** into a fresh session opened in
 this repo — `CLAUDE.md` loads automatically and gives it the rest of the context.
 
-## Built — first pass done
+## Built — first pass done (merged to main)
 
 | Stream | Files | Owner |
 | --- | --- | --- |
 | Scaffold, tokens, demo data, app shell | `src/styles.css`, `src/components/*`, `src/data/mock.ts`, `src/demo/Shell.tsx`, `src/main.tsx` | done |
 | Deploy configs and README | `Dockerfile`, `Caddyfile`, `railway.json`, `wrangler.toml`, `vercel.json`, `netlify.toml`, `README.md` | done |
-| Landing page | `src/pages/Landing.tsx`, `src/pages/landing/*` | in progress |
-| Pipeline, candidates, profile | `src/demo/Pipeline.tsx`, `Candidates.tsx`, `CandidateDetail.tsx` | in progress |
-| Overview, listings & split tests, new-role wizard | `src/demo/Overview.tsx`, `Listings.tsx`, `NewRole.tsx` | in progress |
+| Landing page | `src/pages/Landing.tsx`, `src/pages/landing/*` | done |
+| Pipeline, candidates, profile | `src/demo/Pipeline.tsx`, `Candidates.tsx`, `CandidateDetail.tsx` | done |
+| Overview, listings & split tests, new-role wizard | `src/demo/Overview.tsx`, `Listings.tsx`, `NewRole.tsx` | done |
 
 ## Open — pick one
 

@@ -218,8 +218,8 @@ export function Deploy() {
   return (
     <section id="deploy" className="scroll-mt-20 px-4 py-20 sm:py-28">
       <div className="mx-auto max-w-[1120px]">
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14">
-          <div className="reveal">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14">
+          <div className="reveal min-w-0">
             <div className="text-[12.5px] font-medium text-primary">Deploy</div>
             <h2 className="mt-3 text-[clamp(2rem,5vw,3.25rem)] leading-[1.02] font-semibold tracking-[-0.04em] text-balance">
               Your data, your server.
@@ -241,7 +241,7 @@ export function Deploy() {
                 <span className="ml-2 font-mono text-[11px] text-faint">terminal</span>
               </div>
               <div className="flex items-start gap-2 p-4">
-                <pre className="min-w-0 flex-1 font-mono text-[12.5px] leading-[1.75] break-words whitespace-pre-wrap">
+                <pre className="min-w-0 flex-1 font-mono text-[12.5px] leading-[1.75] whitespace-pre-wrap [overflow-wrap:anywhere]">
                   <span className="text-faint">$ </span>git clone {GITHUB}
                   {"\n"}
                   <span className="text-faint">$ </span>cd recruited && npm i
@@ -255,7 +255,7 @@ export function Deploy() {
             </div>
           </div>
 
-          <div className="grid content-start gap-2.5 sm:grid-cols-2">
+          <div className="grid min-w-0 grid-cols-1 content-start gap-2.5 sm:grid-cols-2">
             {TARGETS.map((t, i) => (
               <div
                 key={t.name}
