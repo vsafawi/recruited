@@ -263,3 +263,152 @@ export function aTierPerDollar(l: Listing) {
 export function costPerQualified(l: Listing) {
   return l.qualified ? l.spend / l.qualified : 0;
 }
+
+/* ---------------------------------------------------------------------------
+   Interview loops. Each role runs several rounds with different people on the
+   team; every round leaves a scorecard so the next interviewer starts with
+   the full picture instead of a forwarded email.
+   --------------------------------------------------------------------------- */
+
+export interface TeamMember {
+  id: string;
+  name: string;
+  initials: string;
+  title: string;
+  hue: number;
+}
+
+export const TEAM: TeamMember[] = [
+  { id: "dana", name: "Dana Whitfield", initials: "DW", title: "Head of Ops", hue: 285 },
+  { id: "theo", name: "Theo Grant", initials: "TG", title: "Head of Campaigns", hue: 25 },
+  { id: "nia", name: "Nia Castillo", initials: "NC", title: "Account lead", hue: 152 },
+  { id: "rhea", name: "Rhea Patel", initials: "RP", title: "Campaign coordinator", hue: 235 },
+  { id: "sam", name: "Sam Ortiz", initials: "SO", title: "Founder", hue: 68 },
+];
+
+export const teamById = (id: string) => TEAM.find((t) => t.id === id)!;
+
+export interface InterviewRound {
+  id: string;
+  name: string;
+  /** Team member ids who run this round. */
+  owners: string[];
+  /** What this round is meant to find out. */
+  focus: string;
+  minutes: number;
+}
+
+export const ROUND_PLAN: Record<string, InterviewRound[]> = {
+  "va-ops": [
+    { id: "screen", name: "Screening call", owners: ["dana"], focus: "Availability, tools, rate", minutes: 20 },
+    { id: "trial", name: "Paid trial task", owners: ["dana"], focus: "Release-week checklist in Notion", minutes: 90 },
+    { id: "team", name: "Team interview", owners: ["rhea", "nia"], focus: "Working with campaign leads day to day", minutes: 45 },
+    { id: "final", name: "Final with founder", owners: ["sam"], focus: "Fit, expectations, start date", minutes: 30 },
+  ],
+  "campaign-mgr": [
+    { id: "screen", name: "Screening call", owners: ["dana"], focus: "Campaign experience, comp, timing", minutes: 25 },
+    { id: "brief", name: "Campaign brief exercise", owners: ["theo"], focus: "Plan a single release on a $5k budget", minutes: 60 },
+    { id: "panel", name: "Panel interview", owners: ["theo", "nia"], focus: "Artist relations, reporting, judgement", minutes: 60 },
+    { id: "final", name: "Final with founder", owners: ["sam"], focus: "Fit, offer expectations", minutes: 30 },
+  ],
+  playlist: [
+    { id: "screen", name: "Screening call", owners: ["dana"], focus: "Curator network, hours", minutes: 20 },
+    { id: "pitch", name: "Pitch exercise", owners: ["rhea"], focus: "Pitch one track to five curators", minutes: 45 },
+    { id: "interview", name: "Interview", owners: ["theo"], focus: "DSP knowledge, relationships", minutes: 45 },
+    { id: "final", name: "Final with founder", owners: ["sam"], focus: "Fit, start date", minutes: 30 },
+  ],
+};
+
+export const SCORE_CRITERIA = ["Role skills", "Music-industry context", "Communication", "Ownership"] as const;
+
+export type Recommendation = "strong-yes" | "yes" | "no" | "strong-no";
+
+export interface Scorecard {
+  candidateId: string;
+  roundId: string;
+  by: string;
+  when: string;
+  recommendation: Recommendation;
+  /** 1-4 per criterion, in SCORE_CRITERIA order. */
+  ratings: [number, number, number, number];
+  summary: string;
+  /** What this interviewer wants the next round to dig into. */
+  probeNext: string[];
+}
+
+export interface UpcomingInterview {
+  candidateId: string;
+  roundId: string;
+  when: string;
+}
+
+export const SCORECARDS: Scorecard[] = [
+  // Jasmine Okafor — campaign manager, at offer
+  { candidateId: "c8", roundId: "screen", by: "dana", when: "Oct 2", recommendation: "strong-yes", ratings: [4, 4, 4, 3],
+    summary: "Ran 40+ independent releases at a distributor. Ask is $62k, inside the band. Can start in three weeks.",
+    probeNext: ["How she prioritises when four releases land the same week", "Paid social budgets she has owned"] },
+  { candidateId: "c8", roundId: "brief", by: "theo", when: "Oct 6", recommendation: "strong-yes", ratings: [4, 4, 3, 4],
+    summary: "Best brief we have received. Put 60% of the budget into pre-save and TikTok creators, with a clear kill switch at day 5.",
+    probeNext: ["Reporting cadence with artists", "Has she managed a direct report"] },
+  { candidateId: "c8", roundId: "panel", by: "nia", when: "Oct 9", recommendation: "yes", ratings: [4, 3, 4, 4],
+    summary: "Calm with difficult-artist scenarios. Reports weekly, in a one-page doc. Has not managed people yet.",
+    probeNext: ["Comfortable without a direct report for the first six months"] },
+  { candidateId: "c8", roundId: "final", by: "sam", when: "Oct 12", recommendation: "strong-yes", ratings: [4, 4, 4, 4],
+    summary: "Fine without reports for now. Wants a title review at six months. Approved an offer at $62k.",
+    probeNext: [] },
+
+  // Daniel Mercer — campaign manager, panel next
+  { candidateId: "c9", roundId: "screen", by: "dana", when: "Oct 5", recommendation: "yes", ratings: [3, 4, 3, 3],
+    summary: "Five years at a country imprint, owns the email list and Meta spend. Ask $60k. Notice period is four weeks.",
+    probeNext: ["Work outside country — has he run hip-hop or pop releases", "Four-week notice period, any flexibility"] },
+  { candidateId: "c9", roundId: "brief", by: "theo", when: "Oct 10", recommendation: "yes", ratings: [3, 4, 4, 3],
+    summary: "Solid, conservative plan. Strong on email and radio, light on TikTok. Clear budget table.",
+    probeNext: ["Short-form video: show a campaign he ran on TikTok or Reels", "How he would report to an artist who wants daily updates"] },
+
+  // Jomar Reyes — VA, final interview Thu
+  { candidateId: "c2", roundId: "screen", by: "dana", when: "Oct 3", recommendation: "strong-yes", ratings: [4, 3, 4, 4],
+    summary: "Coordinated release days for a K-pop fan agency. Asana daily. Asks $900, under the variant B band.",
+    probeNext: ["Overlap with US Eastern hours"] },
+  { candidateId: "c2", roundId: "trial", by: "dana", when: "Oct 7", recommendation: "strong-yes", ratings: [4, 3, 4, 4],
+    summary: "Trial task back in 70 of 90 minutes. Caught a missing ISRC on the sample release without being asked.",
+    probeNext: ["How he handles three campaign leads asking for things at once"] },
+  { candidateId: "c2", roundId: "team", by: "rhea", when: "Oct 11", recommendation: "yes", ratings: [4, 3, 3, 4],
+    summary: "Easy to work with, asks good clarifying questions. Slightly quiet on video; fine in writing.",
+    probeNext: ["Start date and notice", "Confirm he can cover 9am–1pm Eastern"] },
+
+  // Noah Kim — playlist coordinator, interview Fri
+  { candidateId: "c17", roundId: "screen", by: "dana", when: "Oct 7", recommendation: "strong-yes", ratings: [4, 4, 4, 3],
+    summary: "Curates three playlists with 180k followers combined. Already knows half our curator list. Ask $25/hr.",
+    probeNext: ["Conflict of interest: pitching to his own playlists", "Whether he will keep curating on the side"] },
+  { candidateId: "c17", roundId: "pitch", by: "rhea", when: "Oct 11", recommendation: "strong-yes", ratings: [4, 4, 4, 4],
+    summary: "Five personalised pitches, each under 80 words. Two of the five curators were people he already knew.",
+    probeNext: ["DSP editorial pitching — has he used Spotify for Artists pitch tool for a label", "Conflict of interest, still open"] },
+];
+
+export const UPCOMING: UpcomingInterview[] = [
+  { candidateId: "c9", roundId: "panel", when: "Tue 11:00" },
+  { candidateId: "c2", roundId: "final", when: "Thu 10:00" },
+  { candidateId: "c17", roundId: "interview", when: "Fri 13:00" },
+];
+
+export interface TeamNote {
+  candidateId: string;
+  by: string;
+  when: string;
+  text: string;
+}
+
+export const TEAM_NOTES: TeamNote[] = [
+  { candidateId: "c8", by: "sam", when: "Oct 12", text: "Offer approved at $62k. Dana to send today, title review in April." },
+  { candidateId: "c8", by: "theo", when: "Oct 6", text: "If we lose her, Daniel is the backup. Her brief is in the shared drive." },
+  { candidateId: "c9", by: "theo", when: "Oct 10", text: "Nia, please push on TikTok in the panel. That is the gap." },
+  { candidateId: "c2", by: "dana", when: "Oct 11", text: "Sam, he is the strongest VA we have seen from variant B. Ready for you." },
+  { candidateId: "c17", by: "rhea", when: "Oct 11", text: "Knows half our curator list already. Ask about the conflict of interest before anything else." },
+];
+
+/** How many rounds a candidate has finished, given their stage. Detailed scorecards win when present. */
+export function roundsDone(c: Candidate) {
+  const cards = SCORECARDS.filter((s) => s.candidateId === c.id).length;
+  if (cards) return cards;
+  return { new: 0, screen: 0, assess: 1, interview: 2, offer: 4, hired: 4, rejected: 1 }[c.stage];
+}
