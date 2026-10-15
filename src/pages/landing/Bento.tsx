@@ -276,7 +276,7 @@ export function Bento() {
       <div className="mx-auto max-w-[1120px]">
         <div className="reveal max-w-[640px]">
           <div className="text-[12.5px] font-medium text-primary">The product</div>
-          <h2 className="mt-3 text-[clamp(2rem,5vw,3.25rem)] leading-[1.02] font-semibold tracking-[-0.04em] text-balance">
+          <h2 className="mt-3 text-[2rem] sm:text-[2.6rem] lg:text-[3.25rem] leading-[1.02] font-semibold tracking-[-0.04em] text-balance">
             Everything a small team needs to hire, and nothing it doesn’t.
           </h2>
           <p className="mt-5 text-[16px] leading-relaxed text-pretty text-muted">

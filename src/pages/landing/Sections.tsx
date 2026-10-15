@@ -162,7 +162,7 @@ export function HowItWorks() {
       <div className="mx-auto max-w-[1120px]">
         <div className="reveal max-w-[600px]">
           <div className="text-[12.5px] font-medium text-primary">How it works</div>
-          <h2 className="mt-3 text-[clamp(2rem,5vw,3.25rem)] leading-[1.02] font-semibold tracking-[-0.04em] text-balance">
+          <h2 className="mt-3 text-[2rem] sm:text-[2.6rem] lg:text-[3.25rem] leading-[1.02] font-semibold tracking-[-0.04em] text-balance">
             Three steps, then you know.
           </h2>
         </div>
@@ -221,7 +221,7 @@ export function Deploy() {
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14">
           <div className="reveal min-w-0">
             <div className="text-[12.5px] font-medium text-primary">Deploy</div>
-            <h2 className="mt-3 text-[clamp(2rem,5vw,3.25rem)] leading-[1.02] font-semibold tracking-[-0.04em] text-balance">
+            <h2 className="mt-3 text-[2rem] sm:text-[2.6rem] lg:text-[3.25rem] leading-[1.02] font-semibold tracking-[-0.04em] text-balance">
               Your data, your server.
             </h2>
             <p className="mt-5 max-w-[460px] text-[16px] leading-relaxed text-pretty text-muted">
@@ -307,7 +307,7 @@ export function CaseStudy() {
             <div className="inline-flex items-center gap-1.5 text-[12.5px] font-medium text-muted">
               <Waypoints className="size-3.5 text-primary" /> In use
             </div>
-            <p className="mt-4 text-[clamp(1.5rem,3.4vw,2.25rem)] leading-[1.15] font-semibold tracking-[-0.035em] text-balance">
+            <p className="mt-4 text-[1.5rem] sm:text-[1.9rem] lg:text-[2.25rem] leading-[1.15] font-semibold tracking-[-0.035em] text-balance">
               Music Market Agency runs seven job posts on four job sites with it.
             </p>
             <p className="mt-4 max-w-[520px] text-[14.5px] leading-relaxed text-pretty text-muted">
@@ -365,7 +365,7 @@ export function FinalCta() {
       <div aria-hidden className="dot-grid pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_50%_60%_at_50%_45%,#000,transparent)]" />
       <div className="reveal relative mx-auto flex max-w-[640px] flex-col items-center text-center">
         <Mark3D size={96} />
-        <h2 className="mt-10 text-[clamp(2.1rem,5.5vw,3.5rem)] leading-[1.02] font-semibold tracking-[-0.045em] text-balance">
+        <h2 className="mt-10 text-[2.1rem] sm:text-[2.8rem] lg:text-[3.5rem] leading-[1.02] font-semibold tracking-[-0.045em] text-balance">
           Run your next hire in it.
         </h2>
         <p className="mt-5 max-w-[480px] text-[16px] leading-relaxed text-pretty text-muted">

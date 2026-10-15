@@ -107,7 +107,7 @@ export function SplitTest() {
           <div className="inline-flex items-center gap-1.5 text-[12.5px] font-medium text-primary">
             <FlaskConical className="size-3.5" /> Try two versions
           </div>
-          <h2 className="mt-3 text-[clamp(2rem,5vw,3.25rem)] leading-[1.02] font-semibold tracking-[-0.04em] text-balance">
+          <h2 className="mt-3 text-[2rem] sm:text-[2.6rem] lg:text-[3.25rem] leading-[1.02] font-semibold tracking-[-0.04em] text-balance">
             Find out which version of your job post works.
           </h2>
           <p className="mx-auto mt-5 max-w-[600px] text-[16px] leading-relaxed text-pretty text-muted">
@@ -152,7 +152,7 @@ export function SplitTest() {
                 <div>
                   <div className="text-[12px] font-medium text-muted">For the same fee, version B brought</div>
                   <div className="mt-1 flex items-baseline gap-2">
-                    <span className="violet-grad tnum text-[clamp(56px,10vw,84px)] leading-[0.9] font-semibold tracking-[-0.055em]">
+                    <span className="violet-grad tnum text-[56px] sm:text-[72px] lg:text-[84px] leading-[0.9] font-semibold tracking-[-0.055em]">
                       {lift.toFixed(1)}×
                     </span>
                   </div>

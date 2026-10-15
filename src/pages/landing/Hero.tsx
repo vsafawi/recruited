@@ -80,14 +80,14 @@ export function Hero() {
           <ArrowRight className="size-3" />
         </a>
         <h1
-          className="rise mt-5 text-[clamp(2.4rem,7vw,4.6rem)] leading-[0.98] font-semibold tracking-[-0.045em] text-balance"
+          className="rise mt-5 text-[2.5rem] sm:text-[3.5rem] lg:text-[4.6rem] leading-[0.98] font-semibold tracking-[-0.045em] text-balance"
           style={{ ["--d" as string]: "140ms" }}
         >
           <span className="ink-grad">See which job post brings </span>
           <span className="text-faint">the people worth hiring.</span>
         </h1>
         <p
-          className="rise mt-6 max-w-[600px] text-[clamp(15px,2vw,17.5px)] leading-[1.55] text-pretty text-muted"
+          className="rise mt-6 max-w-[600px] text-[15px] sm:text-[17.5px] leading-[1.55] text-pretty text-muted"
           style={{ ["--d" as string]: "220ms" }}
         >
           Post your job on the sites you already use and keep every applicant in one place. Try two versions of the
