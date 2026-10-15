@@ -41,7 +41,7 @@ how we avoid two threads building the same thing or editing the same file.
 | 12 | Interview loop tab on the candidate profile | `src/demo/InterviewLoop.tsx`, `mock.ts` (interview data) | another thread, PR #1 | done — landed without a claim; claim first next time |
 | 6 | Dark mode | `src/styles.css` (append a dark block), `src/components/ThemeToggle.tsx`, a toggle in `Shell.tsx` | hackathon-plan thread | done |
 | 13 | Applications land in the pipeline — submit on /jobs/:id, see the card in New on /demo/pipeline | `src/data/store.ts`, `src/pages/apply/Confirmation.tsx` | lead thread | done |
-| 14 | Guided tour for judges — a floating "Take the tour" that walks the demo in six steps | `src/demo/Tour.tsx` (mounted in `Shell.tsx` in the claim commit) | lead thread | claimed |
+| 14 | Guided tour for judges — a floating "Take the tour" that walks the demo in six steps | `src/demo/Tour.tsx` (mounted in `Shell.tsx`) | lead thread | done |
 | 7 | Backend (after the hackathon) | `supabase/`, `src/lib/` | — | open |
 | 10 | Reports — time to hire, source of hire, cost per hire | `src/demo/Reports.tsx`, `src/demo/reports/*` | lead thread | done |
 | 11 | Team and settings — interviewers, rubric templates, board connections | `src/demo/Settings.tsx`, `src/demo/settings/*` | lead thread | done |
